@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tr:Tree xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:tr="com.sparkTree.*"
+		 xmlns:mx="library://ns.adobe.com/flex/halo"
+		 xmlns:sqlite="com.peterelst.air.sqlite.*"
+		 dataProvider="{testData}"
+		 width="100%" height="100%" itemIdentifyField="id_lieu" allowItemDisSelection="true"
+		 useVirtualLayout="false" dragEnabled="false" dropEnabled="false" labelField="lib"
+		 color="red"
+		 click="tree1_clickHandler(event)" 
+		 >		
+	<fx:Declarations>
+		<sqlite:SQLite id="db" file="gevu_mobile.sqlite" open="select_query.execute()" />
+		<sqlite:Query id="select_query" connection="{db.connection}" 
+					  sql="SELECT node.lib, node.id_lieu, node.lieu_parent, node.niv, parent.id_lieu
+					  FROM gevu_lieux AS node,
+					  gevu_lieux AS parent
+					  WHERE node.lft BETWEEN parent.lft AND parent.rgt
+					  GROUP BY node.id_lieu
+					  ORDER BY node.lft"
+					  result="onSelectResult()" />
+		<s:ArrayCollection id="testData" />
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			private function onSelectResult():void {
+				testData = new ArrayCollection(select_query.data);
+			}			
+			
+			protected function tree1_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				this.parentApplication.lblSelect.text = event.target.text;
+			}
+			
+		]]>	
+	</fx:Script>
+</tr:Tree>
