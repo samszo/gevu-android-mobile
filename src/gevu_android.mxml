@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:tr="com.sparkTree.*"
+			   xmlns:mx="library://ns.adobe.com/flex/halo"
+			   creationComplete="Init();">
+	
+	<fx:Declarations>
+		<s:ArrayCollection id="testData" />
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import flash.data.SQLConnection;
+			import flash.data.SQLStatement;
+			import flash.events.MouseEvent;
+			import flash.filesystem.File;
+			import flash.utils.getDefinitionByName;
+			import flash.utils.getQualifiedClassName;
+			
+			import mx.events.PropertyChangeEvent;
+			
+			private function Init():void {
+				initDB();
+				var res:Array = this.getContacts(); 
+				
+				
+				testData.disableAutoUpdate();
+				testData.removeAll();
+				
+				
+				
+				for ( var i:int = 0; i < 5; i++ ) {
+					var vri:DiskGroup = new DiskGroup("GROUP", i);
+					if( ! vri.children ){
+						vri.children = new ArrayCollection();
+					}
+					
+					for ( var j:int = 0; j < 3; j++ ) {
+						var vdi1:Disk = new Disk("ELEMENT"+(i*100+j));
+						vri.children.addItem(vdi1);
+					}
+					
+					testData.addItem(vri);
+				}
+				
+				testData.enableAutoUpdate();
+			}
+			
+			private var dbConnection:SQLConnection = new SQLConnection();
+			private function initDB():void{
+				var embededSessionDB:File = File.applicationDirectory.resolvePath("gevu_mobile.db");
+				/*var writeSessionDB:File = File.applicationStorageDirectory.resolvePath("assets");
+				// If a writable DB doesn't exist, we then copy it into the app folder so it's writteable
+				if (!writeSessionDB.exists) {
+					embededSessionDB.copyTo(writeSessionDB);
+				}
+				var dbFile:File = writeSessionDB;*/
+				dbConnection.open(embededSessionDB);
+			}
+			
+			private function getContacts():Array{
+				var stmt:SQLStatement = new SQLStatement();
+				stmt.sqlConnection = dbConnection;
+				stmt.text = "SELECT * FROM gevu_contacts";
+				stmt.execute();
+				var result:Array = stmt.getResult().data;
+				return result;
+			}
+		]]>
+	</fx:Script>
+	<s:layout><s:VerticalLayout/></s:layout>
+	<tr:Tree id="v_folderstree" dataProvider="{testData}"
+			 width="400" height="100%" itemIdentifyField="treeid" allowItemDisSelection="true"
+			 useVirtualLayout="false" dragEnabled="false" dropEnabled="false" labelField="label"
+			 >
+		
+	</tr:Tree>
+</s:Application>
