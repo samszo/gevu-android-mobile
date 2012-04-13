@@ -3,14 +3,11 @@
 			   xmlns:s="library://ns.adobe.com/flex/spark" 
 			   xmlns:tr="com.sparkTree.*"
 			   xmlns:mx="library://ns.adobe.com/flex/halo"
-			   xmlns:sqlite="com.peterelst.air.sqlite.*" xmlns:gevu="gevu.*">
+			   xmlns:sqlite="com.peterelst.air.sqlite.*" 
+			   xmlns:gevu="gevu.*">
 	
 	<fx:Declarations>
-		<sqlite:SQLite id="db" file="gevu_mobile.sqlite" open="select_query.execute()" />
-		<sqlite:Query id="select_query" connection="{db.connection}" 
-					  sql="SELECT * FROM gevu_lieux"
-					  result="onSelectResult()" />
-		<s:ArrayCollection id="testData" />
+		
 	</fx:Declarations>
 	
 	<fx:Script>
@@ -24,44 +21,9 @@
 			
 			import mx.events.PropertyChangeEvent;
 
-			private function onSelectResult():void {
-				testData = new ArrayCollection(select_query.data);
-			}
-			
+			/*
 			private function Init():void {
-				/*
-				SELECT l.lib, l.id_lieu, a.id_antenne, b.id_batiment
-				FROM gevu_lieux AS l
-				LEFT JOIN gevu_antennes AS a ON a.id_lieu = l.id_lieu
-				LEFT JOIN gevu_batiments AS b ON b.id_lieu = l.id_lieu
-				WHERE l.id_lieu = 6
-				
-				LEFT JOIN gevu_evu_geos AS g g.id_lieu = l.id_lieu
-				LEFT JOIN gevu_diagnostics AS d d.id_lieu = l.id_lieu
-				LEFT JOIN gevu_docsxlieux AS dl dl.id_lieu = l.id_lieu
-				LEFT JOIN gevu_espaces AS e e.id_lieu = l.id_lieu
-				LEFT JOIN gevu_espacesxexterieurs"
-				,"Models_DbTable_Gevu_espacesxinterieurs"
-				,"Models_DbTable_Gevu_etablissements"
-				,"Models_DbTable_Gevu_niveaux"
-				,"Models_DbTable_Gevu_objetsxexterieurs"
-				,"Models_DbTable_Gevu_objetsxinterieurs"
-				,"Models_DbTable_Gevu_objetsxvoiries"
-				,"Models_DbTable_Gevu_observations"
-				,"Models_DbTable_Gevu_parcelles"
-				,"Models_DbTable_Gevu_problemes"
-				,"Models_DbTable_Gevu_antennes"
-				,"Models_DbTable_Gevu_groupes"
-				,"Models_DbTable_Gevu_logements"
-				,"Models_DbTable_Gevu_locaux"
-				,"Models_DbTable_Gevu_partiescommunes"
-				
-				WHERE node.lft BETWEEN parent.lft AND parent.rgt
-				GROUP BY node.id_lieu
-				ORDER BY node.lft				
-				initDB();
-				var res:Array = this.getContacts(); 
-				
+
 				
 				testData.disableAutoUpdate();
 				testData.removeAll();
@@ -83,9 +45,9 @@
 				}
 				
 				testData.enableAutoUpdate();
-				*/
+				
 			}
-			
+			*/
 		]]>
 	</fx:Script>
 	<s:layout><s:VerticalLayout/></s:layout>
