@@ -5,28 +5,67 @@
 		 xmlns:mx="library://ns.adobe.com/flex/halo"
 		 xmlns:sqlite="com.peterelst.air.sqlite.*"
 		 dataProvider="{testData}"
-		 width="100%" height="100%" itemIdentifyField="id_lieu" allowItemDisSelection="true"
-		 useVirtualLayout="false" dragEnabled="false" dropEnabled="false" labelField="lib"
-		 color="red"
-		 click="tree1_clickHandler(event)" 
+		 width="100%" height="100%" itemIdentifyField="treeid" allowItemDisSelection="true"
+		 useVirtualLayout="false" dragEnabled="false" dropEnabled="false" labelField="label"
 		 >		
 	<fx:Declarations>
 		<sqlite:SQLite id="db" file="gevu_mobile.sqlite" open="select_query.execute()" />
 		<sqlite:Query id="select_query" connection="{db.connection}" 
-					  sql="SELECT node.lib, node.id_lieu, node.lieu_parent, node.niv, parent.id_lieu
+					  sql="SELECT node.lib, node.id_lieu, node.lieu_parent,node.lft,node.rgt
 					  FROM gevu_lieux AS node,
 					  gevu_lieux AS parent
 					  WHERE node.lft BETWEEN parent.lft AND parent.rgt
 					  GROUP BY node.id_lieu
 					  ORDER BY node.lft"
 					  result="onSelectResult()" />
+		
 		<s:ArrayCollection id="testData" />
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
+			import flash.sampler.NewObjectSample;
+			
+						
 			private function onSelectResult():void {
-				testData = new ArrayCollection(select_query.data);
-			}			
+				var res:ArrayCollection=new ArrayCollection(select_query.data);
+				var parents:Array = new Array;
+				testData.disableAutoUpdate();
+				testData.removeAll();
+				
+				for(var i:int=0;i<res.length;i++)
+				{
+					if (res.getItemAt(i).rgt != res.getItemAt(i).lft +1) //==>this is a parent node
+					{	 
+						parents[i] = new DiskGroup(res.getItemAt(i).lib,res.getItemAt(i).id_lieu);
+						if( ! parents[i].children ) parents[i].children = new ArrayCollection();
+						var parent_id:int=res.getItemAt(i).lieu_parent;
+						if(parent_id>0)
+						{
+						for (var j:int=0;j<parents.length;j++)
+							if(parents[j]!=null)
+							if(parent_id==parents[j].getID)
+							parents[j].children.addItem(parents[i]);	
+						}
+						
+					}//it is a parent node
+					else{
+						var leaf:Disk= new Disk(res.getItemAt(i).lib)
+						var parent_id:int=res.getItemAt(i).lieu_parent;
+						for (var j:int=0;j<parents.length;j++) 
+						  if(parents[j]!=null)
+							if(parent_id==parents[j].getID)
+								parents[j].children.addItem(leaf);	
+					  }	// it is a leaf
+					}//for loop
+				
+				   testData.addItem(parents[0]);	 	
+                   testData.enableAutoUpdate();
+				
+	              		
+			
+			}
+				
+						
 			
 			protected function tree1_clickHandler(event:MouseEvent):void
 			{
@@ -35,5 +74,5 @@
 			}
 			
 		]]>	
-	</fx:Script>
+	</fx:Script>		
 </tr:Tree>
