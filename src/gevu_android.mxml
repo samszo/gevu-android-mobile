@@ -21,34 +21,7 @@
 			
 			import mx.events.PropertyChangeEvent;
 
-			/*
-			private function Init():void {
-
-				
-				testData.disableAutoUpdate();
-				testData.removeAll();
-				
-				
-				
-				for ( var i:int = 0; i < 5; i++ ) {
-					var vri:DiskGroup = new DiskGroup("GROUP", i);
-					if( ! vri.children ){
-						vri.children = new ArrayCollection();
-					}
-					
-					for ( var j:int = 0; j < 3; j++ ) {
-						var vdi1:Disk = new Disk("ELEMENT"+(i*100+j));
-						vri.children.addItem(vdi1);
-					}
-					
-					testData.addItem(vri);
-				}
-				
-				testData.enableAutoUpdate();
-				
-			}
-			*/
-		]]>
+			]]>
 	</fx:Script>
 	<s:layout><s:VerticalLayout/></s:layout>
 	<s:VGroup>
