@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:view="views.*" >
+<s:Panel title="Batiment" x="0" y="0" width="600" height="986">
+ <s:Scroller width="100%" height="100%">
+	<s:Group> 
+	<s:VGroup>
+		<s:HGroup width="100%">
+			<s:Label text="Identifiant du bâtiment : " />
+		</s:HGroup>
+		<s:TextInput id="F02" />
+		<s:HGroup >
+   <view:contacts title="Contact gardien" id="ctcGar" /> 
+			<s:VGroup>
+				<s:Label text="Horaires du gardien : " />
+				<s:TextArea id="F10" />				
+				<s:Label text="Horaires du bâtiment : " />
+				<s:TextArea id="F11" />				
+			</s:VGroup>
+		</s:HGroup>		
+		<s:HGroup width="100%">
+			<s:VGroup>
+				<s:Label text="Superficie de la parcelle : "/>
+				<s:NumericStepper id="F12" stepSize="1"/>
+			</s:VGroup>
+			<s:VGroup>
+				<s:Label text="Superficie du bâtiment" />
+				<s:NumericStepper id="F13" stepSize="1"/>
+			</s:VGroup>
+		</s:HGroup>
+		<s:HGroup>
+			<s:VGroup>
+				<s:Label text="Date d'achèvement : " />
+				
+			<!--<s:DateField id="F14" yearNavigationEnabled="true" change="editModif('date_achevement', formeDate(DateField(event.target).selectedDate))" />-->
+				
+			</s:VGroup>
+			<s:VGroup>
+				<s:Label text="Date du dépot de permis" />
+				
+			<!--<s:DateField id="F15" yearNavigationEnabled="true" change="editModif('date_depot_permis', formeDate(DateField(event.target).selectedDate))" />-->
+				
+			</s:VGroup>
+			<s:VGroup>
+				<s:Label text="Date de la dernière réhabilitation" />
+				
+			<!--<s:DateField id="F16" yearNavigationEnabled="true" change="editModif('date_reha', formeDate(DateField(event.target).selectedDate))" />-->
+				
+		</s:VGroup>
+		</s:HGroup>
+		<view:repType2 lblQ="Le bâtiment est-il uniquement un lieu de travail ?" Q="reponse_1" />
+		<view:repType2 lblQ="Si le bâtiment est un lieu de travail, compte-t-il plus de 20 salariés ?" Q="reponse_2"  />
+		<view:repType2 lblQ="S'agit-il d'un bâtiment de grande hauteur ?" Q="reponse_3" />
+		<view:repType2 lblQ="Le bâtiment est t-il en ZPPAUP ?" Q="reponse_4" />
+		<view:repType2 width="366" height="85"
+					   lblQ="Le bâtiment est-il inscrit au Monument Historique ?" Q="reponse_5"/>
+		<view:repType2 lblQ="Le bâtiment est-il classé au Monument Historique ?" Q="reponse_6" />
+		<s:HGroup width="100%">
+			<s:VGroup>
+				<s:Label text="Nombre de niveaux avec RDC : "/>
+				<s:NumericStepper id="F23"  stepSize="1" />
+			</s:VGroup>
+			<s:VGroup>
+				<s:Label text="Nombre de niveaux au dessus du RDC : "/>
+				<s:NumericStepper id="F24"  stepSize="1"  />
+			</s:VGroup>
+			<s:VGroup>
+				<s:Label text="Nombre de niveaux en dessous du RDC : "/>
+				<s:NumericStepper id="F25" stepSize="1"  />
+			</s:VGroup>
+		</s:HGroup>		
+
+		<s:HGroup>
+			<s:VGroup>
+				<s:Label text="Nombre d'entrée(s) principale(s) : "/>
+				<s:NumericStepper id="F26" stepSize="1" />
+			</s:VGroup>
+			<s:VGroup>
+				<s:Label text="Nombre d'ascenseur(s) : "/>
+				<s:NumericStepper id="F27" stepSize="1"/>
+			</s:VGroup>
+			<s:VGroup>
+				<s:Label text="Nombre d'escalier(s) : "/>
+				<s:NumericStepper id="F28"  stepSize="1"/>
+			</s:VGroup>
+		</s:HGroup>		
+
+		<view:repType2 lblQ="Présence d'aire(s) de stationnement(s), à l'intérieur du bâtiment ?" Q="reponse_13" />
+		<view:repType2 lblQ="Présence d'aire(s) de stationnement(s), à l'extérieur du bâtiment ?" Q="reponse_14" />
+		<s:Button id="SaveModif" label="Enregistrer les modifications" />
+		
+	</s:VGroup>
+	</s:Group>	
+	</s:Scroller>	
+</s:Panel>
+</s:View>

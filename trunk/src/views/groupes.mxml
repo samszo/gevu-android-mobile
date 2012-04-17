@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:view="views.*">
+	<s:Panel width="600" height="278" title="Groupe">
+		<s:VGroup >
+			<view:repType2 width="357" height="102" lblQ="Le bâtiment est t-il en ZPPAUP ?"
+						   Q="reponse_1"/>
+			<s:HGroup height="37">
+			<s:Label width="27" height="31" text="ref"/>
+			<s:TextInput id="F2"/>
+			</s:HGroup>	
+		</s:VGroup>	
+		<s:Button id="SaveModif" x="0" y="197" label="Enregistrer les modifications"/>
+	</s:Panel>
+</s:View>

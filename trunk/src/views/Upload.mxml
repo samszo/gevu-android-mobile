@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		title="Photo Upload">
+	
+	<fx:Script>
+		<![CDATA[
+			private var urlRequest:URLRequest = new URLRequest("http://www._____.com/upload.php");
+			private var file:File;
+			
+			//take a new picture with the camera
+			protected function uploadCamera_clickHandler(event:MouseEvent):void
+			{
+				if (CameraUI.isSupported)
+				{
+					trace("camera is supported");
+					var myCam:CameraUI = new CameraUI();
+					myCam.launch(MediaType.IMAGE);
+					myCam.addEventListener(MediaEvent.COMPLETE,selectCompleteHandler);
+				}
+				else
+				{
+					trace("camera not supported");
+					statusText.text = "Camera not supported on this device.";
+				}
+			}
+			
+			//select a picture from the camera roll (gallery)
+			protected function uploadGallery_clickHandler(event:MouseEvent):void
+			{
+				if (CameraRoll.supportsBrowseForImage)
+				{
+					trace("camera roll is supported");
+					var roll:CameraRoll = new CameraRoll();
+					roll.browseForImage();
+					roll.addEventListener(MediaEvent.SELECT,selectCompleteHandler);
+				}
+				else
+				{
+					trace("camera roll not supported");
+					statusText.text = "Camera roll not supported on this device.";
+				}
+			}
+			
+			//when the selection is complete upload it
+			protected function selectCompleteHandler(event:MediaEvent):void
+			{
+				trace("event.data.file.url; = "+event.data.file.url);
+				takePhotoButton.enabled = galleryPhotoButton.enabled = false;
+				file = event.data.file;
+				file.addEventListener(Event.COMPLETE,uploadCompleteHandler);
+				file.addEventListener(Event.OPEN,openUploadHandler);
+				file.upload(urlRequest);
+				
+			}
+			
+			protected function uploadCompleteHandler(event:Event):void
+			{
+				trace("upload complete");
+				takePhotoButton.enabled = galleryPhotoButton.enabled = true;
+				statusText.text = "Photo Uploaded";
+			}
+			
+			protected function openUploadHandler(event:Event):void
+			{
+				trace("uploading");
+				statusText.text = "Uploading...";
+			}
+		]]>
+	</fx:Script>
+	
+	<s:VGroup x="21" y="23" width="200" height="200">
+		<s:Label id="statusText" fontSize="24" text="Choose a photo..."/>
+		<s:Button id="takePhotoButton" label="Take Photo" click="uploadCamera_clickHandler(event)"/>
+		<s:Button id="galleryPhotoButton" label="Upload from Gallery"
+				  click="uploadGallery_clickHandler(event)"/>
+	</s:VGroup>
+</s:View>

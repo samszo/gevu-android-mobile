@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:view="views.*">
+	
+	<s:Panel title="Contacts">
+		<s:VGroup id="viewContact" 
+				  >
+			<s:HGroup>
+				<s:Button   label="Ajouter un contact" />
+			</s:HGroup>	
+		</s:VGroup>
+		
+		<s:VGroup id="viewContactUnique" x="0" y="55" width="588" height="250" paddingBottom="6"
+				  paddingLeft="6" paddingRight="6" paddingTop="6">
+			<s:DataGrid width="100%" height="100%" id="dgContact">
+				<s:columns>
+					<s:ArrayList>
+						<s:GridColumn headerText="Nom" />
+						<s:GridColumn headerText="Prénom" />
+						<s:GridColumn headerText="Fixe" />
+						<s:GridColumn headerText="Mobile"/>
+						<s:GridColumn headerText="Fax"/>
+						<s:GridColumn headerText="Mail"/>
+						<s:GridColumn headerText="Id Contact"  visible="false"/>
+					</s:ArrayList>
+				</s:columns>
+			</s:DataGrid>
+	
+	<!--	<s:Label text="Mail:"/>
+			<s:Label text="Tel. mobile:"/>
+			<s:Label text="Tél. fixe:"/>
+			<s:Label text="Fax:"/>
+			<s:Label text="Prénom:" />
+			<s:Label id="UpdNom" />
+			<s:Label id="UpdPrenom" />
+			<s:Label id="UpdFixe" /> 
+			<s:VGroup>
+				<s:Label id="UpdMobile" />							
+			</s:VGroup>
+			<s:Label id="UpdMail" />
+			-->			
+		</s:VGroup>
+		<s:Button x="165" y="0" label="Supprimer un contact"/>
+			
+		
+	</s:Panel>
+</s:View>	
