@@ -5,9 +5,9 @@
 		 xmlns:mx="library://ns.adobe.com/flex/halo"
 		 xmlns:sqlite="com.peterelst.air.sqlite.*"
 		 dataProvider="{testData}"
-		 width="100%" height="100%" itemIdentifyField="treeid" allowItemDisSelection="true"
+		 width="100%" height="100%" itemIdentifyField="treeid" allowItemDisSelection="false"
 		 useVirtualLayout="false" dragEnabled="false" dropEnabled="false" labelField="label"
-		 >		
+		 click="tree_clickHandler(event)">		
 	<fx:Declarations>
 		<sqlite:SQLite id="db" file="gevu_mobile.sqlite" open="select_query.execute()" />
 		<sqlite:Query id="select_query" connection="{db.connection}" 
@@ -24,6 +24,7 @@
 	<fx:Script>
 		<![CDATA[
 			import flash.sampler.NewObjectSample;
+			import spark.components.Button;
 			
 						
 			private function onSelectResult():void {
@@ -59,20 +60,16 @@
 					}//for loop
 				
 				   testData.addItem(parents[0]);	 	
-                   testData.enableAutoUpdate();
-				
-	              		
+                   testData.enableAutoUpdate();              		
 			
 			}
 				
-						
-			
-			protected function tree1_clickHandler(event:MouseEvent):void
+			protected function tree_clickHandler(event:MouseEvent):void
 			{
-				// TODO Auto-generated method stub
-				this.parentApplication.lblSelect.text = event.target.text;
+				
 			}
+			
 			
 		]]>	
-	</fx:Script>		
+	</fx:Script>
 </tr:Tree>

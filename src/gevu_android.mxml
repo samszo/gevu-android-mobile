@@ -4,7 +4,8 @@
 			   xmlns:tr="com.sparkTree.*"
 			   xmlns:mx="library://ns.adobe.com/flex/halo"
 			   xmlns:sqlite="com.peterelst.air.sqlite.*" 
-			   xmlns:gevu="gevu.*">
+			   xmlns:gevu="gevu.*"
+			   xmlns:view="views.*">
 	
 	<fx:Declarations>
 		
@@ -18,14 +19,26 @@
 			import flash.filesystem.File;
 			import flash.utils.getDefinitionByName;
 			import flash.utils.getQualifiedClassName;
-			
 			import mx.events.PropertyChangeEvent;
-
-			]]>
+			
+		]]>
 	</fx:Script>
-	<s:layout><s:VerticalLayout/></s:layout>
-	<s:VGroup>
-		<gevu:arbre />
-		<s:Label id="lblSelect" text="" />		
-	</s:VGroup>
+	<s:layout>
+		<s:HorizontalLayout/>
+	</s:layout>
+	<gevu:arbre width="40%"/>
+	<!--<view:batiments/>
+	<<view:groupes/>
+	<view:antennes/> 
+	<view:niveaux/>
+	<view:partiescommunes/> 
+	<view:logements/>
+	<view:locaux/>
+	<view:parcelles/>
+	<view:espacesxexterieurs/>
+	<view:espacesxinterieurs/>
+	<view:objetsxexterieurs/>
+	<view:objetsxinterieurs/>
+	<view:Upload/>-->
+	
 </s:Application>
