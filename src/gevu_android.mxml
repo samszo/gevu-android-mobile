@@ -27,18 +27,4 @@
 		<s:HorizontalLayout/>
 	</s:layout>
 	<gevu:arbre width="40%"/>
-	<!--<view:batiments/>
-	<<view:groupes/>
-	<view:antennes/> 
-	<view:niveaux/>
-	<view:partiescommunes/> 
-	<view:logements/>
-	<view:locaux/>
-	<view:parcelles/>
-	<view:espacesxexterieurs/>
-	<view:espacesxinterieurs/>
-	<view:objetsxexterieurs/>
-	<view:objetsxinterieurs/>
-	<view:Upload/>-->
-	
 </s:Application>

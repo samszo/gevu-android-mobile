@@ -12,6 +12,7 @@ package
 		
 		private var _redundancyType:String;
 		private var _id:int=1;
+		private var _treeid:int;
 		
 		//item type is VolumeDiskItem
 		private var _diskList:IList;
@@ -55,12 +56,11 @@ package
 		public function get getID():int{
 			return this._id;
 		}
-		private var _treeid:String = null;
-		public function get treeid():String {
-			if ( ! _treeid ) {
-				_treeid = "redundancy" + this._id;
-			}
-			return _treeid;
+		
+		
+		public function get treeid():int {
+			    _treeid = this._id;
+			    return _treeid;
 		}
 	}
 }
