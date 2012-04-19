@@ -10,8 +10,8 @@
 		 click="tree_clickHandler(event)"
 		 >		
 	<fx:Declarations>
-		<sqlite:SQLite id="db" file="gevu_mobile.sqlite" open="select_query.execute()" />
-		<sqlite:Query id="select_query" connection="{db.connection}" 
+		<sqlite:SQLite id="db" file="gevu_mobile.sqlite" open="tree_query.execute()" />
+		<sqlite:Query id="tree_query" connection="{db.connection}" 
 					  sql="SELECT node.lib, node.id_lieu, node.lieu_parent,node.lft,node.rgt
 					  FROM gevu_lieux AS node,
 					  gevu_lieux AS parent
@@ -19,6 +19,37 @@
 					  GROUP BY node.id_lieu
 					  ORDER BY node.lft"
 					  result="onSelectResult()" />
+		
+		<sqlite:Query id="form_query" connection="{db.connection}"
+					  sql="SELECT l.lib, l.id_lieu, a.id_antenne, b.id_batiment,c.id_geo,d.id_diag,e.id_doc,
+					  f.id_espace,g.id_espace_ext,h.id_espace_int,i.id_etablissement,j.id_niveau,
+					  k.id_objet_ext,m.id_objet_int,n.id_objet_voirie,o.id_observations,
+					  p.id_parcelle,q.id_probleme,s.id_groupe,t.id_logement,u.id_local,v.id_part_commu
+					  FROM gevu_lieux AS l
+					  LEFT JOIN gevu_antennes AS a ON a.id_lieu = l.id_lieu
+					  LEFT JOIN gevu_batiments AS b ON b.id_lieu = l.id_lieu
+					  LEFT JOIN gevu_geos AS c ON c.id_lieu = l.id_lieu
+					  LEFT JOIN gevu_diagnostics AS d ON d.id_lieu = l.id_lieu
+					  LEFT JOIN gevu_docsxlieux AS e ON e.id_lieu = l.id_lieu
+					  LEFT JOIN gevu_espaces AS f ON f.id_lieu = l.id_lieu
+					  LEFT JOIN gevu_espacesxexterieurs AS g ON g.id_lieu = l.id_lieu
+					  LEFT JOIN Gevu_espacesxinterieurs AS h ON h.id_lieu = l.id_lieu
+					  LEFT JOIN Gevu_etablissements AS i ON i.id_lieu = l.id_lieu
+					  LEFT JOIN Gevu_niveaux AS j ON j.id_lieu = l.id_lieu
+					  LEFT JOIN Gevu_objetsxexterieurs AS k ON k.id_lieu = l.id_lieu
+					  LEFT JOIN Gevu_objetsxinterieurs AS m ON m.id_lieu = l.id_lieu
+					  LEFT JOIN Gevu_objetsxvoiries AS n ON n.id_lieu = l.id_lieu
+					  LEFT JOIN Gevu_observations AS o ON o.id_lieu = l.id_lieu
+					  LEFT JOIN Gevu_parcelles AS p ON p.id_lieu = l.id_lieu
+					  LEFT JOIN Gevu_problemes AS q ON q.id_lieu = l.id_lieu
+					  LEFT JOIN Gevu_groupes AS s ON s.id_lieu = l.id_lieu
+					  LEFT JOIN Gevu_logements AS t ON t.id_lieu = l.id_lieu
+					  LEFT JOIN Gevu_locaux AS u ON u.id_lieu = l.id_lieu
+					  LEFT JOIN Gevu_partiescommunes AS v ON v.id_lieu = l.id_lieu
+					  where l.id_lieu ={this.selected_id} 
+					  GROUP BY l.id_lieu
+					  ORDER BY l.id_lieu ;" 
+					  result="form_query_resultHandler(event)"/>
 		
 		<s:ArrayCollection id="testData" />
 	</fx:Declarations>
@@ -33,9 +64,15 @@
 			import spark.events.IndexChangeEvent;
 			import spark.events.ListEvent;
 			
+		    [Bindable]
+			private var selected_id:int;
 						
+			/* 
+			 * This function is responsible for
+             * Building the tree			
+             */	
 			private function onSelectResult():void {
-				var res:ArrayCollection=new ArrayCollection(select_query.data);
+				var res:ArrayCollection=new ArrayCollection(tree_query.data);
 				var parents:Array = new Array;
 				testData.disableAutoUpdate();
 				testData.removeAll();
@@ -58,10 +95,10 @@
 					}//it is a parent node
 					else{
 						var leaf:Disk= new Disk(res.getItemAt(i).lib,res.getItemAt(i).id_lieu)
-						var parent_id:int=res.getItemAt(i).lieu_parent;
+						var leaf_parent_id:int=res.getItemAt(i).lieu_parent;
 						for (var j:int=0;j<parents.length;j++) 
 						  if(parents[j]!=null)
-							if(parent_id==parents[j].getID)
+							if(leaf_parent_id==parents[j].getID)
 								parents[j].children.addItem(leaf);	
 					  }	// it is a leaf
 					}//for loop
@@ -70,13 +107,132 @@
                    testData.enableAutoUpdate();              		
 			}
 	
-			
-			
+			//Retrive the id of the clicked tree item
+		    //and executes the form query to know whcih
+			// info is associated to this "lieu" in order
+			//to build the appropriate form
 			protected function tree_clickHandler(event:MouseEvent):void
 			{
-				var selected_id:int=event.currentTarget.selectedItem.source.getID;
-				trace(selected_id);
+			 selected_id=event.currentTarget.selectedItem.source.getID;
+			 form_query.execute();
+			 }
+			
+			protected function form_query_resultHandler(event:SQLEvent):void
+			{
+			var form_res:ArrayCollection= new ArrayCollection(form_query.data);
+			this.buildForms(form_res);
 			}
+			
+			//Retrive the non null values to know the type
+			// of lieu and build the form
+			public function buildForms(info:ArrayCollection):Array{
+			 var compo:Array = new Array;
+			 var i:int=0 ;
+			 
+			  if (info.getItemAt(0).id_antenne !=null) {
+				compo[i] = "id_antenne";
+				i++;
+			  }
+			  
+			  if (info.getItemAt(0).id_batiment !=null) {
+				  compo[i] = "id_batiment";
+				  i++;
+			  }
+			  
+			  if (info.getItemAt(0).id_geo !=null) {
+				  compo[i] = "id_geo";
+				  i++;
+			  }
+			  
+			  if (info.getItemAt(0).id_diag !=null) {
+				  compo[i] = "id_diag";
+				  i++;
+			  }
+			  
+			  if (info.getItemAt(0).id_doc !=null) {
+				  compo[i] = "id_doc";
+				  i++;
+			  }
+			  
+			  if (info.getItemAt(0).id_espace !=null) {
+				  compo[i] = "id_espace";
+				  i++;
+			  }
+			  
+			  if (info.getItemAt(0).id_espace_ext !=null) {
+				  compo[i] = "id_espace_ext";
+				  i++;
+			  }
+			  
+			  if (info.getItemAt(0).id_espace_int !=null) {
+				  compo[i] = "id_espace_int";
+				  i++;
+			  }
+			  
+			  if (info.getItemAt(0).id_etablissement !=null) {
+				  compo[i] = "id_etablissement";
+				  i++;
+			  }
+			  
+			  
+			  if (info.getItemAt(0).id_niveau !=null) {
+				  compo[i] = "id_niveau";
+				  i++;
+			  }
+			  
+			  if (info.getItemAt(0).id_objet_ext !=null) {
+				  compo[i] = "id_objet_ext";
+				  i++;
+			  }
+			  
+			  if (info.getItemAt(0).id_objet_int !=null) {
+				  compo[i] = "id_objet_int";
+				  i++;
+			  }
+			  
+			  if (info.getItemAt(0).id_objet_voirie !=null) {
+				  compo[i] = "id_objet_voirie";
+				  i++;
+			  }
+			  
+			  if (info.getItemAt(0).id_observations !=null) {
+				  compo[i] = "id_observations";
+				  i++;
+			  }
+			  
+			  if (info.getItemAt(0).id_parcelle !=null) {
+				  compo[i] = "id_parcelle";
+				  i++;
+			  }
+			  
+			  if (info.getItemAt(0).id_probleme !=null) {
+				  compo[i] = "id_probleme";
+				  i++;
+			  }
+			  
+			  if (info.getItemAt(0).id_groupe !=null) {
+				  compo[i] = "id_groupe";
+				  i++;
+			  }
+			  
+			  if (info.getItemAt(0).id_logement !=null) {
+				  compo[i] = "id_logement";
+				  i++;
+			  }
+			  
+			  if (info.getItemAt(0).id_local !=null) {
+				  compo[i] = "id_local";
+				  i++;
+			  }
+			  
+			  if (info.getItemAt(0).id_part_commu !=null) {
+				  compo[i] = "id_part_commu";
+				  i++;
+			  }
+			 trace(compo);
+			 return compo;
+			}
+									   
 			
 		]]>	
 	</fx:Script>

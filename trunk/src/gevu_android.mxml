@@ -26,5 +26,5 @@
 	<s:layout>
 		<s:HorizontalLayout/>
 	</s:layout>
-	<gevu:arbre width="40%"/>
+	<gevu:arbre width="50%"/>
 </s:Application>
