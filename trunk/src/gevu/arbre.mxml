@@ -7,7 +7,8 @@
 		 dataProvider="{testData}"
 		 width="100%" height="100%" itemIdentifyField="treeid" allowItemDisSelection="false"
 		 useVirtualLayout="false" dragEnabled="false" dropEnabled="false" labelField="label"
-		 click="tree_clickHandler(event)">		
+		 click="tree_clickHandler(event)"
+		 >		
 	<fx:Declarations>
 		<sqlite:SQLite id="db" file="gevu_mobile.sqlite" open="select_query.execute()" />
 		<sqlite:Query id="select_query" connection="{db.connection}" 
@@ -23,8 +24,14 @@
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
+			import com.sparkTree.TreeEvent;
+			
+			import flash.net.dns.SRVRecord;
 			import flash.sampler.NewObjectSample;
+			
 			import spark.components.Button;
+			import spark.events.IndexChangeEvent;
+			import spark.events.ListEvent;
 			
 						
 			private function onSelectResult():void {
@@ -50,7 +57,7 @@
 						
 					}//it is a parent node
 					else{
-						var leaf:Disk= new Disk(res.getItemAt(i).lib)
+						var leaf:Disk= new Disk(res.getItemAt(i).lib,res.getItemAt(i).id_lieu)
 						var parent_id:int=res.getItemAt(i).lieu_parent;
 						for (var j:int=0;j<parents.length;j++) 
 						  if(parents[j]!=null)
@@ -61,14 +68,15 @@
 				
 				   testData.addItem(parents[0]);	 	
                    testData.enableAutoUpdate();              		
-			
 			}
-				
+	
+			
+			
 			protected function tree_clickHandler(event:MouseEvent):void
 			{
-				
+				var selected_id:int=event.currentTarget.selectedItem.source.getID;
+				trace(selected_id);
 			}
-			
 			
 		]]>	
 	</fx:Script>
