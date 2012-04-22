@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:view="views.*">
+<s:Panel   title="Logement"
+		   width="100%" height="100%" 
+		   >
+	<s:VGroup>
+
+		<s:HGroup width="100%">
+			<s:Label text="Identifiant du logement :" />
+			<s:TextInput id="F2" width="100%" />
+		</s:HGroup>
+		<s:HGroup>
+			<s:Label text="N° de porte :" />
+			<s:TextInput id="F3" width="100%" />
+		</s:HGroup>
+		<s:Label text="Type de logement : " />
+		<s:HGroup width="100%">
+			<s:RadioButton groupName="type" id="reponse_T1" label="T1" color="0x323232"  /> 
+			<s:RadioButton groupName="type" id="reponse_T2" label="T2" color="0x323232"  />
+			<s:RadioButton groupName="type" id="reponse_T3" label="T3" color="0x323232"  />
+			<s:RadioButton groupName="type" id="reponse_T4" label="T4" color="0x323232" />
+			<s:RadioButton groupName="type" id="reponse_T5" label="T5" color="0x323232"  />
+		</s:HGroup>
+		<s:HGroup>
+			<s:RadioButton groupName="type" id="reponse_T6" label="T6" color="0x323232"  />
+			<s:RadioButton groupName="type" id="reponse_T7" label="T7" color="0x323232"  />
+			<s:RadioButton groupName="type" id="reponse_T8" label="T8" color="0x323232" />
+			<s:RadioButton groupName="type" id="reponse_T9" label="T9" color="0x323232"  />
+			<s:RadioButton groupName="type" id="reponse_T10" label="T10" color="0x323232" />
+		</s:HGroup>
+		<s:Button id="SaveModif" label="Enregistrer les modifications" />
+		
+	</s:VGroup>
+	
+	</s:Panel>
+	</s:View>

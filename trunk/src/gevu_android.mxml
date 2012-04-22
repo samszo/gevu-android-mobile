@@ -21,10 +21,17 @@
 			import flash.utils.getQualifiedClassName;
 			import mx.events.PropertyChangeEvent;
 			
+			
 		]]>
 	</fx:Script>
 	<s:layout>
 		<s:HorizontalLayout/>
 	</s:layout>
-	<gevu:arbre width="50%"/>
+	<gevu:arbre width="100%" height="50%"/>
+		<s:Scroller width="100%" height="100%">
+			<s:VGroup id="main_interface">
+			</s:VGroup>	
+		</s:Scroller>
+	
+	
 </s:Application>
