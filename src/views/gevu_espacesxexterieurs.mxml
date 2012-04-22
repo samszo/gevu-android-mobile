@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:view="views.*">
+
+<s:Panel  title="Espace extérieur"
+		   width="100%" height="100%" 
+		   >
+		<s:VGroup>
+			<s:HGroup width="100%">
+				<s:Label text="Identifiant : " />
+				<s:TextInput id="F2" width="100%" />
+			</s:HGroup>
+
+			<s:HGroup width="100%">
+				<s:Label text="fonction" />
+				<s:TextInput id="F3" />
+			</s:HGroup>
+
+			<s:HGroup width="100%">
+				<s:Label text="Type social d'espace : " />
+				<s:RadioButton groupName="type" id="reponse_1" label="Lieu de Travail" color="0x323232"  /> 
+				<s:RadioButton groupName="type" id="reponse_2" label="Public" color="0x323232"  />
+				<s:RadioButton groupName="type" id="reponse_3" label="Mixte" color="0x323232"  />
+			</s:HGroup>
+
+			<s:HGroup width="100%">
+				<s:Label text="Type d'espace spécifique" />
+				<s:ComboBox id="cbType" width="100%" height="100%" labelField="lib" prompt="Choisissez"  />				
+			</s:HGroup>
+
+			<s:HGroup width="100%" >
+				<s:Button id="saveModif" label="Enregistrer" />
+				<s:Button id="ajoutDiag" label="Ajouter des diagnostics" />			
+			</s:HGroup>
+
+		</s:VGroup>
+	
+	</s:Panel>
+</s:View>

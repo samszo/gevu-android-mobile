@@ -57,15 +57,41 @@
 		<![CDATA[
 			import com.sparkTree.TreeEvent;
 			
+			import flash.display.DisplayObject;
 			import flash.net.dns.SRVRecord;
 			import flash.sampler.NewObjectSample;
+			import flash.utils.getDefinitionByName;
 			
+			import mx.core.FlexGlobals;
+			import mx.core.IVisualElement;
+			
+			import spark.components.Application;
 			import spark.components.Button;
 			import spark.events.IndexChangeEvent;
 			import spark.events.ListEvent;
 			
-		    [Bindable]
+			import views.Gevu_espacesxinterieurs;
+			import views.Gevu_groupes;
+			import views.Gevu_locaux;
+			import views.Gevu_logements;
+			import views.Gevu_niveaux;
+			import views.Gevu_objetsxexterieurs;
+			import views.Gevu_objetsxinterieurs;
+			import views.Gevu_parcelles;
+			import views.Gevu_partiescommunes;
+			import views.gevu_antennes;
+			import views.gevu_batiments;
+			import views.gevu_espacesxexterieurs;
+			import views.gevu_geos;
+			
+
+			
+			
+		   [Bindable]
 			private var selected_id:int;
+			
+			private var tabels:Array= new Array;
+	
 						
 			/* 
 			 * This function is responsible for
@@ -96,10 +122,10 @@
 					else{
 						var leaf:Disk= new Disk(res.getItemAt(i).lib,res.getItemAt(i).id_lieu)
 						var leaf_parent_id:int=res.getItemAt(i).lieu_parent;
-						for (var j:int=0;j<parents.length;j++) 
-						  if(parents[j]!=null)
-							if(leaf_parent_id==parents[j].getID)
-								parents[j].children.addItem(leaf);	
+						for (var k:int=0;k<parents.length;k++) 
+						  if(parents[k]!=null)
+							if(leaf_parent_id==parents[k].getID)
+								parents[k].children.addItem(leaf);	
 					  }	// it is a leaf
 					}//for loop
 				
@@ -117,122 +143,183 @@
 			 form_query.execute();
 			 }
 			
+			
+		    
 			protected function form_query_resultHandler(event:SQLEvent):void
 			{
-			var form_res:ArrayCollection= new ArrayCollection(form_query.data);
-			this.buildForms(form_res);
+			 var form_res:ArrayCollection= new ArrayCollection(form_query.data);
+			 var ids:Array = getForms(form_res);
+			 var forms:Array=initTables();
+			 var className:String;
+			 var ClassReference:Class;
+			 var instance:Object;
+			 //these references are added for the compiler to 
+			 // have a refernce and execute the getDefinitionByName()
+			 //methode and if not, an : variable not found error will happen
+			 gevu_antennes;
+			 gevu_batiments;
+			 gevu_espacesxexterieurs;
+			 Gevu_espacesxinterieurs;
+			 Gevu_groupes;
+			 Gevu_locaux;
+			 Gevu_logements;
+			 Gevu_niveaux;
+			 Gevu_objetsxexterieurs;
+			 Gevu_objetsxinterieurs;
+			 Gevu_parcelles;
+			 Gevu_partiescommunes;
+			 gevu_geos;//just for test
+			 
+			 //removing all interfaces
+			  if (FlexGlobals.topLevelApplication.main_interface.numChildren>0)
+				  for (var j:int=0;j<FlexGlobals.topLevelApplication.main_interface.numChildren;j++)
+					  FlexGlobals.topLevelApplication.main_interface.removeElementAt(j);
+			  
+			  for (var k:int=0;k<ids.length;k++)
+			  {
+				 className= "views."+tabels[ids[k]] ;
+				 ClassReference = getDefinitionByName(className) as Class;
+				 instance = new ClassReference();
+				 FlexGlobals.topLevelApplication.main_interface.addElement(instance);
+				 
+			  }
+			}//function
+			
+			
+			
+			public function initTables():Array {
+				
+				tabels['id_antenne']='gevu_antennes';
+				tabels['id_batiment']='gevu_batiments';
+				tabels['id_geo']='gevu_geos';
+				tabels['id_diag']='gevu_diagnostics';
+				tabels['id_doc']='gevu_docsxlieux';
+				tabels['id_espace']='gevu_espaces';
+				tabels['id_espace_ext']='gevu_espacesxexterieurs';
+				tabels['id_espace_int']='Gevu_espacesxinterieurs';
+				tabels['id_etablissement']='Gevu_etablissements';
+				tabels['id_niveau']='Gevu_niveaux';
+				tabels['id_objet_ext']='Gevu_objetsxexterieurs';
+				tabels['id_espace_int']='Gevu_objetsxinterieurs';
+				tabels['id_objet_voirie']='Gevu_objetsxvoiries';
+				tabels['id_observations']='Gevu_observations';
+				tabels['id_parcelle']='Gevu_parcelles';
+				tabels['id_probleme']='Gevu_problemes';
+				tabels['id_groupe']='Gevu_groupes';
+				tabels['id_logement']='Gevu_logements';
+				tabels['id_local']='Gevu_locaux';
+				tabels['id_part_commu']='Gevu_partiescommunes';
+				
+				return tabels;
 			}
 			
-			//Retrive the non null values to know the type
-			// of lieu and build the form
-			public function buildForms(info:ArrayCollection):Array{
-			 var compo:Array = new Array;
-			 var i:int=0 ;
-			 
-			  if (info.getItemAt(0).id_antenne !=null) {
-				compo[i] = "id_antenne";
-				i++;
-			  }
-			  
-			  if (info.getItemAt(0).id_batiment !=null) {
-				  compo[i] = "id_batiment";
-				  i++;
-			  }
-			  
-			  if (info.getItemAt(0).id_geo !=null) {
-				  compo[i] = "id_geo";
-				  i++;
-			  }
-			  
-			  if (info.getItemAt(0).id_diag !=null) {
-				  compo[i] = "id_diag";
-				  i++;
-			  }
-			  
-			  if (info.getItemAt(0).id_doc !=null) {
-				  compo[i] = "id_doc";
-				  i++;
-			  }
-			  
-			  if (info.getItemAt(0).id_espace !=null) {
-				  compo[i] = "id_espace";
-				  i++;
-			  }
-			  
-			  if (info.getItemAt(0).id_espace_ext !=null) {
-				  compo[i] = "id_espace_ext";
-				  i++;
-			  }
-			  
-			  if (info.getItemAt(0).id_espace_int !=null) {
-				  compo[i] = "id_espace_int";
-				  i++;
-			  }
-			  
-			  if (info.getItemAt(0).id_etablissement !=null) {
-				  compo[i] = "id_etablissement";
-				  i++;
-			  }
-			  
-			  
-			  if (info.getItemAt(0).id_niveau !=null) {
-				  compo[i] = "id_niveau";
-				  i++;
-			  }
-			  
-			  if (info.getItemAt(0).id_objet_ext !=null) {
-				  compo[i] = "id_objet_ext";
-				  i++;
-			  }
-			  
-			  if (info.getItemAt(0).id_objet_int !=null) {
-				  compo[i] = "id_objet_int";
-				  i++;
-			  }
-			  
-			  if (info.getItemAt(0).id_objet_voirie !=null) {
-				  compo[i] = "id_objet_voirie";
-				  i++;
-			  }
-			  
-			  if (info.getItemAt(0).id_observations !=null) {
-				  compo[i] = "id_observations";
-				  i++;
-			  }
-			  
-			  if (info.getItemAt(0).id_parcelle !=null) {
-				  compo[i] = "id_parcelle";
-				  i++;
-			  }
-			  
-			  if (info.getItemAt(0).id_probleme !=null) {
-				  compo[i] = "id_probleme";
-				  i++;
-			  }
-			  
-			  if (info.getItemAt(0).id_groupe !=null) {
-				  compo[i] = "id_groupe";
-				  i++;
-			  }
-			  
-			  if (info.getItemAt(0).id_logement !=null) {
-				  compo[i] = "id_logement";
-				  i++;
-			  }
-			  
-			  if (info.getItemAt(0).id_local !=null) {
-				  compo[i] = "id_local";
-				  i++;
-			  }
-			  
-			  if (info.getItemAt(0).id_part_commu !=null) {
-				  compo[i] = "id_part_commu";
-				  i++;
-			  }
-			 trace(compo);
-			 return compo;
+			public function getForms(info:ArrayCollection):Array{
+				var compo:Array = new Array;
+				var i:int=0 ;
+				
+				//there is a way to change this.
+				if (info.getItemAt(0).id_antenne !=null) {
+					compo[i] = "id_antenne";
+					i++;
+				}
+				
+				if (info.getItemAt(0).id_batiment !=null) {
+					compo[i] = "id_batiment";
+					i++;
+				}
+				
+				if (info.getItemAt(0).id_geo !=null) {
+					compo[i] = "id_geo";
+					i++;
+				}
+				
+				if (info.getItemAt(0).id_diag !=null) {
+					compo[i] = "id_diag";
+					i++;
+				}
+				
+				if (info.getItemAt(0).id_doc !=null) {
+					compo[i] = "id_doc";
+					i++;
+				}
+				
+				if (info.getItemAt(0).id_espace !=null) {
+					compo[i] = "id_espace";
+					i++;
+				}
+				
+				if (info.getItemAt(0).id_espace_ext !=null) {
+					compo[i] = "id_espace_ext";
+					i++;
+				}
+				
+				if (info.getItemAt(0).id_espace_int !=null) {
+					compo[i] = "id_espace_int";
+					i++;
+				}
+				
+				if (info.getItemAt(0).id_etablissement !=null) {
+					compo[i] = "id_etablissement";
+					i++;
+				}
+				
+				
+				if (info.getItemAt(0).id_niveau !=null) {
+					compo[i] = "id_niveau";
+					i++;
+				}
+				
+				if (info.getItemAt(0).id_objet_ext !=null) {
+					compo[i] = "id_objet_ext";
+					i++;
+				}
+				
+				if (info.getItemAt(0).id_objet_int !=null) {
+					compo[i] = "id_objet_int";
+					i++;
+				}
+				
+				if (info.getItemAt(0).id_objet_voirie !=null) {
+					compo[i] = "id_objet_voirie";
+					i++;
+				}
+				
+				if (info.getItemAt(0).id_observations !=null) {
+					compo[i] = "id_observations";
+					i++;
+				}
+				
+				if (info.getItemAt(0).id_parcelle !=null) {
+					compo[i] = "id_parcelle";
+					i++;
+				}
+				
+				if (info.getItemAt(0).id_probleme !=null) {
+					compo[i] = "id_probleme";
+					i++;
+				}
+				
+				if (info.getItemAt(0).id_groupe !=null) {
+					compo[i] = "id_groupe";
+					i++;
+				}
+				
+				if (info.getItemAt(0).id_logement !=null) {
+					compo[i] = "id_logement";
+					i++;
+				}
+				
+				if (info.getItemAt(0).id_local !=null) {
+					compo[i] = "id_local";
+					i++;
+				}
+				
+				if (info.getItemAt(0).id_part_commu !=null) {
+					compo[i] = "id_part_commu";
+					i++;
+				}
+				return compo;
 			}
-									   
 			
 		]]>	
 	</fx:Script>

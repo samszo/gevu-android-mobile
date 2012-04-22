@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:view="views.*">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:Panel x="10" y="5" width="590" height="169" title="Antenne">
+		<s:VGroup >
+		</s:VGroup>
+		<s:TextInput id="F2" x="169" y="7"/>
+		<s:Label x="9" y="22" text="Identifiant du local :"/>
+		<view:contacts id="ctc" x="-1" y="57"/>
+	</s:Panel>
+	<s:Button id="SaveModif" x="10" y="438" label="Enregistrer les modifications"/>
+</s:View>
