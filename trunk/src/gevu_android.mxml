@@ -19,15 +19,25 @@
 			import flash.filesystem.File;
 			import flash.utils.getDefinitionByName;
 			import flash.utils.getQualifiedClassName;
+			
+			import gevu.arbre;
+			
+			import mx.core.FlexGlobals;
 			import mx.events.PropertyChangeEvent;
 			
+			 
+			protected function add_clickHandler(event:MouseEvent):void
+			{
+				this.mytree.get_lieu_info.execute();
+			}
 			
 		]]>
 	</fx:Script>
 	<s:layout>
 		<s:HorizontalLayout/>
-	</s:layout>
-	<gevu:arbre width="100%" height="50%"/>
+	</s:layout>	
+	<s:Button label="Ajouter un lieu" click="add_clickHandler(event)"/>
+	<gevu:arbre  id="mytree" width="100%" height="50%"/>
 		<s:Scroller width="100%" height="100%">
 			<s:VGroup id="main_interface">
 			</s:VGroup>	

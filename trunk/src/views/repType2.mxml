@@ -2,16 +2,18 @@
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" 
 		xmlns:view="views.*"
-		>
+		creationComplete="decocheVals();">
 	<fx:Script>
 		<![CDATA[			
 		[Bindable] public var lblQ:String;
 		[Bindable] public var Q:String;
 		[Bindable] public var val:String;
 		[Bindable] public var fnct:Function;
+			
 		private function changeModif(val:String):void{
-		fnct(Q, val);
+		fnct(val);
 		}
+			
 		private function cocheVals():void{
 		//basé sur les mot-clef de type 2
 		//1 	Oui, 2 	Non, 124 	N. A., 141 	Sous réserve
@@ -32,12 +34,12 @@
 	</fx:Script>
 
 <s:VGroup>
-	<s:TextArea  fontFamily="Times New Roman" fontSize="18" editable="false" />
+	<s:TextArea  text="{lblQ}" fontFamily="Times New Roman" fontSize="18" editable="false" />
 	<s:HGroup>		
-		<s:RadioButton groupName="reponse" id="reponse_1" label="oui" color="0x323232" /> 
-		<s:RadioButton groupName="reponse" id="reponse_2" label="non" color="0x323232" />
-		<s:RadioButton groupName="reponse" id="reponse_124" label="n. a." color="0x323232"  />
-		<s:RadioButton groupName="reponse" id="reponse_141" label="sous réserve" color="0x323232"  />
+		<s:RadioButton groupName="reponse" id="reponse_1" label="oui" color="0x323232" click="changeModif('1')" /> 
+		<s:RadioButton groupName="reponse" id="reponse_2" label="non" color="0x323232" click="changeModif('2')"/>
+		<s:RadioButton groupName="reponse" id="reponse_124" label="n. a." color="0x323232" click="changeModif('124')"/>
+		<s:RadioButton groupName="reponse" id="reponse_141" label="sous réserve" color="0x323232" click="changeModif('141')" />
 	</s:HGroup>
 </s:VGroup>
 </s:View>	

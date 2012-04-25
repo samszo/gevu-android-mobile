@@ -1,16 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" 
-		xmlns:view="views.*">
+		xmlns:sqlite="com.peterelst.air.sqlite.*"
+		xmlns:view="views.*"
+		creationComplete="this.get_ref.execute();">
+	<fx:Declarations>
+		<sqlite:SQLite id="db" file="gevu_mobile.sqlite" />
+		<sqlite:Query id="get_ref" connection="{db.connection}" 
+					  sql="select ref from gevu_groupes where id_lieu={selected_id}"
+					  result="groupes_query_resultHandler(event)"/>
+		<sqlite:Query id="update_query" connection="{db.connection}"
+					  sql="update gevu_groupes set reponse_1={this.reponse}
+					       where id_lieu={this.selected_id}" />
+		
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			[Bindable] private var selected_id:int;
+			[Bindable] public var reponse:String;
+			
+			public function set_selected_id(x:int):void{
+				this.selected_id=x;
+			}
+			
+			protected function groupes_query_resultHandler(event:SQLEvent):void
+			{
+				var ref:Array=get_ref.data;
+				this.F2.text=ref[0].ref;
+			}
+			
+			public function editModif(val:String) : void {
+				this.reponse=val;
+			}
+			
+			protected function SaveModif_clickHandler(event:MouseEvent):void
+			  {
+				this.update_query.execute();
+				}
+			
+		]]>
+	</fx:Script>
 	<s:Panel width="600" height="278" title="Groupe">
 		<s:VGroup >
 			<view:repType2 width="357" height="102" lblQ="Le bâtiment est t-il en ZPPAUP ?"
-						   Q="reponse_1"/>
+						  fnct="{this.editModif}" />
 			<s:HGroup height="37">
 			<s:Label width="27" height="31" text="ref"/>
 			<s:TextInput id="F2"/>
 			</s:HGroup>	
 		</s:VGroup>	
-		<s:Button id="SaveModif" x="0" y="197" label="Enregistrer les modifications"/>
+		<s:Button id="SaveModif" x="0" y="197" label="Enregistrer" click="SaveModif_clickHandler(event)"/>
 	</s:Panel>
 </s:View>
+

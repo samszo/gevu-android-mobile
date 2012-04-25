@@ -1,48 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" 
-		xmlns:view="views.*">
-	
+		xmlns:view="views.*"
+		xmlns:sqlite="com.peterelst.air.sqlite.*"
+		creationComplete="this.contact_query.execute()">
+	<fx:Declarations>
+		<sqlite:SQLite id="db" file="gevu_mobile.sqlite"  />
+		<sqlite:Query id="contact_query" connection="{db.connection}"
+					  sql="select id_contact,nom,prenom,fixe,mobile,fax,mail from
+					  gevu_contacts where id_contact={this.id_contact}"
+					  result="contact_query_resultHandler(event)"/>
+		<sqlite:Query id="add_query" connection="{db.connection}"
+					  sql="insert into gevu_contacts(nom,prenom,fixe,mobile,fax,mail)
+					  values ({this.nom},{this.prenom},{this.fixe},{this.mobile},{this.fax},{this.mail})"/>
+		<sqlite:Query id="delete_query" connection="{db.connection}"
+					  sql="delete from gevu_contacts where cid={this.deleting_id}"/>
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			[Bindable]
+			public var id_contact:int;
+			[Bindable]
+			private var contact_info:ArrayCollection =new ArrayCollection;
+			
+			[Bindable]
+			private var nom:String = new String;
+			[Bindable]
+			private var prenom:String = new String;
+			[Bindable]
+			private var fixe:String = new String;
+			[Bindable]
+			private var fax:String = new String;
+			[Bindable]
+			private var mobile:String = new String;
+			[Bindable]
+			private var mail:String = new String;
+			[Bindable]
+			private var deleting_id:String = new String;
+			
+			protected function contact_query_resultHandler(event:SQLEvent):void
+			{
+				contact_info=contact_query.data as ArrayCollection;
+			}
+			
+			protected function add_form_clickHandler(event:MouseEvent):void
+			{
+				this.add_contact_form.visible=true;	
+				
+			}
+			
+			protected function save_contact_clickHandler(event:MouseEvent):void
+			{
+				this.nom=this.nom_in.text;
+				this.prenom=this.prenom_in.text;
+				this.fixe=this.fixe_in.text;
+				this.mobile=this.mobile_in.text;
+				this.fax=this.fax_in.text;
+				this.mail=this.mail_in.text;
+				this.add_query.execute();
+			}
+			
+			protected function delete_clickHandler(event:MouseEvent):void
+			{
+			var item:Object=this.dgContact.selectedItem;
+			this.deleting_id=item['cid'];
+			this.delete_query.execute();
+			}
+			
+		]]>
+	</fx:Script>
 	<s:Panel title="Contacts">
 		<s:VGroup id="viewContact" 
 				  >
 			<s:HGroup>
-				<s:Button   label="Ajouter un contact" />
+				<s:Button   label="Ajouter un contact" click="add_form_clickHandler(event)"/>
+				<s:Button   label="Supprimer un contact" click="delete_clickHandler(event)"/>
 			</s:HGroup>	
 		</s:VGroup>
 		
 		<s:VGroup id="viewContactUnique" x="0" y="55" width="588" height="250" paddingBottom="6"
 				  paddingLeft="6" paddingRight="6" paddingTop="6">
-			<s:DataGrid width="100%" height="100%" id="dgContact">
+			<s:DataGrid width="100%" height="240" id="dgContact" dataProvider="{this.contact_info}"
+						editable="true" 
+						>
 				<s:columns>
-					<s:ArrayList>
-						<s:GridColumn headerText="Nom" />
-						<s:GridColumn headerText="Prénom" />
-						<s:GridColumn headerText="Fixe" />
-						<s:GridColumn headerText="Mobile"/>
-						<s:GridColumn headerText="Fax"/>
-						<s:GridColumn headerText="Mail"/>
-						<s:GridColumn headerText="Id Contact"  visible="false"/>
-					</s:ArrayList>
+					<s:ArrayCollection>
+						<s:GridColumn dataField="id_contact" visible="false"/>
+						<s:GridColumn headerText="Nom" dataField="nom"/>
+						<s:GridColumn headerText="Prénom" dataField="prenom"/>
+						<s:GridColumn headerText="Fixe" dataField="fixe"/>
+						<s:GridColumn headerText="Mobile" dataField="mobile"/>
+						<s:GridColumn headerText="Fax" dataField="fax"/>
+						<s:GridColumn headerText="Mail" dataField="mail"/>
+					</s:ArrayCollection>
 				</s:columns>
 			</s:DataGrid>
-	
-	<!--	<s:Label text="Mail:"/>
-			<s:Label text="Tel. mobile:"/>
-			<s:Label text="Tél. fixe:"/>
-			<s:Label text="Fax:"/>
-			<s:Label text="Prénom:" />
-			<s:Label id="UpdNom" />
-			<s:Label id="UpdPrenom" />
-			<s:Label id="UpdFixe" /> 
-			<s:VGroup>
-				<s:Label id="UpdMobile" />							
-			</s:VGroup>
-			<s:Label id="UpdMail" />
-			-->			
-		</s:VGroup>
-		<s:Button x="165" y="0" label="Supprimer un contact"/>
 			
+			<s:VGroup id="add_contact_form" visible="false">
+				<s:HGroup>
+					<s:Label text="Nom:"/>
+					<s:TextInput id="nom_in" height="25"/>
+				</s:HGroup>	
+				<s:HGroup>	
+					<s:Label text="prenom:"/>
+					<s:TextInput id="prenom_in" height="25"/>
+				</s:HGroup>
+				<s:HGroup>	
+					<s:Label text="Fixe:"/>
+					<s:TextInput id="fixe_in" height="25"/>
+				</s:HGroup>
+				<s:HGroup>	
+					<s:Label text="Mobile"/>
+					<s:TextInput id="mobile_in" height="25"/>
+				</s:HGroup>
+				<s:HGroup>	
+					<s:Label text="Fax"/>
+					<s:TextInput id="fax_in" height="25"/>
+				</s:HGroup>
+				<s:HGroup>	
+					<s:Label text="Mail"/>
+					<s:TextInput id="mail_in" height="25"/>
+				</s:HGroup>	
+				<s:Button label="Enrigisterer ce contact" click="save_contact_clickHandler(event)"/>	
+			</s:VGroup>
+			
+		</s:VGroup>
+		
+		
 		
 	</s:Panel>
 </s:View>	
