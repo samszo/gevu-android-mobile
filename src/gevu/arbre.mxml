@@ -8,7 +8,8 @@
 		 width="100%" height="100%" itemIdentifyField="treeid" allowItemDisSelection="false"
 		 useVirtualLayout="false" dragEnabled="false" dropEnabled="false" labelField="label"
 		 click="tree_clickHandler(event)"
-		 >		
+		 >	
+	
 	<fx:Declarations>
 		<sqlite:SQLite id="db" file="gevu_mobile.sqlite" open="tree_query.execute()" />
 		<sqlite:Query id="tree_query" connection="{db.connection}" 
@@ -51,6 +52,48 @@
 					  ORDER BY l.id_lieu ;" 
 					  result="form_query_resultHandler(event)"/>
 		
+		<sqlite:Query id="get_lieu_info" connection="{db.connection}"
+					  sql="select * from gevu_lieux where id_lieu={this.selected_id}"
+					  result="get_lieu_info_resultHandler(event)"
+					  />
+		
+		
+	                        <!-- THE PARENT HAS CHILDS-->	
+		<sqlite:Query id="update_rgt_has_child" connection="{db.connection}"
+					  sql="update gevu_lieux set rgt = rgt + 2 WHERE rgt > {this.selected_rgt}" />
+		
+		<sqlite:Query id="update_lft_has_child" connection="{db.connection}"
+					  sql="update gevu_lieux SET lft = lft + 2 WHERE lft > {this.selected_rgt}"/>
+		
+		<sqlite:Query id="insert_has_child" connection="{db.connection}" 
+					  sql="insert into gevu_lieux (lib,lft,rgt,niv,lieu_parent)
+					       values('test',
+					             {this.selected_rgt + 1},
+					             {this.selected_rgt + 2},
+					             {this.selected_niv + 1},
+					             {this.selected_id})" />
+				<!-- **************************************************** -->
+					  
+					  
+		
+		                     <!-- THE PARENT Does not have CHILDS-->	
+		<sqlite:Query id="update_rgt_no_child" connection="{db.connection}"
+					  sql="update gevu_lieux set rgt = rgt + 2 WHERE rgt > {this.selected_lft}"/>
+		
+		<sqlite:Query id="update_lft_no_child" connection="{db.connection}"
+					  sql="update gevu_lieux SET lft = lft + 2 WHERE lft > {this.selected_lft}"/>
+		
+		<sqlite:Query id="insert_no_child" connection="{db.connection}" 
+					  sql="insert into gevu_lieux (lib,lft,rgt,niv,lieu_parent)
+					  values('test',
+					  {this.selected_lft + 1},
+					  {this.selected_lft + 2},
+					  {this.selected_niv + 1},
+					  {this.selected_id})" />
+		<!-- **************************************************** -->
+		
+			
+		
 		<s:ArrayCollection id="testData" />
 	</fx:Declarations>
 	<fx:Script>
@@ -70,27 +113,28 @@
 			import spark.events.IndexChangeEvent;
 			import spark.events.ListEvent;
 			
-			import views.Gevu_espacesxinterieurs;
-			import views.Gevu_groupes;
-			import views.Gevu_locaux;
-			import views.Gevu_logements;
-			import views.Gevu_niveaux;
-			import views.Gevu_objetsxexterieurs;
-			import views.Gevu_objetsxinterieurs;
-			import views.Gevu_parcelles;
-			import views.Gevu_partiescommunes;
-			import views.gevu_antennes;
-			import views.gevu_batiments;
-			import views.gevu_espacesxexterieurs;
-			import views.gevu_geos;
+			import views.*;
+            
+			gevu_antennes;
+			gevu_batiments;
+			gevu_espacesxexterieurs;
+			gevu_espacesxinterieurs;
+			gevu_groupes;
+			gevu_locaux;
+			gevu_logements;
+			gevu_niveaux;
+			gevu_objetsxexterieurs;
+			gevu_objetsxinterieurs;
+			gevu_parcelles;
+			gevu_partiescommunes;
 			
-
+			[Bindable] private var selected_id:int;
+			[Bindable] private var selected_lft:int;
+			[Bindable] private var selected_rgt:int;
+			[Bindable] private var selected_niv:int;
+			[Bindable] private var lieu_info:Array=new Array;
 			
 			
-		   [Bindable]
-			private var selected_id:int;
-			
-			private var tabels:Array= new Array;
 	
 						
 			/* 
@@ -133,10 +177,7 @@
                    testData.enableAutoUpdate();              		
 			}
 	
-			//Retrive the id of the clicked tree item
-		    //and executes the form query to know whcih
-			// info is associated to this "lieu" in order
-			//to build the appropriate form
+			
 			protected function tree_clickHandler(event:MouseEvent):void
 			{
 			 selected_id=event.currentTarget.selectedItem.source.getID;
@@ -149,26 +190,13 @@
 			{
 			 var form_res:ArrayCollection= new ArrayCollection(form_query.data);
 			 var ids:Array = getForms(form_res);
-			 var forms:Array=initTables();
 			 var className:String;
 			 var ClassReference:Class;
 			 var instance:Object;
 			 //these references are added for the compiler to 
 			 // have a refernce and execute the getDefinitionByName()
 			 //methode and if not, an : variable not found error will happen
-			 gevu_antennes;
-			 gevu_batiments;
-			 gevu_espacesxexterieurs;
-			 Gevu_espacesxinterieurs;
-			 Gevu_groupes;
-			 Gevu_locaux;
-			 Gevu_logements;
-			 Gevu_niveaux;
-			 Gevu_objetsxexterieurs;
-			 Gevu_objetsxinterieurs;
-			 Gevu_parcelles;
-			 Gevu_partiescommunes;
-			 gevu_geos;//just for test
+			 
 			 
 			 //removing all interfaces
 			  if (FlexGlobals.topLevelApplication.main_interface.numChildren>0)
@@ -177,41 +205,16 @@
 			  
 			  for (var k:int=0;k<ids.length;k++)
 			  {
-				 className= "views."+tabels[ids[k]] ;
+				 className= "views."+ids[k];
+				 trace(className);
 				 ClassReference = getDefinitionByName(className) as Class;
 				 instance = new ClassReference();
-				 FlexGlobals.topLevelApplication.main_interface.addElement(instance);
-				 
+				 //instance.set_selected_id(selected_id);
+				 //FlexGlobals.topLevelApplication.main_interface.addElement(instance);
 			  }
 			}//function
 			
 			
-			
-			public function initTables():Array {
-				
-				tabels['id_antenne']='gevu_antennes';
-				tabels['id_batiment']='gevu_batiments';
-				tabels['id_geo']='gevu_geos';
-				tabels['id_diag']='gevu_diagnostics';
-				tabels['id_doc']='gevu_docsxlieux';
-				tabels['id_espace']='gevu_espaces';
-				tabels['id_espace_ext']='gevu_espacesxexterieurs';
-				tabels['id_espace_int']='Gevu_espacesxinterieurs';
-				tabels['id_etablissement']='Gevu_etablissements';
-				tabels['id_niveau']='Gevu_niveaux';
-				tabels['id_objet_ext']='Gevu_objetsxexterieurs';
-				tabels['id_espace_int']='Gevu_objetsxinterieurs';
-				tabels['id_objet_voirie']='Gevu_objetsxvoiries';
-				tabels['id_observations']='Gevu_observations';
-				tabels['id_parcelle']='Gevu_parcelles';
-				tabels['id_probleme']='Gevu_problemes';
-				tabels['id_groupe']='Gevu_groupes';
-				tabels['id_logement']='Gevu_logements';
-				tabels['id_local']='Gevu_locaux';
-				tabels['id_part_commu']='Gevu_partiescommunes';
-				
-				return tabels;
-			}
 			
 			public function getForms(info:ArrayCollection):Array{
 				var compo:Array = new Array;
@@ -219,108 +222,132 @@
 				
 				//there is a way to change this.
 				if (info.getItemAt(0).id_antenne !=null) {
-					compo[i] = "id_antenne";
+					compo[i] = "gevu_antennes";
 					i++;
 				}
 				
 				if (info.getItemAt(0).id_batiment !=null) {
-					compo[i] = "id_batiment";
+					compo[i] = "gevu_batiments";
 					i++;
 				}
-				
+				/*
 				if (info.getItemAt(0).id_geo !=null) {
 					compo[i] = "id_geo";
 					i++;
-				}
+				}*/
 				
 				if (info.getItemAt(0).id_diag !=null) {
-					compo[i] = "id_diag";
+					compo[i] = "gevu_diagnostics";
 					i++;
 				}
 				
 				if (info.getItemAt(0).id_doc !=null) {
-					compo[i] = "id_doc";
+					compo[i] = "gevu_docsxlieux";
 					i++;
 				}
 				
 				if (info.getItemAt(0).id_espace !=null) {
-					compo[i] = "id_espace";
+					compo[i] = "gevu_espaces";
 					i++;
 				}
 				
 				if (info.getItemAt(0).id_espace_ext !=null) {
-					compo[i] = "id_espace_ext";
+					compo[i] = "gevu_espacesxexterieurs";
 					i++;
 				}
 				
 				if (info.getItemAt(0).id_espace_int !=null) {
-					compo[i] = "id_espace_int";
+					compo[i] = "gevu_espacesxinterieurs";
 					i++;
 				}
 				
 				if (info.getItemAt(0).id_etablissement !=null) {
-					compo[i] = "id_etablissement";
+					compo[i] = "gevu_etablissements";
 					i++;
 				}
 				
 				
 				if (info.getItemAt(0).id_niveau !=null) {
-					compo[i] = "id_niveau";
+					compo[i] = "gevu_niveaux";
 					i++;
 				}
 				
 				if (info.getItemAt(0).id_objet_ext !=null) {
-					compo[i] = "id_objet_ext";
+					compo[i] = "gevu_objetsxexterieurs";
 					i++;
 				}
 				
 				if (info.getItemAt(0).id_objet_int !=null) {
-					compo[i] = "id_objet_int";
+					compo[i] = "gevu_objetsxinterieurs";
 					i++;
 				}
 				
 				if (info.getItemAt(0).id_objet_voirie !=null) {
-					compo[i] = "id_objet_voirie";
+					compo[i] = "gevu_objetsxvoiries";
 					i++;
 				}
 				
 				if (info.getItemAt(0).id_observations !=null) {
-					compo[i] = "id_observations";
+					compo[i] = "gevu_observations";
 					i++;
 				}
 				
 				if (info.getItemAt(0).id_parcelle !=null) {
-					compo[i] = "id_parcelle";
+					compo[i] = "gevu_parcelles";
 					i++;
 				}
 				
 				if (info.getItemAt(0).id_probleme !=null) {
-					compo[i] = "id_probleme";
+					compo[i] = "gevu_problemes";
 					i++;
 				}
 				
 				if (info.getItemAt(0).id_groupe !=null) {
-					compo[i] = "id_groupe";
+					compo[i] = "gevu_groupes";
 					i++;
 				}
 				
 				if (info.getItemAt(0).id_logement !=null) {
-					compo[i] = "id_logement";
+					compo[i] = "gevu_logements";
 					i++;
 				}
 				
 				if (info.getItemAt(0).id_local !=null) {
-					compo[i] = "id_local";
+					compo[i] = "gevu_locaux";
 					i++;
 				}
 				
 				if (info.getItemAt(0).id_part_commu !=null) {
-					compo[i] = "id_part_commu";
+					compo[i] = "gevu_partiescommunes";
 					i++;
 				}
 				return compo;
 			}
 			
+			protected function get_lieu_info_resultHandler(event:SQLEvent):void
+			{
+			  this.lieu_info=this.get_lieu_info.data;
+			  this.selected_lft=lieu_info[0].lft;
+			  this.selected_rgt=lieu_info[0].rgt;
+			  this.selected_niv=lieu_info[0].niv;
+				if (this.selected_rgt != this.selected_lft +1)
+				{
+				this.update_lft_has_child;
+				this.update_rgt_has_child;
+				this.insert_has_child;
+				
+				}//parent
+				
+				else
+				{
+				 this.update_lft_no_child;
+				 this.update_rgt_no_child;
+				 this.insert_no_child;
+				}//not parent
+				
+				this.tree_query.execute();
+			}
+					
 		]]>	
 	</fx:Script>
 </tr:Tree>

@@ -1,22 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" 
-		xmlns:view="views.*" >
-<s:Panel title="Batiment" x="0" y="0" width="600" height="986">
+		xmlns:view="views.*"
+		xmlns:sqlite="com.peterelst.air.sqlite.*"
+		creationComplete="this.get_data.execute();">
+	<fx:Declarations>
+		<sqlite:SQLite id="db" file="gevu_mobile.sqlite"  />
+		<sqlite:Query id="get_data" connection="{db.connection}"
+					  sql="select ref,horaires_gardien,horaires_batiment from gevu_batiments where id_lieu={this.selected_id}"
+					  result="get_data_resultHandler(event)"/>
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import spark.events.TextOperationEvent;
+			[Bindable] private var selected_id:int;
+			[Bindable] private var id_contact:int;
+			[Bindable] private var reponse1:String=new String;
+			[Bindable] private var reponse2:String=new String;
+			[Bindable] private var reponse3:String=new String;
+			[Bindable] private var reponse4:String=new String;
+			[Bindable] private var reponse5:String=new String;
+			[Bindable] private var reponse6:String=new String;
+			[Bindable] private var reponse13:String=new String;
+			[Bindable] private var reponse14:String=new String;
+			[Bindable] private var horaires_gardien:String=new String;
+			[Bindable] private var horaires_batiment:String=new String;
+			[Bindable] private var ref:String=new String;
+			
+			public function set_selected_id(x:int):void{
+				this.selected_id=x;
+			}
+			
+			protected function get_data_resultHandler(event:SQLEvent):void
+			{
+				var data:Array=this.get_data.data;
+				this.F02.text=data[0].ref;
+				this.F10.text=data[0].horaires_gardien;
+				this.F11.text=data[0].horaires_batiment;
+			}
+			
+			public function editModif1(val:String) : void {
+				this.reponse1=val;
+			}
+			
+			public function editModif2(val:String) : void {
+				this.reponse2=val;
+			}
+			public function editModif3(val:String) : void {
+				this.reponse3=val;
+			}
+			public function editModif4(val:String) : void {
+				this.reponse4=val;
+			}
+			public function editModif5(val:String) : void {
+				this.reponse5=val;
+			}
+			public function editModif6(val:String) : void {
+				this.reponse6=val;
+			}
+			
+			public function editModif13(val:String) : void {
+				this.reponse13=val;
+			}
+			
+			public function editModif14(val:String) : void {
+				this.reponse14=val;
+			}
+			protected function ref_changeHandler(event:TextOperationEvent):void
+			{
+			 this.ref=this.F02.text;	
+			}
+			
+			protected function h_gar_changeHandler(event:TextOperationEvent):void
+			{
+			 this.horaires_gardien=this.F10.text;	
+			}
+			
+			protected function h_bat_changeHandler(event:TextOperationEvent):void
+			{
+			  this.horaires_batiment=this.F11.text;	
+			}
+			
+		]]>
+	</fx:Script>
+<s:Panel title="Batiment" x="0" y="0" width="600" height="1200">
  <s:Scroller width="100%" height="100%">
 	<s:Group> 
 	<s:VGroup>
 		<s:HGroup width="100%">
 			<s:Label text="Identifiant du bâtiment : " />
 		</s:HGroup>
-		<s:TextInput id="F02" />
-		<s:HGroup >
-   <view:contacts title="Contact gardien" id="ctcGar" /> 
+		<s:TextInput id="F02" change="ref_changeHandler(event)"/>
+		<s:HGroup >		
+  <!-- <view:contacts title="Contact gardien" id="ctcGar" id_contact="{this.id_contact}"/>--> 
 			<s:VGroup>
 				<s:Label text="Horaires du gardien : " />
-				<s:TextArea id="F10" />				
+				<s:TextInput id="F10" change="h_gar_changeHandler(event)"/>				
 				<s:Label text="Horaires du bâtiment : " />
-				<s:TextArea id="F11" />				
+				<s:TextInput id="F11" change="h_bat_changeHandler(event)" />				
 			</s:VGroup>
 		</s:HGroup>		
 		<s:HGroup width="100%">
@@ -49,13 +130,12 @@
 				
 		</s:VGroup>
 		</s:HGroup>
-		<view:repType2 lblQ="Le bâtiment est-il uniquement un lieu de travail ?" Q="reponse_1" />
-		<view:repType2 lblQ="Si le bâtiment est un lieu de travail, compte-t-il plus de 20 salariés ?" Q="reponse_2"  />
-		<view:repType2 lblQ="S'agit-il d'un bâtiment de grande hauteur ?" Q="reponse_3" />
-		<view:repType2 lblQ="Le bâtiment est t-il en ZPPAUP ?" Q="reponse_4" />
-		<view:repType2 width="366" height="85"
-					   lblQ="Le bâtiment est-il inscrit au Monument Historique ?" Q="reponse_5"/>
-		<view:repType2 lblQ="Le bâtiment est-il classé au Monument Historique ?" Q="reponse_6" />
+		<view:repType2 lblQ="Le bâtiment est-il uniquement un lieu de travail ?" Q="reponse_1" fnct="{this.editModif1}"/>
+		<view:repType2 lblQ="Si le bâtiment est un lieu de travail, compte-t-il plus de 20 salariés ?" Q="reponse_2" fnct="{this.editModif2}" />
+		<view:repType2 lblQ="S'agit-il d'un bâtiment de grande hauteur ?" Q="reponse_3" fnct="{this.editModif3}" />
+		<view:repType2 lblQ="Le bâtiment est t-il en ZPPAUP ?" Q="reponse_4" fnct="{this.editModif4}"/>
+		<view:repType2 lblQ="Le bâtiment est-il inscrit au Monument Historique ?" Q="reponse_5" fnct="{this.editModif5}"/>
+		<view:repType2 lblQ="Le bâtiment est-il classé au Monument Historique ?" Q="reponse_6" fnct="{this.editModif6}"/>
 		<s:HGroup width="100%">
 			<s:VGroup>
 				<s:Label text="Nombre de niveaux avec RDC : "/>
@@ -86,8 +166,8 @@
 			</s:VGroup>
 		</s:HGroup>		
 
-		<view:repType2 lblQ="Présence d'aire(s) de stationnement(s), à l'intérieur du bâtiment ?" Q="reponse_13" />
-		<view:repType2 lblQ="Présence d'aire(s) de stationnement(s), à l'extérieur du bâtiment ?" Q="reponse_14" />
+		<view:repType2 lblQ="Présence d'aire(s) de stationnement(s), à l'intérieur du bâtiment ?" Q="reponse_13" fnct="{this.editModif13}"/>
+		<view:repType2 lblQ="Présence d'aire(s) de stationnement(s), à l'extérieur du bâtiment ?" Q="reponse_14" fnct="{this.editModif14}"/>
 		<s:Button id="SaveModif" label="Enregistrer les modifications" />
 		
 	</s:VGroup>
