@@ -2,52 +2,82 @@
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" 
 		xmlns:view="views.*"
-		xmlns:sqlite="com.peterelst.air.sqlite.*"
-		creationComplete="this.contact_query.execute()">
+		xmlns:sqlite="com.peterelst.air.sqlite.*" 
+		creationComplete="this.query_execution();init();">
+	
+			
 	<fx:Declarations>
-		<sqlite:SQLite id="db" file="gevu_mobile.sqlite"  />
-		<sqlite:Query id="contact_query" connection="{db.connection}"
-					  sql="select id_contact,nom,prenom,fixe,mobile,fax,mail from
-					  gevu_contacts where id_contact={this.id_contact}"
-					  result="contact_query_resultHandler(event)"/>
+		<sqlite:SQLite id="db" file="gevu_mobile.db"  />
+		
 		<sqlite:Query id="add_query" connection="{db.connection}"
 					  sql="insert into gevu_contacts(nom,prenom,fixe,mobile,fax,mail)
-					  values ({this.nom},{this.prenom},{this.fixe},{this.mobile},{this.fax},{this.mail})"/>
+					  values ('{this.nom}','{this.prenom}',{this.fixe},{this.mobile},{this.fax},'{this.mail}')"
+					  />
+		
+		<sqlite:Query id="add_query2" connection="{db.connection}"
+					  sql="insert into gevu_contactsxantennes values ({this.last_inserted_id},{this.id_antenne})"
+					  />
+					  
 		<sqlite:Query id="delete_query" connection="{db.connection}"
-					  sql="delete from gevu_contacts where cid={this.deleting_id}"/>
+					  sql="delete from gevu_contacts where id_contact={this.deleting_id}"/>
+		
+		<sqlite:Query id="antenne_contact_query" connection="{db.connection}"
+					  sql="select c.id_contact,c.nom,c.prenom,c.fixe,c.mobile,c.fax,c.mail
+					  from gevu_antennes a ,gevu_contactsxantennes b,gevu_contacts c
+					  where (a.id_antenne = b.id_antenne) and (c.id_contact =  b.id_contact)"
+					  result="antenne_contact_query_resultHandler(event)"/>
+		<sqlite:Query id="get_last_inserted_id" connection="{db.connection}"
+					  sql="select max(id_contact) as max from gevu_contacts" 
+					  result="get_last_inserted_id_resultHandler(event)"/>
+		<sqlite:Query id="update_contact" connection="{db.connection}"
+					  sql="update gevu_contacts set
+					  nom='{this.nom}',
+					  prenom='{this.prenom}',
+					  fixe={this.fixe},
+					  mobile={this.mobile},
+					  fax={this.fax},
+					  mail='{this.mail}'
+					  where id_contact={this.updating_id}" />
+		
+		
+		
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
-			[Bindable]
-			public var id_contact:int;
-			[Bindable]
-			private var contact_info:ArrayCollection =new ArrayCollection;
+			import mx.utils.OnDemandEventDispatcher;
 			
-			[Bindable]
-			private var nom:String = new String;
-			[Bindable]
-			private var prenom:String = new String;
-			[Bindable]
-			private var fixe:String = new String;
-			[Bindable]
-			private var fax:String = new String;
-			[Bindable]
-			private var mobile:String = new String;
-			[Bindable]
-			private var mail:String = new String;
-			[Bindable]
-			private var deleting_id:String = new String;
+			import spark.events.GridItemEditorEvent;
+			[Bindable] public var id_antenne:int;
+			[Bindable] private var contact_info:ArrayCollection =new ArrayCollection;
+			[Bindable] private var nom:String = new String;
+			[Bindable] private var prenom:String = new String;
+			[Bindable] private var fixe:String =new String;
+			[Bindable] private var fax:String =new String;
+			[Bindable] private var mobile:String= new String;
+			[Bindable] private var mail:String = new String;
+			[Bindable] private var deleting_id:String = new String;
+			[Bindable] private var updating_id:String = new String;
+			[Bindable] public var query_type:String;
+			[Bindable] private var last_inserted_id:int;
 			
-			protected function contact_query_resultHandler(event:SQLEvent):void
-			{
-				contact_info=contact_query.data as ArrayCollection;
+			private function init():void{
+				this.add_query.addEventListener(SQLErrorEvent.ERROR,onError);
+				this.add_query2.addEventListener(SQLErrorEvent.ERROR,onError);
+				this.delete_query.addEventListener(SQLErrorEvent.ERROR,onError);
+				this.antenne_contact_query.addEventListener(SQLErrorEvent.ERROR,onError);
+				this.get_last_inserted_id.addEventListener(SQLErrorEvent.ERROR,onError);
+				this.update_contact.addEventListener(SQLErrorEvent.ERROR,onError);
+				
+			}
+			
+			private function onError(e:SQLErrorEvent):void{
+				trace(e.error);
 			}
 			
 			protected function add_form_clickHandler(event:MouseEvent):void
 			{
 				this.add_contact_form.visible=true;	
-				
 			}
 			
 			protected function save_contact_clickHandler(event:MouseEvent):void
@@ -55,17 +85,70 @@
 				this.nom=this.nom_in.text;
 				this.prenom=this.prenom_in.text;
 				this.fixe=this.fixe_in.text;
-				this.mobile=this.mobile_in.text;
-				this.fax=this.fax_in.text;
+				this.mobile=this.mobile_in.text; 
+				this.fax=this.fax_in.text ; 
 				this.mail=this.mail_in.text;
 				this.add_query.execute();
-			}
+				this.get_last_inserted_id.execute();
+				}
 			
 			protected function delete_clickHandler(event:MouseEvent):void
 			{
 			var item:Object=this.dgContact.selectedItem;
-			this.deleting_id=item['cid'];
+			this.deleting_id=item['id_contact'];
 			this.delete_query.execute();
+			this.query_execution();
+			}
+			
+			protected function antenne_contact_query_resultHandler(event:SQLEvent):void
+			{
+			contact_info = new ArrayCollection(antenne_contact_query.data);
+				
+			}
+			
+			private function query_execution():void{
+				switch(this.query_type)
+				{
+					case "antenne":
+					{
+						this.antenne_contact_query.execute();
+						break;
+					}
+						
+					default:
+					{
+						break;
+					}
+				}	
+			
+			}
+			
+			
+			
+			
+			protected function get_last_inserted_id_resultHandler(event:SQLEvent):void
+			{
+				var last_id:Array=this.get_last_inserted_id.data;
+				this.last_inserted_id=last_id[0].max;
+				this.add_query2.execute();
+				this.query_execution();
+				
+				
+			}
+			
+			protected function dgContact_gridItemEditorSessionSaveHandler(event:GridItemEditorEvent):void
+			{
+				this.updating_id = event.currentTarget.dataProvider[0].id_contact;
+				this.nom= event.currentTarget.dataProvider[0].nom;
+				this.prenom= event.currentTarget.dataProvider[0].prenom;
+				this.fixe= event.currentTarget.dataProvider[0].fixe;
+				this.mobile= event.currentTarget.dataProvider[0].mobile;
+				this.fax= event.currentTarget.dataProvider[0].fax;
+				this.mail= event.currentTarget.dataProvider[0].mail;
+				this.update_contact.execute();
+				this.query_execution();
+			
+				
 			}
 			
 		]]>
@@ -82,7 +165,7 @@
 		<s:VGroup id="viewContactUnique" x="0" y="55" width="588" height="250" paddingBottom="6"
 				  paddingLeft="6" paddingRight="6" paddingTop="6">
 			<s:DataGrid width="100%" height="240" id="dgContact" dataProvider="{this.contact_info}"
-						editable="true" 
+						editable="true" gridItemEditorSessionSave="dgContact_gridItemEditorSessionSaveHandler(event)"
 						>
 				<s:columns>
 					<s:ArrayCollection>
@@ -125,9 +208,6 @@
 				<s:Button label="Enrigisterer ce contact" click="save_contact_clickHandler(event)"/>	
 			</s:VGroup>
 			
-		</s:VGroup>
-		
-		
-		
+		</s:VGroup>	
 	</s:Panel>
 </s:View>	
