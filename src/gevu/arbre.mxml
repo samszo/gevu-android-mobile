@@ -11,7 +11,7 @@
 		 >	
 	
 	<fx:Declarations>
-		<sqlite:SQLite id="db" file="gevu_mobile.sqlite" open="tree_query.execute()" />
+		<sqlite:SQLite id="db" file="gevu_mobile.db" open="tree_query.execute()" />
 		<sqlite:Query id="tree_query" connection="{db.connection}" 
 					  sql="SELECT node.lib, node.id_lieu, node.lieu_parent,node.lft,node.rgt
 					  FROM gevu_lieux AS node,
@@ -60,19 +60,20 @@
 		
 	                        <!-- THE PARENT HAS CHILDS-->	
 		<sqlite:Query id="update_rgt_has_child" connection="{db.connection}"
-					  sql="update gevu_lieux set rgt = rgt + 2 WHERE rgt > {this.selected_rgt}" />
+					  sql="update gevu_lieux set rgt = rgt + 2 WHERE rgt > {this.selected_rgt}"  />
 		
 		<sqlite:Query id="update_lft_has_child" connection="{db.connection}"
-					  sql="update gevu_lieux SET lft = lft + 2 WHERE lft > {this.selected_rgt}"/>
+					  sql="update gevu_lieux SET lft = lft + 2 WHERE lft > {this.selected_rgt}" />
 		
 		<sqlite:Query id="insert_has_child" connection="{db.connection}" 
-					  sql="insert into gevu_lieux (lib,lft,rgt,niv,lieu_parent)
-					       values('test',
+					  sql="insert into gevu_lieux (id_rubrique,lib,id_parent,id_instant,lft,rgt,niv,maj,lieu_parent)
+					       values(0,'test',0,0,
 					             {this.selected_rgt + 1},
 					             {this.selected_rgt + 2},
 					             {this.selected_niv + 1},
+					              '2012-03-18 20:42:30',
 					             {this.selected_id})" />
-				<!-- **************************************************** -->
+			<!-- ************************************************************* -->
 					  
 					  
 		
@@ -84,13 +85,14 @@
 					  sql="update gevu_lieux SET lft = lft + 2 WHERE lft > {this.selected_lft}"/>
 		
 		<sqlite:Query id="insert_no_child" connection="{db.connection}" 
-					  sql="insert into gevu_lieux (lib,lft,rgt,niv,lieu_parent)
-					  values('test',
+					  sql="insert into gevu_lieux (id_rubrique,lib,id_parent,id_instant,lft,rgt,niv,maj,lieu_parent)
+					  values(0,'test',0,0
 					  {this.selected_lft + 1},
 					  {this.selected_lft + 2},
 					  {this.selected_niv + 1},
+					  '2012-03-18 20:42:30',
 					  {this.selected_id})" />
-		<!-- **************************************************** -->
+		<!-- ********************************************************* -->
 		
 			
 		
@@ -133,7 +135,7 @@
 			[Bindable] private var selected_rgt:int;
 			[Bindable] private var selected_niv:int;
 			[Bindable] private var lieu_info:Array=new Array;
-			
+			[Bindable] private var t:Date=new Date;
 			
 	
 						
@@ -206,11 +208,10 @@
 			  for (var k:int=0;k<ids.length;k++)
 			  {
 				 className= "views."+ids[k];
-				 trace(className);
 				 ClassReference = getDefinitionByName(className) as Class;
 				 instance = new ClassReference();
-				 //instance.set_selected_id(selected_id);
-				 //FlexGlobals.topLevelApplication.main_interface.addElement(instance);
+				 instance.set_selected_id(selected_id);
+				 FlexGlobals.topLevelApplication.main_interface.addElement(instance);
 			  }
 			}//function
 			
@@ -330,24 +331,35 @@
 			  this.selected_lft=lieu_info[0].lft;
 			  this.selected_rgt=lieu_info[0].rgt;
 			  this.selected_niv=lieu_info[0].niv;
+			  //adding event listners
+			  this.update_lft_has_child.addEventListener(SQLErrorEvent.ERROR,onerror);
+			  this.update_rgt_has_child.addEventListener(SQLErrorEvent.ERROR,onerror);
+			  this.insert_has_child.addEventListener(SQLErrorEvent.ERROR,onerror);
+			  this.update_lft_no_child.addEventListener(SQLErrorEvent.ERROR,onerror);
+			  this.update_rgt_no_child.addEventListener(SQLErrorEvent.ERROR,onerror);
+			  this.insert_no_child.addEventListener(SQLErrorEvent.ERROR,onerror);
+			  this.tree_query.addEventListener(SQLErrorEvent.ERROR,onerror);
 				if (this.selected_rgt != this.selected_lft +1)
-				{
-				this.update_lft_has_child;
-				this.update_rgt_has_child;
-				this.insert_has_child;
+				{	
+				this.update_lft_has_child.execute();
+				this.update_rgt_has_child.execute();
+				this.insert_has_child.execute();
+				
 				
 				}//parent
 				
 				else
 				{
-				 this.update_lft_no_child;
-				 this.update_rgt_no_child;
-				 this.insert_no_child;
+				 this.update_lft_no_child.execute();
+				 this.update_rgt_no_child.execute();
+				 this.insert_no_child.execute();
 				}//not parent
-				
 				this.tree_query.execute();
 			}
 					
+			public function onerror(e:SQLErrorEvent):void{
+             trace(e.error);				
+			}
 		]]>	
 	</fx:Script>
 </tr:Tree>

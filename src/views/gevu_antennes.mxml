@@ -3,29 +3,23 @@
 		xmlns:s="library://ns.adobe.com/flex/spark"
 		xmlns:sqlite="com.peterelst.air.sqlite.*"
 		xmlns:view="views.*"
-		creationComplete="this.get_ref.execute();">
+		creationComplete="this.get_ref.execute();"
+		>
 	<fx:Declarations>
-		<sqlite:SQLite id="db" file="gevu_mobile.sqlite"  />
+		<sqlite:SQLite id="db" file="gevu_mobile.db"  />
 		<sqlite:Query id="get_ref" connection="{db.connection}" 
 					  sql="select ref from gevu_antennes where id_lieu={selected_id}"
 					  result="antennes_query_resultHandler(event)"/>
-        <sqlite:Query id="contact_query" connection="{db.connection}"
-			 sql="select c.id_contact
-			 from gevu_antennes a ,gevu_contactsxantennes b,gevu_contacts c
-			 where (a.id_antenne = b.id_antenne) and (c.id_contact =  b.id_contact)"
-			 result="contact__resultHandler(event)"/>
+  
 				  
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
-			[Bindable]
-			private var selected_id:int;
-			[Bindable]
-			private var id_contact:int;
+			[Bindable] private var selected_id:int;
+			[Bindable] private var id_contact:int;
 		
 			public function set_selected_id(x:int):void{
 			 this.selected_id=x;
-			 this.contact_query.execute();
 			}
 			
 			protected function antennes_query_resultHandler(event:SQLEvent):void
@@ -34,11 +28,7 @@
 				this.F2.text=ref[0].ref;
 			}
 			
-			protected function contact__resultHandler(event:SQLEvent):void
-			{
-			var id:Array=contact_query.data;
-			this.id_contact=id[0].id_contact;		
-			}
+			
 			
 		]]>
 	</fx:Script>
@@ -47,6 +37,7 @@
 		</s:VGroup>
 		<s:TextInput id="F2" x="169" y="7"/>
 		<s:Label x="9" y="22" text="Identifiant du local :"/>
-		<view:contacts id="ctc" x="-1" y="57" height="176" id_contact="{this.id_contact}"/>
+		<view:contacts id="ctc" x="-1" y="57" height="176" id_antenne="{this.selected_id}"
+			query_type="antenne" />
 	</s:Panel>
 </s:View>
