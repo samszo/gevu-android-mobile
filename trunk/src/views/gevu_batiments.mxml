@@ -3,11 +3,11 @@
 		xmlns:s="library://ns.adobe.com/flex/spark" 
 		xmlns:view="views.*"
 		xmlns:sqlite="com.peterelst.air.sqlite.*"
-		creationComplete="this.get_data.execute();">
+		creationComplete="this.init();this.get_data.execute();">
 	<fx:Declarations>
-		<sqlite:SQLite id="db" file="gevu_mobile.sqlite"  />
+		<sqlite:SQLite id="db" file="gevu_mobile.db"  />
 		<sqlite:Query id="get_data" connection="{db.connection}"
-					  sql="select ref,horaires_gardien,horaires_batiment from gevu_batiments where id_lieu={this.selected_id}"
+					  sql="select * from gevu_batiments where id_lieu={this.selected_id}"
 					  result="get_data_resultHandler(event)"/>
 	</fx:Declarations>
 	<fx:Script>
@@ -21,11 +21,26 @@
 			[Bindable] private var reponse4:String=new String;
 			[Bindable] private var reponse5:String=new String;
 			[Bindable] private var reponse6:String=new String;
+			[Bindable] private var reponse7:String=new String;
+			[Bindable] private var reponse8:String=new String;
+			[Bindable] private var reponse9:String=new String;
+			[Bindable] private var reponse10:String=new String;
+			[Bindable] private var reponse11:String=new String;
+			[Bindable] private var reponse12:String=new String;
 			[Bindable] private var reponse13:String=new String;
 			[Bindable] private var reponse14:String=new String;
 			[Bindable] private var horaires_gardien:String=new String;
 			[Bindable] private var horaires_batiment:String=new String;
 			[Bindable] private var ref:String=new String;
+			
+			
+			private function init():void{
+				this.get_data.addEventListener(SQLErrorEvent.ERROR,onError);
+			}
+			
+			private function onError(e:SQLErrorEvent):void{
+				trace(e.error);
+			}
 			
 			public function set_selected_id(x:int):void{
 				this.selected_id=x;
@@ -37,6 +52,17 @@
 				this.F02.text=data[0].ref;
 				this.F10.text=data[0].horaires_gardien;
 				this.F11.text=data[0].horaires_batiment;
+				this.F12.value =data[0].superficie_parcelle;
+				this.F13.value=data[0].superficie_batiment;
+				this.F14.text=data[0].date_achevement;
+				this.F15.text=data[0].date_depot_permis;
+				this.F16.text=data[0].date_reha;
+				this.F23.value=data[0].reponse_7;
+				this.F24.value=data[0].reponse_8;
+				this.F25.value=data[0].reponse_9;
+				this.F26.value=data[0].reponse_10;
+				this.F27.value=data[0].reponse_11;
+				this.F28.value=data[0].reponse_12;
 			}
 			
 			public function editModif1(val:String) : void {
@@ -66,112 +92,119 @@
 			public function editModif14(val:String) : void {
 				this.reponse14=val;
 			}
+			
 			protected function ref_changeHandler(event:TextOperationEvent):void
 			{
-			 this.ref=this.F02.text;	
+				this.ref=this.F02.text;	
 			}
 			
 			protected function h_gar_changeHandler(event:TextOperationEvent):void
 			{
-			 this.horaires_gardien=this.F10.text;	
+				this.horaires_gardien=this.F10.text;	
 			}
 			
 			protected function h_bat_changeHandler(event:TextOperationEvent):void
 			{
-			  this.horaires_batiment=this.F11.text;	
+				this.horaires_batiment=this.F11.text;	
+			}
+			
+			protected function N_S_changeHandler(type:String,event:Event):void
+			{
+				
+				
 			}
 			
 		]]>
 	</fx:Script>
-<s:Panel title="Batiment" x="0" y="0" width="600" height="1200">
- <s:Scroller width="100%" height="100%">
-	<s:Group> 
-	<s:VGroup>
-		<s:HGroup width="100%">
-			<s:Label text="Identifiant du bâtiment : " />
-		</s:HGroup>
-		<s:TextInput id="F02" change="ref_changeHandler(event)"/>
-		<s:HGroup >		
-  <!-- <view:contacts title="Contact gardien" id="ctcGar" id_contact="{this.id_contact}"/>--> 
-			<s:VGroup>
-				<s:Label text="Horaires du gardien : " />
-				<s:TextInput id="F10" change="h_gar_changeHandler(event)"/>				
-				<s:Label text="Horaires du bâtiment : " />
-				<s:TextInput id="F11" change="h_bat_changeHandler(event)" />				
-			</s:VGroup>
-		</s:HGroup>		
-		<s:HGroup width="100%">
-			<s:VGroup>
-				<s:Label text="Superficie de la parcelle : "/>
-				<s:NumericStepper id="F12" stepSize="1"/>
-			</s:VGroup>
-			<s:VGroup>
-				<s:Label text="Superficie du bâtiment" />
-				<s:NumericStepper id="F13" stepSize="1"/>
-			</s:VGroup>
-		</s:HGroup>
-		<s:HGroup>
-			<s:VGroup>
-				<s:Label text="Date d'achèvement : " />
-				
-			<!--<s:DateField id="F14" yearNavigationEnabled="true" change="editModif('date_achevement', formeDate(DateField(event.target).selectedDate))" />-->
-				
-			</s:VGroup>
-			<s:VGroup>
-				<s:Label text="Date du dépot de permis" />
-				
-			<!--<s:DateField id="F15" yearNavigationEnabled="true" change="editModif('date_depot_permis', formeDate(DateField(event.target).selectedDate))" />-->
-				
-			</s:VGroup>
-			<s:VGroup>
-				<s:Label text="Date de la dernière réhabilitation" />
-				
-			<!--<s:DateField id="F16" yearNavigationEnabled="true" change="editModif('date_reha', formeDate(DateField(event.target).selectedDate))" />-->
-				
-		</s:VGroup>
-		</s:HGroup>
-		<view:repType2 lblQ="Le bâtiment est-il uniquement un lieu de travail ?" Q="reponse_1" fnct="{this.editModif1}"/>
-		<view:repType2 lblQ="Si le bâtiment est un lieu de travail, compte-t-il plus de 20 salariés ?" Q="reponse_2" fnct="{this.editModif2}" />
-		<view:repType2 lblQ="S'agit-il d'un bâtiment de grande hauteur ?" Q="reponse_3" fnct="{this.editModif3}" />
-		<view:repType2 lblQ="Le bâtiment est t-il en ZPPAUP ?" Q="reponse_4" fnct="{this.editModif4}"/>
-		<view:repType2 lblQ="Le bâtiment est-il inscrit au Monument Historique ?" Q="reponse_5" fnct="{this.editModif5}"/>
-		<view:repType2 lblQ="Le bâtiment est-il classé au Monument Historique ?" Q="reponse_6" fnct="{this.editModif6}"/>
-		<s:HGroup width="100%">
-			<s:VGroup>
-				<s:Label text="Nombre de niveaux avec RDC : "/>
-				<s:NumericStepper id="F23"  stepSize="1" />
-			</s:VGroup>
-			<s:VGroup>
-				<s:Label text="Nombre de niveaux au dessus du RDC : "/>
-				<s:NumericStepper id="F24"  stepSize="1"  />
-			</s:VGroup>
-			<s:VGroup>
-				<s:Label text="Nombre de niveaux en dessous du RDC : "/>
-				<s:NumericStepper id="F25" stepSize="1"  />
-			</s:VGroup>
-		</s:HGroup>		
-
-		<s:HGroup>
-			<s:VGroup>
-				<s:Label text="Nombre d'entrée(s) principale(s) : "/>
-				<s:NumericStepper id="F26" stepSize="1" />
-			</s:VGroup>
-			<s:VGroup>
-				<s:Label text="Nombre d'ascenseur(s) : "/>
-				<s:NumericStepper id="F27" stepSize="1"/>
-			</s:VGroup>
-			<s:VGroup>
-				<s:Label text="Nombre d'escalier(s) : "/>
-				<s:NumericStepper id="F28"  stepSize="1"/>
-			</s:VGroup>
-		</s:HGroup>		
-
-		<view:repType2 lblQ="Présence d'aire(s) de stationnement(s), à l'intérieur du bâtiment ?" Q="reponse_13" fnct="{this.editModif13}"/>
-		<view:repType2 lblQ="Présence d'aire(s) de stationnement(s), à l'extérieur du bâtiment ?" Q="reponse_14" fnct="{this.editModif14}"/>
-		<s:Button id="SaveModif" label="Enregistrer les modifications" />
-		
-	</s:VGroup>
-	</s:Group>	
-	</s:Scroller>	
-</s:Panel>
+	<s:Panel title="Batiment" x="0" y="0" >
+		<s:Scroller height="600">
+			<s:Group> 
+				<s:VGroup>
+					<s:HGroup width="100%">
+						<s:Label text="Identifiant du bâtiment : " />
+					</s:HGroup>
+					<s:TextInput id="F02" change="ref_changeHandler(event)"/>
+					<s:HGroup >		
+						<!-- <view:contacts title="Contact gardien" id="ctcGar" id_contact="{this.id_contact}"/>--> 
+						<s:VGroup>
+							<s:Label text="Horaires du gardien : " />
+							<s:TextArea id="F10" change="h_gar_changeHandler(event)"/>				
+							<s:Label text="Horaires du bâtiment : " />
+							<s:TextArea id="F11" change="h_bat_changeHandler(event)" />				
+						</s:VGroup>
+					</s:HGroup>		
+					<s:HGroup width="100%">
+						<s:VGroup>
+							<s:Label text="Superficie de la parcelle : "/>
+							<s:NumericStepper id="F12" stepSize="1" change="N_S_changeHandler('F12',event)" />
+						</s:VGroup>
+						<s:VGroup>
+							<s:Label text="Superficie du bâtiment" />
+							<s:NumericStepper id="F13" stepSize="1" change="N_S_changeHandler('F13',event)"/>
+						</s:VGroup>
+					</s:HGroup>
+					<s:HGroup>
+						<s:VGroup>
+							<s:Label text="Date d'achèvement : " />
+							<s:Label text="aaaa-mm-jj"/>
+							<s:TextInput id="F14" width="100"/>
+							
+						</s:VGroup>
+						<s:VGroup>
+							<s:Label text="Date du dépot de permis" />
+							<s:Label text="aaaa-mm-jj"/>
+							<s:TextInput id="F15" width="100"/>
+							
+						</s:VGroup>
+						<s:VGroup>
+							<s:Label text="Date de la dernière réhabilitation" />
+							<s:Label text="aaaa-mm-jj"/>
+							<s:TextInput id="F16" width="100"/>
+							
+						</s:VGroup>
+					</s:HGroup>
+					<view:repType2 lblQ="Le bâtiment est-il uniquement un lieu de travail ?" Q="reponse_1" fnct="{this.editModif1}"/>
+					<view:repType2 lblQ="Si le bâtiment est un lieu de travail, compte-t-il plus de 20 salariés ?" Q="reponse_2" fnct="{this.editModif2}" />
+					<view:repType2 lblQ="S'agit-il d'un bâtiment de grande hauteur ?" Q="reponse_3" fnct="{this.editModif3}" />
+					<view:repType2 lblQ="Le bâtiment est t-il en ZPPAUP ?" Q="reponse_4" fnct="{this.editModif4}"/>
+					<view:repType2 lblQ="Le bâtiment est-il inscrit au Monument Historique ?" Q="reponse_5" fnct="{this.editModif5}"/>
+					<view:repType2 lblQ="Le bâtiment est-il classé au Monument Historique ?" Q="reponse_6" fnct="{this.editModif6}"/>
+					<s:HGroup width="100%">
+						<s:VGroup>
+							<s:Label text="Nombre de niveaux avec RDC : "/>
+							<s:NumericStepper id="F23"  stepSize="1" change="N_S_changeHandler('F23',event)"/>
+						</s:VGroup>
+						<s:VGroup>
+							<s:Label text="Nombre de niveaux au dessus du RDC : "/>
+							<s:NumericStepper id="F24"  stepSize="1" change="N_S_changeHandler('F24',event)" />
+						</s:VGroup>
+						<s:VGroup>
+							<s:Label text="Nombre de niveaux en dessous du RDC : "/>
+							<s:NumericStepper id="F25" stepSize="1" change="N_S_changeHandler('F25',event)" />
+						</s:VGroup>
+					</s:HGroup>		
+					
+					<s:HGroup>
+						<s:VGroup>
+							<s:Label text="Nombre d'entrée(s) principale(s) : "/>
+							<s:NumericStepper id="F26" stepSize="1" change="N_S_changeHandler('F26',event)"/>
+						</s:VGroup>
+						<s:VGroup>
+							<s:Label text="Nombre d'ascenseur(s) : "/>
+							<s:NumericStepper id="F27" stepSize="1" change="N_S_changeHandler('F27',event)"/>
+						</s:VGroup>
+						<s:VGroup>
+							<s:Label text="Nombre d'escalier(s) : "/>
+							<s:NumericStepper id="F28"  stepSize="1" change="N_S_changeHandler('F28',event)"/>
+						</s:VGroup>
+					</s:HGroup>		
+					
+					<view:repType2 lblQ="Présence d'aire(s) de stationnement(s), à l'intérieur du bâtiment ?" Q="reponse_13" fnct="{this.editModif13}"/>
+					<view:repType2 lblQ="Présence d'aire(s) de stationnement(s), à l'extérieur du bâtiment ?" Q="reponse_14" fnct="{this.editModif14}"/>
+					<s:Button id="SaveModif" label="Enregistrer les modifications" />
+					
+				</s:VGroup>
+			</s:Group>	
+		</s:Scroller>	
+	</s:Panel>
 </s:View>

@@ -3,27 +3,38 @@
 		xmlns:s="library://ns.adobe.com/flex/spark" 
 		xmlns:sqlite="com.peterelst.air.sqlite.*"
 		xmlns:view="views.*"
-		creationComplete="this.get_ref.execute();">
+		creationComplete="this.init();this.get_ref.execute();">
 	<fx:Declarations>
-		<sqlite:SQLite id="db" file="gevu_mobile.sqlite" />
+		<sqlite:SQLite id="db" file="gevu_mobile.db" />
 		<sqlite:Query id="get_ref" connection="{db.connection}" 
 					  sql="select ref from gevu_groupes where id_lieu={selected_id}"
 					  result="groupes_query_resultHandler(event)"/>
 		<sqlite:Query id="update_query" connection="{db.connection}"
-					  sql="update gevu_groupes set reponse_1={this.reponse}
-					       where id_lieu={this.selected_id}" />
+					  sql="update gevu_groupes set ref='{this.updated_ref}',reponse_1='{this.reponse}'
+					       where id_lieu={this.selected_id}" 
+					  result="update_query_resultHandler(event)"/>
 		
 	</fx:Declarations>
 	
 	<fx:Script>
 		<![CDATA[
+			import spark.events.TextOperationEvent;
 			[Bindable] private var selected_id:int;
+			[Bindable] private var updated_ref:String = new String;
 			[Bindable] public var reponse:String;
 			
 			public function set_selected_id(x:int):void{
 				this.selected_id=x;
 			}
 			
+			private function init():void{
+				this.get_ref.addEventListener(SQLErrorEvent.ERROR,onError);
+				this.update_query.addEventListener(SQLErrorEvent.ERROR,onError);
+			}
+			
+			private function onError(e:SQLErrorEvent):void{
+				trace(e.error);
+			}
 			protected function groupes_query_resultHandler(event:SQLEvent):void
 			{
 				var ref:Array=get_ref.data;
@@ -39,6 +50,18 @@
 				this.update_query.execute();
 				}
 			
+			protected function update_query_resultHandler(event:SQLEvent):void
+			{
+				trace(event.currentTarget);
+				
+			}
+			
+			protected function ref_changeHandler(event:TextOperationEvent):void
+			{
+			this.updated_ref=event.currentTarget.text;	
+				
+			}
+			
 		]]>
 	</fx:Script>
 	<s:Panel width="600" height="278" title="Groupe">
@@ -47,7 +70,7 @@
 						  fnct="{this.editModif}" />
 			<s:HGroup height="37">
 			<s:Label width="27" height="31" text="ref"/>
-			<s:TextInput id="F2"/>
+			<s:TextInput id="F2" change="ref_changeHandler(event)"/>
 			</s:HGroup>	
 		</s:VGroup>	
 		<s:Button id="SaveModif" x="0" y="197" label="Enregistrer" click="SaveModif_clickHandler(event)"/>
