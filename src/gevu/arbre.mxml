@@ -207,11 +207,34 @@
 			  
 			  for (var k:int=0;k<ids.length;k++)
 			  {
+				  
 				 className= "views."+ids[k];
+				 if(
+					 className == 'views.gevu_antennes'  ||
+					 className == 'views.gevu_batiments' ||
+				     className == 'views.gevu_diagnostics' ||
+					 className == 'views.gevu_docsxlieux' ||
+					 className == 'views.gevu_espaces' ||
+					 className == 'views.gevu_espacesxexterieurs' ||
+					 className == 'views.gevu_espacesxinterieurs' ||
+					 className == 'views.gevu_etablissements' ||
+					 className == 'views.gevu_niveaux' ||
+					 className == 'views.gevu_objetsxexterieurs' ||
+					 className == 'views.gevu_objetsxinterieurs' ||
+					 className == 'views.gevu_objetsxvoiries' ||
+					 className == 'views.gevu_observations' ||
+				     className == 'views.gevu_parcelles' ||
+					 className == 'views.gevu_problemes' ||
+					 className == 'views.gevu_groupes' ||
+					 className == 'views.gevu_logements' ||
+					 className == 'views.gevu_locaux' ||
+				     className == 'views.gevu_partiescommunes')
+				 {
 				 ClassReference = getDefinitionByName(className) as Class;
 				 instance = new ClassReference();
 				 instance.set_selected_id(selected_id);
 				 FlexGlobals.topLevelApplication.main_interface.addElement(instance);
+				 }
 			  }
 			}//function
 			

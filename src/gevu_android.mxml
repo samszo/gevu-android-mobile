@@ -36,8 +36,10 @@
 	<s:layout>
 		<s:HorizontalLayout/>
 	</s:layout>	
-	<s:Button label="Ajouter un lieu" click="add_clickHandler(event)"/>
-	<gevu:arbre  id="mytree" width="100%" height="50%"/>
+	<s:VGroup>
+		<s:Button label="Ajouter un lieu" click="add_clickHandler(event)"/>
+		<gevu:arbre  id="mytree" width="250" height="300"/>	
+	</s:VGroup>
 		<s:Scroller width="100%" height="100%">
 			<s:VGroup id="main_interface">
 			</s:VGroup>	

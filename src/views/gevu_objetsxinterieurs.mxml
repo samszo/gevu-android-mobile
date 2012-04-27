@@ -3,6 +3,14 @@
 		xmlns:s="library://ns.adobe.com/flex/spark" 
 		xmlns:view="views.*">
 	
+	<fx:Script>
+		<![CDATA[
+			[Bindable] private var selected_id:int;
+			public function set_selected_id(x:int):void{
+				this.selected_id=x;
+			}
+		]]>
+	</fx:Script>
 	<s:Panel title="Objet interieur"
 			 width="100%" height="100%">
 		<s:VGroup>
