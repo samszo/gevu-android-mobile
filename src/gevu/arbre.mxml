@@ -19,7 +19,8 @@
 					  WHERE node.lft BETWEEN parent.lft AND parent.rgt
 					  GROUP BY node.id_lieu
 					  ORDER BY node.lft"
-					  result="onSelectResult()" />
+					  result="onSelectResult()" 
+					  error="tree_query_errorHandler(event)"/>
 		
 		<sqlite:Query id="form_query" connection="{db.connection}"
 					  sql="SELECT l.lib, l.id_lieu, a.id_antenne, b.id_batiment,c.id_geo,d.id_diag,e.id_doc,
@@ -52,49 +53,73 @@
 					  ORDER BY l.id_lieu ;" 
 					  result="form_query_resultHandler(event)"/>
 		
-		<sqlite:Query id="get_lieu_info" connection="{db.connection}"
+		<sqlite:Query id="get_lieu_info_add" connection="{db.connection}"
 					  sql="select * from gevu_lieux where id_lieu={this.selected_id}"
-					  result="get_lieu_info_resultHandler(event)"
-					  />
+					  result="get_lieu_info_add_resultHandler(event)"/>
+		
+		
+		<sqlite:Query id="get_lieu_info_delete" connection="{db.connection}"
+					  sql="select * from gevu_lieux where id_lieu={this.selected_id}"
+					  result="get_lieu_info_delete_resultHandler(event)"/>
 		
 		
 	                        <!-- THE PARENT HAS CHILDS-->	
 		<sqlite:Query id="update_rgt_has_child" connection="{db.connection}"
-					  sql="update gevu_lieux set rgt = rgt + 2 WHERE rgt > {this.selected_rgt}"  />
+					  sql="update gevu_lieux set rgt = rgt + 2 WHERE rgt > {this.selected_rgt}"  
+					  error="update_rgt_has_child_errorHandler(event)"/>
 		
 		<sqlite:Query id="update_lft_has_child" connection="{db.connection}"
-					  sql="update gevu_lieux SET lft = lft + 2 WHERE lft > {this.selected_rgt}" />
+					  sql="update gevu_lieux SET lft = lft + 2 WHERE lft > {this.selected_rgt}"
+					  error="update_lft_has_child_errorHandler(event)"/>
 		
 		<sqlite:Query id="insert_has_child" connection="{db.connection}" 
 					  sql="insert into gevu_lieux (id_rubrique,lib,id_parent,id_instant,lft,rgt,niv,maj,lieu_parent)
-					       values(0,'test',0,0,
+					       values(0,'{this.nom_lieu}',0,0,
 					             {this.selected_rgt + 1},
 					             {this.selected_rgt + 2},
 					             {this.selected_niv + 1},
-					              '2012-03-18 20:42:30',
-					             {this.selected_id})" />
+					  STRFTIME('%J','2008-01-02 03:04:05'),
+					             {this.selected_id})" 
+					  error="insert_has_child_errorHandler(event)"/>
 			<!-- ************************************************************* -->
 					  
 					  
 		
 		                     <!-- THE PARENT Does not have CHILDS-->	
 		<sqlite:Query id="update_rgt_no_child" connection="{db.connection}"
-					  sql="update gevu_lieux set rgt = rgt + 2 WHERE rgt > {this.selected_lft}"/>
+					  sql="update gevu_lieux set rgt = rgt + 2 WHERE rgt > {this.selected_lft}"
+					  error="update_rgt_no_child_errorHandler(event)"/>
 		
 		<sqlite:Query id="update_lft_no_child" connection="{db.connection}"
-					  sql="update gevu_lieux SET lft = lft + 2 WHERE lft > {this.selected_lft}"/>
+					  sql="update gevu_lieux SET lft = lft + 2 WHERE lft > {this.selected_lft}"
+					  error="update_lft_no_child_errorHandler(event)"/>
 		
 		<sqlite:Query id="insert_no_child" connection="{db.connection}" 
 					  sql="insert into gevu_lieux (id_rubrique,lib,id_parent,id_instant,lft,rgt,niv,maj,lieu_parent)
-					  values(0,'test',0,0
+					  values(0,'{this.nom_lieu}',0,0,
 					  {this.selected_lft + 1},
 					  {this.selected_lft + 2},
 					  {this.selected_niv + 1},
-					  '2012-03-18 20:42:30',
-					  {this.selected_id})" />
+					  STRFTIME('%J','2008-01-02 03:04:05'),
+					  {this.selected_id})" 
+					  error="insert_no_child_errorHandler(event)"/>
 		<!-- ********************************************************* -->
 		
-			
+		<sqlite:Query id="deleting" connection="{db.connection}"
+					  sql="DELETE FROM gevu_lieux WHERE lft BETWEEN {this.selected_lft} AND {this.selected_rgt}"
+					  error="deleting_errorHandler(event)"/>
+		
+		<sqlite:Query id="deleting_update_1" connection="{db.connection}"
+					  sql="UPDATE gevu_lieux SET rgt={this.selected_lft - 1} WHERE rgt > {this.selected_rgt}"
+					  error="deleting_update_1_errorHandler(event)"/>
+		
+		
+		<sqlite:Query id="deleting_update_2" connection="{db.connection}"
+					  sql="UPDATE gevu_lieux SET lft={this.selected_rgt + 1} WHERE lft > {this.selected_rgt}"
+					  error="deleting_update_2_errorHandler(event)"/>
+		
+		
+		<!-- ********************************************************* -->
 		
 		<s:ArrayCollection id="testData" />
 	</fx:Declarations>
@@ -135,8 +160,7 @@
 			[Bindable] private var selected_rgt:int;
 			[Bindable] private var selected_niv:int;
 			[Bindable] private var lieu_info:Array=new Array;
-			[Bindable] private var t:Date=new Date;
-			
+			[Bindable] public var nom_lieu:String;
 	
 						
 			/* 
@@ -144,6 +168,8 @@
              * Building the tree			
              */	
 			private function onSelectResult():void {
+			if	(tree_query.data != null)
+			{	
 				var res:ArrayCollection=new ArrayCollection(tree_query.data);
 				var parents:Array = new Array;
 				testData.disableAutoUpdate();
@@ -176,7 +202,8 @@
 					}//for loop
 				
 				   testData.addItem(parents[0]);	 	
-                   testData.enableAutoUpdate();              		
+                   testData.enableAutoUpdate();
+			 }//not null
 			}
 	
 			
@@ -348,41 +375,122 @@
 				return compo;
 			}
 			
-			protected function get_lieu_info_resultHandler(event:SQLEvent):void
-			{
-			  this.lieu_info=this.get_lieu_info.data;
-			  this.selected_lft=lieu_info[0].lft;
-			  this.selected_rgt=lieu_info[0].rgt;
-			  this.selected_niv=lieu_info[0].niv;
-			  //adding event listners
-			  this.update_lft_has_child.addEventListener(SQLErrorEvent.ERROR,onerror);
-			  this.update_rgt_has_child.addEventListener(SQLErrorEvent.ERROR,onerror);
-			  this.insert_has_child.addEventListener(SQLErrorEvent.ERROR,onerror);
-			  this.update_lft_no_child.addEventListener(SQLErrorEvent.ERROR,onerror);
-			  this.update_rgt_no_child.addEventListener(SQLErrorEvent.ERROR,onerror);
-			  this.insert_no_child.addEventListener(SQLErrorEvent.ERROR,onerror);
-			  this.tree_query.addEventListener(SQLErrorEvent.ERROR,onerror);
+			
+			
+			public function add_lieu():void{
 				if (this.selected_rgt != this.selected_lft +1)
 				{	
-				this.update_lft_has_child.execute();
-				this.update_rgt_has_child.execute();
-				this.insert_has_child.execute();
-				
-				
+					this.update_lft_has_child.execute();
+					this.update_rgt_has_child.execute();
+					this.insert_has_child.execute();
+					
+					
 				}//parent
-				
+					
 				else
 				{
-				 this.update_lft_no_child.execute();
-				 this.update_rgt_no_child.execute();
-				 this.insert_no_child.execute();
+					this.update_lft_no_child.execute();
+					this.update_rgt_no_child.execute();
+					this.insert_no_child.execute();
 				}//not parent
 				this.tree_query.execute();
+
 			}
-					
+			
+			public function delete_lieu():void{
+			 this.deleting.execute();
+			 this.deleting_update_1.execute();
+			 this.deleting_update_2.execute();
+			 this.tree_query.execute();
+			 
+			}
+			
 			public function onerror(e:SQLErrorEvent):void{
              trace(e.error);				
 			}
+			
+			
+			
+			protected function get_lieu_info_add_resultHandler(event:SQLEvent):void
+			{
+				this.lieu_info=this.get_lieu_info_add.data;
+				this.selected_lft=lieu_info[0].lft;
+				this.selected_rgt=lieu_info[0].rgt;
+				this.selected_niv=lieu_info[0].niv;
+				this.add_lieu();
+				
+			}
+			
+			protected function get_lieu_info_delete_resultHandler(event:SQLEvent):void
+			{
+				this.lieu_info=this.get_lieu_info_delete.data;
+				this.selected_lft=lieu_info[0].lft;
+				this.selected_rgt=lieu_info[0].rgt;
+				this.selected_niv=lieu_info[0].niv;
+				this.delete_lieu();
+				
+			}
+			
+			protected function deleting_errorHandler(event:SQLErrorEvent):void
+			{
+				var o:Object=event;
+				
+			}
+			
+			protected function deleting_update_1_errorHandler(event:SQLErrorEvent):void
+			{
+				var o:Object=event;//could not convert string value to date
+				                   //http://verysimple.com/2008/09/09/working-with-dates-in-flex-air-and-sqlite/
+			}
+			
+			protected function deleting_update_2_errorHandler(event:SQLErrorEvent):void
+			{
+				var o:Object=event;
+				
+			}
+			
+			protected function tree_query_errorHandler(event:SQLErrorEvent):void
+			{
+				var o:Object=event;
+				
+			}
+			
+			protected function update_rgt_has_child_errorHandler(event:SQLErrorEvent):void
+			{
+				
+				var o:Object=event;
+			}
+			
+			protected function update_lft_has_child_errorHandler(event:SQLErrorEvent):void
+			{
+				var o:Object=event;
+				
+			}
+			
+			protected function insert_has_child_errorHandler(event:SQLErrorEvent):void
+			{
+				var o:Object=event;
+				
+			}
+			
+			protected function update_rgt_no_child_errorHandler(event:SQLErrorEvent):void
+			{
+				var o:Object=event;
+				
+			}
+			
+			protected function update_lft_no_child_errorHandler(event:SQLErrorEvent):void
+			{
+				var o:Object=event;
+				
+			}
+			
+			protected function insert_no_child_errorHandler(event:SQLErrorEvent):void
+			{
+				var o:Object=event;
+				
+			}
+			
 		]]>	
 	</fx:Script>
 </tr:Tree>

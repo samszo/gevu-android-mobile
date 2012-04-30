@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" 
-		xmlns:view="views.*"
-		creationComplete="decocheVals();">
+		xmlns:view="views.*">
 	<fx:Script>
 		<![CDATA[			
 		[Bindable] public var lblQ:String;
@@ -14,7 +13,7 @@
 		fnct(val);
 		}
 			
-		private function cocheVals():void{
+		public function cocheVals():void{
 		//basé sur les mot-clef de type 2
 		//1 	Oui, 2 	Non, 124 	N. A., 141 	Sous réserve
 		if(val && val!="0"){

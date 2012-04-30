@@ -6,11 +6,6 @@
 			   xmlns:sqlite="com.peterelst.air.sqlite.*" 
 			   xmlns:gevu="gevu.*"
 			   xmlns:view="views.*">
-	
-	<fx:Declarations>
-		
-	</fx:Declarations>
-	
 	<fx:Script>
 		<![CDATA[
 			import flash.data.SQLConnection;
@@ -25,11 +20,30 @@
 			import mx.core.FlexGlobals;
 			import mx.events.PropertyChangeEvent;
 			
+			protected function deleted_clickHandler(event:MouseEvent):void
+			{
+				this.mytree.get_lieu_info_delete.execute();
+				
+			}
 			 
 			protected function add_clickHandler(event:MouseEvent):void
 			{
-				this.mytree.get_lieu_info.execute();
+				this.mytree.nom_lieu=this.nom_lieu.text;
+				this.mytree.get_lieu_info_add.execute();
+				this.nom_lieu.text='';
+				this.nom_lieu.visible=false;
+				this.add.visible=false;
+				this.lab.visible=false;
 			}
+			
+			protected function prepare_add_clickHandler(event:MouseEvent):void
+			{
+				this.nom_lieu.visible=true;
+				this.add.visible=true;
+				this.lab.visible=true;
+			}
+			
+			
 			
 		]]>
 	</fx:Script>
@@ -37,8 +51,19 @@
 		<s:HorizontalLayout/>
 	</s:layout>	
 	<s:VGroup>
-		<s:Button label="Ajouter un lieu" click="add_clickHandler(event)"/>
-		<gevu:arbre  id="mytree" width="250" height="300"/>	
+		<s:HGroup>
+		<s:Button label="Ajouter un lieu" click="prepare_add_clickHandler(event)" fontSize="10"
+				  width="100" height="33"/>
+		<s:Button id="deleted" width="120" height="33" label="Suprimmer ce lieu"
+				  click="deleted_clickHandler(event)" fontSize="10"/>
+		</s:HGroup>	
+		<s:Label id="lab" text="Veuillez-écriver le nom: " visible="false" fontSize="10"/>
+		<s:HGroup>
+			<s:TextInput id="nom_lieu" width="150" visible="false" height="25" />
+			<s:Button id="add" visible="false" label="Enrigistrer" click="add_clickHandler(event)" 
+					  fontSize="10" width="75" height="25"/>
+		</s:HGroup>
+			<gevu:arbre  id="mytree" width="250" height="300"/> 
 	</s:VGroup>
 		<s:Scroller width="100%" height="100%">
 			<s:VGroup id="main_interface">
