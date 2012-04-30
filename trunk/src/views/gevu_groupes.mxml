@@ -7,12 +7,13 @@
 	<fx:Declarations>
 		<sqlite:SQLite id="db" file="gevu_mobile.db" />
 		<sqlite:Query id="get_ref" connection="{db.connection}" 
-					  sql="select ref from gevu_groupes where id_lieu={selected_id}"
+					  sql="select ref,reponse_1 from gevu_groupes where id_lieu={selected_id}"
 					  result="groupes_query_resultHandler(event)"/>
 		<sqlite:Query id="update_query" connection="{db.connection}"
 					  sql="update gevu_groupes set ref='{this.updated_ref}',reponse_1='{this.reponse}'
 					       where id_lieu={this.selected_id}" 
-					  result="update_query_resultHandler(event)"/>
+					  result="update_query_resultHandler(event)"
+					  error="update_query_errorHandler(event)"/>
 		
 	</fx:Declarations>
 	
@@ -20,8 +21,9 @@
 		<![CDATA[
 			import spark.events.TextOperationEvent;
 			[Bindable] private var selected_id:int;
-			[Bindable] private var updated_ref:String = new String;
+			[Bindable] private var updated_ref:String;
 			[Bindable] public var reponse:String;
+			
 			
 			public function set_selected_id(x:int):void{
 				this.selected_id=x;
@@ -39,6 +41,8 @@
 			{
 				var ref:Array=get_ref.data;
 				this.F2.text=ref[0].ref;
+				this.reponse=ref[0].reponse_1;
+				this.rep.cocheVals();
 			}
 			
 			public function editModif(val:String) : void {
@@ -47,6 +51,8 @@
 			
 			protected function SaveModif_clickHandler(event:MouseEvent):void
 			  {
+			 if(this.updated_ref == null) this.updated_ref=this.F2.text;
+			 trace(this.update_query.sql);
 				this.update_query.execute();
 				}
 			
@@ -62,12 +68,18 @@
 				
 			}
 			
+			protected function update_query_errorHandler(event:SQLErrorEvent):void
+			{
+				var o:Object=event;
+				
+			}
+			
 		]]>
 	</fx:Script>
 	<s:Panel width="600" height="278" title="Groupe">
 		<s:VGroup >
-			<view:repType2 width="357" height="102" lblQ="Le bâtiment est t-il en ZPPAUP ?"
-						  fnct="{this.editModif}" />
+			<view:repType2 id="rep" width="357" height="102" lblQ="Le bâtiment est t-il en ZPPAUP ?"
+						   Q="reponse_1" val="{this.reponse}"  fnct="{this.editModif}" />
 			<s:HGroup height="37">
 			<s:Label width="27" height="31" text="ref"/>
 			<s:TextInput id="F2" change="ref_changeHandler(event)"/>

@@ -12,11 +12,11 @@
 		<sqlite:Query id="add_query" connection="{db.connection}"
 					  sql="insert into gevu_contacts(nom,prenom,fixe,mobile,fax,mail)
 					  values ('{this.nom}','{this.prenom}',{this.fixe},{this.mobile},{this.fax},'{this.mail}')"
-					  />
+					 error="add_query_errorHandler(event)" />
 		
 		<sqlite:Query id="add_query2" connection="{db.connection}"
 					  sql="insert into gevu_contactsxantennes values ({this.last_inserted_id},{this.id_antenne})"
-					  />
+					  error="add_query2_errorHandler(event)"/>
 					  
 		<sqlite:Query id="delete_query" connection="{db.connection}"
 					  sql="delete from gevu_contacts where id_contact={this.deleting_id}"/>
@@ -26,9 +26,12 @@
 					  from gevu_antennes a ,gevu_contactsxantennes b,gevu_contacts c
 					  where (a.id_antenne = b.id_antenne) and (c.id_contact =  b.id_contact)"
 					  result="antenne_contact_query_resultHandler(event)"/>
+		
 		<sqlite:Query id="get_last_inserted_id" connection="{db.connection}"
 					  sql="select max(id_contact) as max from gevu_contacts" 
-					  result="get_last_inserted_id_resultHandler(event)"/>
+					  result="get_last_inserted_id_resultHandler(event)"
+					  error="get_last_inserted_id_errorHandler(event)"/>
+		
 		<sqlite:Query id="update_contact" connection="{db.connection}"
 					  sql="update gevu_contacts set
 					  nom='{this.nom}',
@@ -148,6 +151,24 @@
 				this.update_contact.execute();
 				this.query_execution();
 			
+				
+			}
+			
+			protected function add_query_errorHandler(event:SQLErrorEvent):void
+			{
+				var o:Object=event;
+				
+			}
+			
+			protected function add_query2_errorHandler(event:SQLErrorEvent):void
+			{
+				var o:Object=event;
+				
+			}
+			
+			protected function get_last_inserted_id_errorHandler(event:SQLErrorEvent):void
+			{
+				var o:Object=event;
 				
 			}
 			
