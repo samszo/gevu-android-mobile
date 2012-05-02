@@ -5,7 +5,24 @@
 			   xmlns:mx="library://ns.adobe.com/flex/halo"
 			   xmlns:sqlite="com.peterelst.air.sqlite.*" 
 			   xmlns:gevu="gevu.*"
-			   xmlns:view="views.*">
+			   xmlns:view="views.*"
+			   >
+	
+	<fx:Style>
+		@namespace s "library://ns.adobe.com/flex/spark";
+		@namespace mx "library://ns.adobe.com/flex/mx";
+		
+		s|Button#add_button {
+			skinClass: ClassReference("views.ImageButtonSkinAdd");
+		}	
+		s|Button#delete_button{
+			skinClass: ClassReference("views.ImageButtonSkinDelete");
+		}
+		s|Button#edit_button {
+			skinClass: ClassReference("views.ImageButtonSkinEdit");
+		}
+	</fx:Style>
+	
 	<fx:Script>
 		<![CDATA[
 			import flash.data.SQLConnection;
@@ -20,12 +37,14 @@
 			import mx.core.FlexGlobals;
 			import mx.events.PropertyChangeEvent;
 			
-			protected function deleted_clickHandler(event:MouseEvent):void
+			
+			
+			protected function delete_clickHandler(event:MouseEvent):void
 			{
 				this.mytree.get_lieu_info_delete.execute();
 				
 			}
-			 
+			
 			protected function add_clickHandler(event:MouseEvent):void
 			{
 				this.mytree.nom_lieu=this.nom_lieu.text;
@@ -38,11 +57,33 @@
 			
 			protected function prepare_add_clickHandler(event:MouseEvent):void
 			{
+				this.nom_lieu.text="";
+				this.edit.visible=false;
 				this.nom_lieu.visible=true;
 				this.add.visible=true;
 				this.lab.visible=true;
 			}
 			
+			protected function prepare_edit_button_clickHandler(event:MouseEvent):void
+			{
+				this.nom_lieu.text=this.mytree.get_lib();
+				this.nom_lieu.visible=true;
+				this.edit.visible=true;
+				this.add.visible=false;
+				this.lab.visible=true;
+			}
+			
+			private function get_lib():String{
+			 var lib:String= this.mytree.get_lib();
+			 return lib;
+			}
+			
+			protected function edit_clickHandler(event:MouseEvent):void
+			{
+				this.mytree.set_lib(this.nom_lieu.text);
+				this.mytree.update_lib.execute();
+				
+			}
 			
 			
 		]]>
@@ -52,23 +93,37 @@
 	</s:layout>	
 	<s:VGroup>
 		<s:HGroup>
-		<s:Button label="Ajouter un lieu" click="prepare_add_clickHandler(event)" fontSize="10"
-				  width="100" height="33"/>
-		<s:Button id="deleted" width="120" height="33" label="Suprimmer ce lieu"
-				  click="deleted_clickHandler(event)" fontSize="10"/>
-		</s:HGroup>	
-		<s:Label id="lab" text="Veuillez-écriver le nom: " visible="false" fontSize="10"/>
-		<s:HGroup>
-			<s:TextInput id="nom_lieu" width="150" visible="false" height="25" />
-			<s:Button id="add" visible="false" label="Enrigistrer" click="add_clickHandler(event)" 
-					  fontSize="10" width="75" height="25"/>
+			<s:Label  text="Ajouter un lieu: " visible="true" fontSize="15"/>	
+			<s:Button id="add_button" click="prepare_add_clickHandler(event)" />
+	<!--		<s:Button id="reset" click="reset_clickHandler(event)" /> -->
 		</s:HGroup>
-			<gevu:arbre  id="mytree" width="250" height="300"/> 
+		<s:HGroup>
+			<s:Label  text="Editer le lieu séléctioné: " visible="true" fontSize="15"/>	
+			<s:Button id="edit_button" click="prepare_edit_button_clickHandler(event)" />
+		</s:HGroup>
+		<s:HGroup>
+			<s:Label  text="suprimer le lieu séléctioné: " visible="true" fontSize="15"/>
+			<s:Button id="delete_button" label="Suprimmer ce lieu"
+					  click="delete_clickHandler(event)" />
+			
+		</s:HGroup>
+		<s:Label id="lab" text="Veuillez-écriver le nom: " visible="false" fontSize="15"/>
+		<s:HGroup>
+			<s:TextInput id="nom_lieu" width="150" visible="false" height="30"
+						 />
+			<s:Button id="add" visible="false" label="Enrigistrer" click="add_clickHandler(event)" 
+					  fontSize="10" width="75" height="25"
+					  />
+			<s:Button id="edit" visible="false" label="Modifier" click="edit_clickHandler(event)" 
+					  fontSize="10" width="75" height="25"
+					  />
+		</s:HGroup>
+		<gevu:arbre  id="mytree" width="250" height="300"/> 
 	</s:VGroup>
-		<s:Scroller width="100%" height="100%">
-			<s:VGroup id="main_interface">
-			</s:VGroup>	
-		</s:Scroller>
+	<s:Scroller width="100%" height="100%">
+		<s:VGroup id="main_interface">
+		</s:VGroup>	
+	</s:Scroller>
 	
 	
 </s:Application>
