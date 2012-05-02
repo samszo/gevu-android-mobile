@@ -8,10 +8,10 @@
 		 width="100%" height="100%" itemIdentifyField="treeid" allowItemDisSelection="false"
 		 useVirtualLayout="false" dragEnabled="false" dropEnabled="false" labelField="label"
 		 click="tree_clickHandler(event)"
-		 >	
+		 creationComplete="this.tree_query.execute();">	
 	
 	<fx:Declarations>
-		<sqlite:SQLite id="db" file="gevu_mobile.db" open="tree_query.execute()" />
+		<sqlite:SQLite id="db" file="gevu_mobile.db" />
 		<sqlite:Query id="tree_query" connection="{db.connection}" 
 					  sql="SELECT node.lib, node.id_lieu, node.lieu_parent,node.lft,node.rgt
 					  FROM gevu_lieux AS node,
@@ -20,7 +20,9 @@
 					  GROUP BY node.id_lieu
 					  ORDER BY node.lft"
 					  result="onSelectResult()" 
-					  error="tree_query_errorHandler(event)"/>
+					  error="query_errorHandler(event)"
+					  
+					  />
 		
 		<sqlite:Query id="form_query" connection="{db.connection}"
 					  sql="SELECT l.lib, l.id_lieu, a.id_antenne, b.id_batiment,c.id_geo,d.id_diag,e.id_doc,
@@ -57,6 +59,11 @@
 					  sql="select * from gevu_lieux where id_lieu={this.selected_id}"
 					  result="get_lieu_info_add_resultHandler(event)"/>
 		
+		<sqlite:Query id="update_lib" connection="{db.connection}"
+					  sql="update gevu_lieux set lib ='{this.nom_lieu}'
+					  where id_lieu={this.selected_id}"
+					  error="query_errorHandler(event)"
+					  result="update_lib_resultHandler(event)"/>
 		
 		<sqlite:Query id="get_lieu_info_delete" connection="{db.connection}"
 					  sql="select * from gevu_lieux where id_lieu={this.selected_id}"
@@ -66,11 +73,13 @@
 	                        <!-- THE PARENT HAS CHILDS-->	
 		<sqlite:Query id="update_rgt_has_child" connection="{db.connection}"
 					  sql="update gevu_lieux set rgt = rgt + 2 WHERE rgt > {this.selected_rgt}"  
-					  error="update_rgt_has_child_errorHandler(event)"/>
+					  error="query_errorHandler(event)"
+					  result="insert_update_resultHandler(event)"/>
 		
 		<sqlite:Query id="update_lft_has_child" connection="{db.connection}"
 					  sql="update gevu_lieux SET lft = lft + 2 WHERE lft > {this.selected_rgt}"
-					  error="update_lft_has_child_errorHandler(event)"/>
+					  error="query_errorHandler(event)"
+					  result="insert_update_resultHandler(event)"/>
 		
 		<sqlite:Query id="insert_has_child" connection="{db.connection}" 
 					  sql="insert into gevu_lieux (id_rubrique,lib,id_parent,id_instant,lft,rgt,niv,maj,lieu_parent)
@@ -78,9 +87,10 @@
 					             {this.selected_rgt + 1},
 					             {this.selected_rgt + 2},
 					             {this.selected_niv + 1},
-					  STRFTIME('%J','2008-01-02 03:04:05'),
+					  strftime('%J','{this.toSqlDate(myDate)}'),
 					             {this.selected_id})" 
-					  error="insert_has_child_errorHandler(event)"/>
+					  error="query_errorHandler(event)"
+					  result="insert_update_resultHandler(event)"/>
 			<!-- ************************************************************* -->
 					  
 					  
@@ -88,11 +98,13 @@
 		                     <!-- THE PARENT Does not have CHILDS-->	
 		<sqlite:Query id="update_rgt_no_child" connection="{db.connection}"
 					  sql="update gevu_lieux set rgt = rgt + 2 WHERE rgt > {this.selected_lft}"
-					  error="update_rgt_no_child_errorHandler(event)"/>
+					  error="query_errorHandler(event)"
+					  result="insert_update_resultHandler(event)"/>
 		
 		<sqlite:Query id="update_lft_no_child" connection="{db.connection}"
 					  sql="update gevu_lieux SET lft = lft + 2 WHERE lft > {this.selected_lft}"
-					  error="update_lft_no_child_errorHandler(event)"/>
+					  error="query_errorHandler(event)"
+					  result="insert_update_resultHandler(event)"/>
 		
 		<sqlite:Query id="insert_no_child" connection="{db.connection}" 
 					  sql="insert into gevu_lieux (id_rubrique,lib,id_parent,id_instant,lft,rgt,niv,maj,lieu_parent)
@@ -100,23 +112,27 @@
 					  {this.selected_lft + 1},
 					  {this.selected_lft + 2},
 					  {this.selected_niv + 1},
-					  STRFTIME('%J','2008-01-02 03:04:05'),
+					  strftime('%J','{this.toSqlDate(myDate)}'),
 					  {this.selected_id})" 
-					  error="insert_no_child_errorHandler(event)"/>
+					  error="query_errorHandler(event)"
+					  result="insert_update_resultHandler(event)"/>
 		<!-- ********************************************************* -->
 		
 		<sqlite:Query id="deleting" connection="{db.connection}"
 					  sql="DELETE FROM gevu_lieux WHERE lft BETWEEN {this.selected_lft} AND {this.selected_rgt}"
-					  error="deleting_errorHandler(event)"/>
+					  error="query_errorHandler(event)"
+					  result="insert_update_resultHandler(event)"/>
 		
 		<sqlite:Query id="deleting_update_1" connection="{db.connection}"
 					  sql="UPDATE gevu_lieux SET rgt={this.selected_lft - 1} WHERE rgt > {this.selected_rgt}"
-					  error="deleting_update_1_errorHandler(event)"/>
+					  error="query_errorHandler(event)"
+					  result="insert_update_resultHandler(event)"/>
 		
 		
 		<sqlite:Query id="deleting_update_2" connection="{db.connection}"
 					  sql="UPDATE gevu_lieux SET lft={this.selected_rgt + 1} WHERE lft > {this.selected_rgt}"
-					  error="deleting_update_2_errorHandler(event)"/>
+					  error="query_errorHandler(event)"
+					  result="insert_update_resultHandler(event)"/>
 		
 		
 		<!-- ********************************************************* -->
@@ -125,15 +141,19 @@
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
+			import com.sparkTree.TreeDataProvider;
 			import com.sparkTree.TreeEvent;
+			import com.sparkTree.TreeItem;
 			
 			import flash.display.DisplayObject;
 			import flash.net.dns.SRVRecord;
 			import flash.sampler.NewObjectSample;
 			import flash.utils.getDefinitionByName;
 			
+			import mx.collections.IList;
 			import mx.core.FlexGlobals;
 			import mx.core.IVisualElement;
+			import mx.events.FlexEvent;
 			
 			import spark.components.Application;
 			import spark.components.Button;
@@ -161,8 +181,35 @@
 			[Bindable] private var selected_niv:int;
 			[Bindable] private var lieu_info:Array=new Array;
 			[Bindable] public var nom_lieu:String;
-	
-						
+			[Bindable] private var myDate:Date = new Date();
+			           private var treeItem:TreeItem;
+			           private var adding_finished:Boolean=false;
+			
+			public function lpad(original:Object, length:int, pad:String):String
+			{
+				var padded:String = original == null ? "" : original.toString();
+				while (padded.length < length) padded = pad + padded;
+				return padded;
+			}
+			
+			public function toSqlDate(dateVal:Date):String
+			{
+				return dateVal == null ? null : dateVal.fullYear
+					+ "-" + lpad(dateVal.month + 1,2,'0')  // month is zero-based
+					+ "-" + lpad(dateVal.date,2,'0')
+					+ " " + lpad(dateVal.hours,2,'0')
+					+ ":" + lpad(dateVal.minutes,2,'0')
+					+ ":" + lpad(dateVal.seconds,2,'0')
+					;
+			}
+			
+			public function get_lib():String{
+				return this.nom_lieu;
+			}
+			
+			public function set_lib(lib:String):void{
+				this.nom_lieu=lib;
+			}
 			/* 
 			 * This function is responsible for
              * Building the tree			
@@ -200,16 +247,52 @@
 								parents[k].children.addItem(leaf);	
 					  }	// it is a leaf
 					}//for loop
-				
 				   testData.addItem(parents[0]);	 	
                    testData.enableAutoUpdate();
 			 }//not null
-			}
+			this.resetTree();
+		}
 	
+			private function resetTree():void{
+				var tempItem:TreeItem ; 
+              if(this.adding_finished==true && this.treeItem.parent !=null)
+			  {
+				  /*
+				  tempItem=this.treeItem.parent;
+				  var children:IList = tempItem.childrens;
+				  var treeDataProvider:TreeDataProvider = this.dataProvider as TreeDataProvider;
+				  treeDataProvider.openBranch(children,tempItem,true);
+				  */
+				  this.expandItem(this.treeItem.parent);
+				  this.adding_finished=false;
+			  }
+			}
 			
+			/*
+			public function expandItem($item:Object, open:Boolean = true, cancelable:Boolean = true):void
+			 {
+			if ( $item ) {
+			var item:TreeItem;
+			if ( ! ($item is TreeItem) ) {
+			item = this._treeItemsManager.find($item);
+			} else {
+			item = ($item as TreeItem);
+			}
+			if ( item.hasChildren())
+			{
+			var children:IList = item.childrens;
+			if (open)
+			_treeDataProvider.openBranch(children, item, cancelable);
+			else
+			_treeDataProvider.closeBranch(children, item, cancelable);
+			}
+			}
+			*/
 			protected function tree_clickHandler(event:MouseEvent):void
 			{
-			 selected_id=event.currentTarget.selectedItem.source.getID;
+			 this.treeItem= event.currentTarget.selectedItem;
+			 this.selected_id=this.treeItem.source.getID;
+			 this.nom_lieu=this.treeItem.source.label;
 			 form_query.execute();
 			 }
 			
@@ -380,6 +463,7 @@
 			public function add_lieu():void{
 				if (this.selected_rgt != this.selected_lft +1)
 				{	
+					//this.db.connection.begin();
 					this.update_lft_has_child.execute();
 					this.update_rgt_has_child.execute();
 					this.insert_has_child.execute();
@@ -389,15 +473,18 @@
 					
 				else
 				{
+					//this.db.connection.begin();
 					this.update_lft_no_child.execute();
 					this.update_rgt_no_child.execute();
 					this.insert_no_child.execute();
+					
 				}//not parent
 				this.tree_query.execute();
-
+				this.adding_finished=true;
 			}
 			
 			public function delete_lieu():void{
+			 //this.db.connection.begin();	
 			 this.deleting.execute();
 			 this.deleting_update_1.execute();
 			 this.deleting_update_2.execute();
@@ -431,63 +518,20 @@
 				
 			}
 			
-			protected function deleting_errorHandler(event:SQLErrorEvent):void
+			protected function query_errorHandler(event:SQLErrorEvent):void
 			{
 				var o:Object=event;
-				
 			}
 			
-			protected function deleting_update_1_errorHandler(event:SQLErrorEvent):void
-			{
-				var o:Object=event;//could not convert string value to date
-				                   //http://verysimple.com/2008/09/09/working-with-dates-in-flex-air-and-sqlite/
-			}
-			
-			protected function deleting_update_2_errorHandler(event:SQLErrorEvent):void
-			{
-				var o:Object=event;
-				
-			}
-			
-			protected function tree_query_errorHandler(event:SQLErrorEvent):void
-			{
-				var o:Object=event;
-				
-			}
-			
-			protected function update_rgt_has_child_errorHandler(event:SQLErrorEvent):void
+			protected function insert_update_resultHandler(event:SQLEvent):void
 			{
 				
-				var o:Object=event;
+			//	this.db.connection.commit();
 			}
 			
-			protected function update_lft_has_child_errorHandler(event:SQLErrorEvent):void
+			protected function update_lib_resultHandler(event:SQLEvent):void
 			{
-				var o:Object=event;
-				
-			}
-			
-			protected function insert_has_child_errorHandler(event:SQLErrorEvent):void
-			{
-				var o:Object=event;
-				
-			}
-			
-			protected function update_rgt_no_child_errorHandler(event:SQLErrorEvent):void
-			{
-				var o:Object=event;
-				
-			}
-			
-			protected function update_lft_no_child_errorHandler(event:SQLErrorEvent):void
-			{
-				var o:Object=event;
-				
-			}
-			
-			protected function insert_no_child_errorHandler(event:SQLErrorEvent):void
-			{
-				var o:Object=event;
+			this.tree_query.execute();	
 				
 			}
 			

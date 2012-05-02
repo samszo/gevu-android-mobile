@@ -10,14 +10,17 @@
 					  sql="select id_batiment,id_lieu,id_instant
 					  , ref,contact_proprietaire,contact_delegataire
 					  , contact_gardien,horaires_gardien,horaires_batiment
-					  , superficie_parcelle, superficie_batiment,date_achevement
-					  , date_depot_permis,date_reha
+					  , superficie_parcelle,superficie_batiment
+					  , STRFTIME('%Y-%m-%d',date_achevement)
+					  , STRFTIME('%Y-%m-%d',date_depot_permis)
+					  , STRFTIME('%Y-%m-%d',date_reha) 
 					  , reponse_1,reponse_2,reponse_3
 					  , reponse_4,reponse_5,reponse_6
 					  , reponse_7, reponse_8,reponse_9
 					  , reponse_10,reponse_11,reponse_12
 					  , reponse_13, reponse_14,reponse_15
-					  , maj from gevu_batiments where id_lieu={this.selected_id}"
+					  , STRFTIME('%Y-%m-%d',maj)
+					  from gevu_batiments where id_lieu={this.selected_id}"
 					  result="get_data_resultHandler(event)"
 					  error="get_data_errorHandler(event)"/>
 	</fx:Declarations>

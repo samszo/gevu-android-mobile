@@ -3,7 +3,7 @@
 		xmlns:s="library://ns.adobe.com/flex/spark" 
 		xmlns:view="views.*"
 		xmlns:sqlite="com.peterelst.air.sqlite.*" 
-		creationComplete="this.query_execution();init();">
+		creationComplete="this.query_execution();this.get_antenne_id.execute()">
 	
 			
 	<fx:Declarations>
@@ -12,25 +12,35 @@
 		<sqlite:Query id="add_query" connection="{db.connection}"
 					  sql="insert into gevu_contacts(nom,prenom,fixe,mobile,fax,mail)
 					  values ('{this.nom}','{this.prenom}',{this.fixe},{this.mobile},{this.fax},'{this.mail}')"
-					 error="add_query_errorHandler(event)" />
+					 error="query_errorHandler(event)"
+					 result="add_query_resultHandler(event)"/>
 		
+		<sqlite:Query id="get_antenne_id" connection="{db.connection}"
+					  sql="select id_antenne from gevu_antennes where id_lieu={this.id_lieu}"
+					  error="query_errorHandler(event)"
+					  result="get_antenne_id_resultHandler(event)"/>
+					  
 		<sqlite:Query id="add_query2" connection="{db.connection}"
 					  sql="insert into gevu_contactsxantennes values ({this.last_inserted_id},{this.id_antenne})"
-					  error="add_query2_errorHandler(event)"/>
+					  error="query_errorHandler(event)"
+					  result="reset_table_resultHandler(event)"/>
 					  
 		<sqlite:Query id="delete_query" connection="{db.connection}"
-					  sql="delete from gevu_contacts where id_contact={this.deleting_id}"/>
+					  sql="delete from gevu_contacts where id_contact={this.deleting_id}"
+					  error="query_errorHandler(event)"
+					  result="reset_table_resultHandler(event)"/>
 		
 		<sqlite:Query id="antenne_contact_query" connection="{db.connection}"
 					  sql="select c.id_contact,c.nom,c.prenom,c.fixe,c.mobile,c.fax,c.mail
 					  from gevu_antennes a ,gevu_contactsxantennes b,gevu_contacts c
 					  where (a.id_antenne = b.id_antenne) and (c.id_contact =  b.id_contact)"
-					  result="antenne_contact_query_resultHandler(event)"/>
+					  result="antenne_contact_query_resultHandler(event)"
+					  error="query_errorHandler(event)"/>
 		
 		<sqlite:Query id="get_last_inserted_id" connection="{db.connection}"
 					  sql="select max(id_contact) as max from gevu_contacts" 
 					  result="get_last_inserted_id_resultHandler(event)"
-					  error="get_last_inserted_id_errorHandler(event)"/>
+					  error="query_errorHandler(event)"/>
 		
 		<sqlite:Query id="update_contact" connection="{db.connection}"
 					  sql="update gevu_contacts set
@@ -40,7 +50,9 @@
 					  mobile={this.mobile},
 					  fax={this.fax},
 					  mail='{this.mail}'
-					  where id_contact={this.updating_id}" />
+					  where id_contact={this.updating_id}" 
+					  result="reset_table_resultHandler(event)"
+					  error="query_errorHandler(event)"/>
 		
 		
 		
@@ -51,7 +63,7 @@
 			import mx.utils.OnDemandEventDispatcher;
 			
 			import spark.events.GridItemEditorEvent;
-			[Bindable] public var id_antenne:int;
+			[Bindable] public var id_lieu:int;
 			[Bindable] private var contact_info:ArrayCollection =new ArrayCollection;
 			[Bindable] private var nom:String = new String;
 			[Bindable] private var prenom:String = new String;
@@ -63,20 +75,8 @@
 			[Bindable] private var updating_id:String = new String;
 			[Bindable] public var query_type:String;
 			[Bindable] private var last_inserted_id:int;
+			[Bindable] private var id_antenne:int;
 			
-			private function init():void{
-				this.add_query.addEventListener(SQLErrorEvent.ERROR,onError);
-				this.add_query2.addEventListener(SQLErrorEvent.ERROR,onError);
-				this.delete_query.addEventListener(SQLErrorEvent.ERROR,onError);
-				this.antenne_contact_query.addEventListener(SQLErrorEvent.ERROR,onError);
-				this.get_last_inserted_id.addEventListener(SQLErrorEvent.ERROR,onError);
-				this.update_contact.addEventListener(SQLErrorEvent.ERROR,onError);
-				
-			}
-			
-			private function onError(e:SQLErrorEvent):void{
-				trace(e.error);
-			}
 			
 			protected function add_form_clickHandler(event:MouseEvent):void
 			{
@@ -85,6 +85,7 @@
 			
 			protected function save_contact_clickHandler(event:MouseEvent):void
 			{
+				this.add_contact_form.visible=false;
 				this.nom=this.nom_in.text;
 				this.prenom=this.prenom_in.text;
 				this.fixe=this.fixe_in.text;
@@ -92,7 +93,6 @@
 				this.fax=this.fax_in.text ; 
 				this.mail=this.mail_in.text;
 				this.add_query.execute();
-				this.get_last_inserted_id.execute();
 				}
 			
 			protected function delete_clickHandler(event:MouseEvent):void
@@ -100,7 +100,6 @@
 			var item:Object=this.dgContact.selectedItem;
 			this.deleting_id=item['id_contact'];
 			this.delete_query.execute();
-			this.query_execution();
 			}
 			
 			protected function antenne_contact_query_resultHandler(event:SQLEvent):void
@@ -127,15 +126,11 @@
 			}
 			
 			
-			
-			
 			protected function get_last_inserted_id_resultHandler(event:SQLEvent):void
 			{
 				var last_id:Array=this.get_last_inserted_id.data;
 				this.last_inserted_id=last_id[0].max;
 				this.add_query2.execute();
-				this.query_execution();
-				
 				
 			}
 			
@@ -148,27 +143,32 @@
 				this.mobile= event.currentTarget.dataProvider[0].mobile;
 				this.fax= event.currentTarget.dataProvider[0].fax;
 				this.mail= event.currentTarget.dataProvider[0].mail;
-				this.update_contact.execute();
+				this.update_contact.execute();		
+				
+			}
+			
+			protected function query_errorHandler(event:SQLErrorEvent):void
+			{
+				var o:Object=event;
+				
+			}
+			
+			
+			protected function add_query_resultHandler(event:SQLEvent):void
+			{
+				this.get_last_inserted_id.execute();
+			}
+			
+			protected function reset_table_resultHandler(event:SQLEvent):void
+			{
 				this.query_execution();
-			
 				
 			}
 			
-			protected function add_query_errorHandler(event:SQLErrorEvent):void
-			{
-				var o:Object=event;
-				
-			}
 			
-			protected function add_query2_errorHandler(event:SQLErrorEvent):void
+			protected function get_antenne_id_resultHandler(event:SQLEvent):void
 			{
-				var o:Object=event;
-				
-			}
-			
-			protected function get_last_inserted_id_errorHandler(event:SQLErrorEvent):void
-			{
-				var o:Object=event;
+				this.id_antenne=this.get_antenne_id.data[0].id_antenne;
 				
 			}
 			
@@ -185,7 +185,7 @@
 		
 		<s:VGroup id="viewContactUnique" x="0" y="55" width="588" height="250" paddingBottom="6"
 				  paddingLeft="6" paddingRight="6" paddingTop="6">
-			<s:DataGrid width="100%" height="240" id="dgContact" dataProvider="{this.contact_info}"
+			<s:DataGrid width="100%" height="246" id="dgContact" dataProvider="{this.contact_info}"
 						editable="true" gridItemEditorSessionSave="dgContact_gridItemEditorSessionSaveHandler(event)"
 						>
 				<s:columns>
