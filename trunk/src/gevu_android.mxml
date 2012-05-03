@@ -114,6 +114,8 @@
 			<s:Button id="add" visible="false" label="Enrigistrer" click="add_clickHandler(event)" 
 					  fontSize="10" width="75" height="25"
 					  />
+	
+			
 			<s:Button id="edit" visible="false" label="Modifier" click="edit_clickHandler(event)" 
 					  fontSize="10" width="75" height="25"
 					  />
