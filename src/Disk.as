@@ -16,7 +16,6 @@ package {
 			this._newId=$id;
 		}
 		
-		[Bindable]
 		
 		public function get getID():int{
 			return this._newId;

@@ -4,14 +4,15 @@
 		 xmlns:tr="com.sparkTree.*"
 		 xmlns:mx="library://ns.adobe.com/flex/halo"
 		 xmlns:sqlite="com.peterelst.air.sqlite.*"
-		 dataProvider="{testData}"
+		 dataProvider="{this.testData}"
 		 width="100%" height="100%" itemIdentifyField="treeid" allowItemDisSelection="false"
 		 useVirtualLayout="false" dragEnabled="false" dropEnabled="false" labelField="label"
 		 click="tree_clickHandler(event)"
-		 creationComplete="this.tree_query.execute();">	
+		 
+		 >	
 	
 	<fx:Declarations>
-		<sqlite:SQLite id="db" file="gevu_mobile.db" />
+		<sqlite:SQLite id="db" file="gevu_mobile.db" open="this.tree_query.execute();"/>
 		<sqlite:Query id="tree_query" connection="{db.connection}" 
 					  sql="SELECT node.lib, node.id_lieu, node.lieu_parent,node.lft,node.rgt
 					  FROM gevu_lieux AS node,
@@ -21,8 +22,8 @@
 					  ORDER BY node.lft"
 					  result="onSelectResult()" 
 					  error="query_errorHandler(event)"
-					  
 					  />
+		
 		
 		<sqlite:Query id="form_query" connection="{db.connection}"
 					  sql="SELECT l.lib, l.id_lieu, a.id_antenne, b.id_batiment,c.id_geo,d.id_diag,e.id_doc,
@@ -153,6 +154,7 @@
 			import mx.collections.IList;
 			import mx.core.FlexGlobals;
 			import mx.core.IVisualElement;
+			import mx.events.CollectionEvent;
 			import mx.events.FlexEvent;
 			
 			import spark.components.Application;
@@ -182,8 +184,8 @@
 			[Bindable] private var lieu_info:Array=new Array;
 			[Bindable] public var nom_lieu:String;
 			[Bindable] private var myDate:Date = new Date();
-			           private var treeItem:TreeItem;
-			           private var adding_finished:Boolean=false;
+			           public var treeItem:TreeItem;
+			           private var finished:Boolean=false;
 			
 			public function lpad(original:Object, length:int, pad:String):String
 			{
@@ -249,55 +251,33 @@
 					}//for loop
 				   testData.addItem(parents[0]);	 	
                    testData.enableAutoUpdate();
+				  
+				  
 			 }//not null
-			this.resetTree();
 		}
 	
-			private function resetTree():void{
-				var tempItem:TreeItem ; 
-              if(this.adding_finished==true && this.treeItem.parent !=null)
-			  {
-				  /*
-				  tempItem=this.treeItem.parent;
-				  var children:IList = tempItem.childrens;
-				  var treeDataProvider:TreeDataProvider = this.dataProvider as TreeDataProvider;
-				  treeDataProvider.openBranch(children,tempItem,true);
-				  */
-				  this.expandItem(this.treeItem.parent);
-				  this.adding_finished=false;
-			  }
-			}
 			
-			/*
-			public function expandItem($item:Object, open:Boolean = true, cancelable:Boolean = true):void
-			 {
-			if ( $item ) {
-			var item:TreeItem;
-			if ( ! ($item is TreeItem) ) {
-			item = this._treeItemsManager.find($item);
-			} else {
-			item = ($item as TreeItem);
-			}
-			if ( item.hasChildren())
-			{
-			var children:IList = item.childrens;
-			if (open)
-			_treeDataProvider.openBranch(children, item, cancelable);
-			else
-			_treeDataProvider.closeBranch(children, item, cancelable);
-			}
-			}
-			*/
+            
 			protected function tree_clickHandler(event:MouseEvent):void
 			{
+				var temp:Array=new Array;			
+			    var tempItem:TreeItem=event.currentTarget.selectedItem
+				if(finished==true && tempItem.expanded != true &&
+				tempItem.source.label=="univers") {
+					for(var i:int=0;i<=this.selected_niv;i++)
+					{	
+					this.expandItem(tempItem);
+					temp[0]=tempItem.childrens.getItemAt(0);
+					tempItem=temp[0];
+					}
+					finished=false;
+				}
 			 this.treeItem= event.currentTarget.selectedItem;
 			 this.selected_id=this.treeItem.source.getID;
 			 this.nom_lieu=this.treeItem.source.label;
 			 form_query.execute();
 			 }
 			
-			
-		    
 			protected function form_query_resultHandler(event:SQLEvent):void
 			{
 			 var form_res:ArrayCollection= new ArrayCollection(form_query.data);
@@ -480,7 +460,7 @@
 					
 				}//not parent
 				this.tree_query.execute();
-				this.adding_finished=true;
+				this.finished=true;
 			}
 			
 			public function delete_lieu():void{
@@ -489,7 +469,7 @@
 			 this.deleting_update_1.execute();
 			 this.deleting_update_2.execute();
 			 this.tree_query.execute();
-			 
+			 this.finished=true;
 			}
 			
 			public function onerror(e:SQLErrorEvent):void{
@@ -531,9 +511,12 @@
 			
 			protected function update_lib_resultHandler(event:SQLEvent):void
 			{
-			this.tree_query.execute();	
+			this.tree_query.execute();
+			this.finished=true;
 				
 			}
+			
+			
 			
 		]]>	
 	</fx:Script>
