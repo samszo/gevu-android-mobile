@@ -7,6 +7,55 @@
 			   xmlns:gevu="gevu.*"
 			   xmlns:view="views.*"
 			   >
+	<fx:Declarations>
+		<fx:Component className="No_Item_Selected">
+			<s:SkinnablePopUpContainer x="70" y="300">
+				<s:TitleWindow  close="close()">
+					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
+						<s:Label text="Veuillez séléctioné un item"/>
+						<s:Button label="OK" click="close()"/>
+					</s:VGroup>
+				</s:TitleWindow>
+			</s:SkinnablePopUpContainer>
+		</fx:Component>
+		
+		<fx:Component className="No_Name_Entered">
+			<s:SkinnablePopUpContainer x="70" y="300">
+				<s:TitleWindow  close="close()">
+					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
+						<s:Label text="Veuillez-écriver le nom"/>
+						<s:Button label="OK" click="close()"/>
+					</s:VGroup>
+				</s:TitleWindow>
+			</s:SkinnablePopUpContainer>
+		</fx:Component>
+		
+		<fx:Component className="Delete_Msg">
+			<s:SkinnablePopUpContainer>
+				
+				<fx:Script>
+					<![CDATA[
+						import mx.core.FlexGlobals;
+						protected function confirm_delete_clickHandler(event:MouseEvent):void
+						{
+							FlexGlobals.topLevelApplication.mytree.get_lieu_info_delete.execute();	
+							
+						}
+					]]>
+				</fx:Script>
+				
+				<s:TitleWindow  close="close()">
+					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
+						<s:Label text="Voullez-vous supprimer un lieu"/>
+						<s:HGroup>	
+							<s:Button label="Oui" click="confirm_delete_clickHandler(event)"/>
+							<s:Button label="No"  click="close()"/>
+						</s:HGroup>	
+					</s:VGroup>
+				</s:TitleWindow>
+			</s:SkinnablePopUpContainer>
+		</fx:Component>
+	</fx:Declarations>
 	
 	<fx:Style>
 		@namespace s "library://ns.adobe.com/flex/spark";
@@ -41,18 +90,32 @@
 			
 			protected function delete_clickHandler(event:MouseEvent):void
 			{
-				this.mytree.get_lieu_info_delete.execute();
-				
+				if(mytree.treeItem == null) {
+					new No_Item_Selected().open(this,false);
+				}
+				else {
+					new Delete_Msg().open(this,false);
+					
+				}
 			}
 			
 			protected function add_clickHandler(event:MouseEvent):void
 			{
-				this.mytree.nom_lieu=this.nom_lieu.text;
-				this.mytree.get_lieu_info_add.execute();
-				this.nom_lieu.text='';
-				this.nom_lieu.visible=false;
-				this.add.visible=false;
-				this.lab.visible=false;
+				if(mytree.treeItem == null) {
+					new No_Item_Selected().open(this,false);
+				}
+				else
+				{	
+					if(this.nom_lieu.text == "" ) new No_Name_Entered().open(this,false)
+					else {		 
+						this.mytree.nom_lieu=this.nom_lieu.text;
+						this.mytree.get_lieu_info_add.execute();
+						this.nom_lieu.text='';
+						this.nom_lieu.visible=false;
+						this.add.visible=false;
+						this.lab.visible=false;
+					}
+				}
 			}
 			
 			protected function prepare_add_clickHandler(event:MouseEvent):void
@@ -74,15 +137,24 @@
 			}
 			
 			private function get_lib():String{
-			 var lib:String= this.mytree.get_lib();
-			 return lib;
+				var lib:String= this.mytree.get_lib();
+				return lib;
 			}
 			
 			protected function edit_clickHandler(event:MouseEvent):void
 			{
-				this.mytree.set_lib(this.nom_lieu.text);
-				this.mytree.update_lib.execute();
-				
+				if(mytree.treeItem == null) {
+					new No_Item_Selected().open(this,false);
+				}
+				else {
+					if(this.nom_lieu.text == "" ) new No_Name_Entered().open(this,false)
+					else {
+						this.mytree.set_lib(this.nom_lieu.text);
+						this.mytree.update_lib.execute();
+						this.nom_lieu.visible=true;
+						this.edit.visible=true;
+					}
+				}
 			}
 			
 			
@@ -91,20 +163,15 @@
 	<s:layout>
 		<s:HorizontalLayout/>
 	</s:layout>	
-	<s:VGroup>
+	<s:VGroup id="left_interface">
 		<s:HGroup>
-			<s:Label  text="Ajouter un lieu: " visible="true" fontSize="15"/>	
+			
 			<s:Button id="add_button" click="prepare_add_clickHandler(event)" />
-	<!--		<s:Button id="reset" click="reset_clickHandler(event)" /> -->
-		</s:HGroup>
-		<s:HGroup>
-			<s:Label  text="Editer le lieu séléctioné: " visible="true" fontSize="15"/>	
-			<s:Button id="edit_button" click="prepare_edit_button_clickHandler(event)" />
-		</s:HGroup>
-		<s:HGroup>
-			<s:Label  text="suprimer le lieu séléctioné: " visible="true" fontSize="15"/>
 			<s:Button id="delete_button" label="Suprimmer ce lieu"
 					  click="delete_clickHandler(event)" />
+			
+			<s:Button id="edit_button" click="prepare_edit_button_clickHandler(event)" />
+			
 			
 		</s:HGroup>
 		<s:Label id="lab" text="Veuillez-écriver le nom: " visible="false" fontSize="15"/>
@@ -114,13 +181,16 @@
 			<s:Button id="add" visible="false" label="Enrigistrer" click="add_clickHandler(event)" 
 					  fontSize="10" width="75" height="25"
 					  />
-	
+			
 			
 			<s:Button id="edit" visible="false" label="Modifier" click="edit_clickHandler(event)" 
 					  fontSize="10" width="75" height="25"
 					  />
 		</s:HGroup>
-		<gevu:arbre  id="mytree" width="250" height="300"/> 
+		<gevu:arbre  id="mytree" width="250" height="300"/>
+		<s:VGroup id="arbre">
+		</s:VGroup> 
+		
 	</s:VGroup>
 	<s:Scroller width="100%" height="100%">
 		<s:VGroup id="main_interface">

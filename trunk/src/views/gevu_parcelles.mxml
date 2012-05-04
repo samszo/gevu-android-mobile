@@ -22,7 +22,7 @@
 						<s:Label text="Référence cadastre : " />
 						<s:TextInput id="F21" width="100%" />
 					</s:HGroup>
-					<view:contacts id="ctcPro" width="585" height="340" title="Contact propriétaire"/> 
+					<view:contacts id="ctcPro" width="585" height="340" query_type="parcelles"/> 
 					<s:VGroup>
 						<s:Label text="Superficie de la parcelle extérieure (m²) :"/>
 						<s:NumericStepper id="F3" width="100%" stepSize="1" />

@@ -56,6 +56,12 @@
 					  ORDER BY l.id_lieu ;" 
 					  result="form_query_resultHandler(event)"/>
 		
+		<sqlite:Query id="geo_query" connection="{db.connection}"
+					  sql="SELECT id_geo,lat,lng,adresse
+					  FROM gevu_geos where id_lieu={this.selected_id}"
+					  result="geo_query_resultHandler(event)"
+					  error="query_errorHandler(event)"/>
+		
 		<sqlite:Query id="get_lieu_info_add" connection="{db.connection}"
 					  sql="select * from gevu_lieux where id_lieu={this.selected_id}"
 					  result="get_lieu_info_add_resultHandler(event)"/>
@@ -186,7 +192,10 @@
 			[Bindable] private var myDate:Date = new Date();
 			           public var treeItem:TreeItem;
 			           private var finished:Boolean=false;
-			
+             
+			[Bindable] public var geo_adresse:String;
+			[Bindable] public var geo_lat:int;
+			[Bindable] public var geo_lng:int;
 			public function lpad(original:Object, length:int, pad:String):String
 			{
 				var padded:String = original == null ? "" : original.toString();
@@ -275,7 +284,10 @@
 			 this.treeItem= event.currentTarget.selectedItem;
 			 this.selected_id=this.treeItem.source.getID;
 			 this.nom_lieu=this.treeItem.source.label;
+			 if(this.selected_id != 1) {
 			 form_query.execute();
+			 geo_query.execute();
+			 }
 			 }
 			
 			protected function form_query_resultHandler(event:SQLEvent):void
@@ -517,6 +529,27 @@
 			}
 			
 			
+			
+			protected function geo_query_resultHandler(event:SQLEvent):void
+			{
+				var geo_data:Array=this.geo_query.data;
+				var ClassReference:Class;
+				var instance:Object;
+				gevu_geos;
+				this.geo_adresse=geo_data[0].adresse;
+				this.geo_lat=geo_data[0].lat;
+				this.geo_lng=geo_data[0].lng;
+				 if (FlexGlobals.topLevelApplication.arbre.numChildren==1)
+					 FlexGlobals.topLevelApplication.arbre.removeElementAt(0);
+				 
+				ClassReference = getDefinitionByName("views.gevu_geos") as Class;
+				instance = new ClassReference();
+				instance.adresse=this.geo_adresse;
+				instance.lat=this.geo_lat
+				instance.lng=this.geo_lng;
+				FlexGlobals.topLevelApplication.arbre.addElement(instance);
+				 
+			}
 			
 		]]>	
 	</fx:Script>
