@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="gevu_geos">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			[Bindable] public var vis:Boolean;
+			[Bindable] public var adresse:String;
+			[Bindable] public var lat:int;
+			[Bindable] public var lng:int;
+			
+			public function setAdresse(x:String):void{
+				this.adresse=x;
+			}
+			
+			public function setLat(x:int):void{
+				this.lat=x;
+			}
+			
+			public function setLng(x:int):void{
+				this.lng=x;
+			}
+		]]>
+	</fx:Script>
+	
+	<s:VGroup>
+		
+		<s:HGroup width="100%">
+			<s:Label text="adresse" />
+			<s:TextInput id="F01"  text="{this.adresse}"/>
+		</s:HGroup>
+		<s:HGroup width="100%">
+			<s:Label text="lat."/>
+			<s:NumericStepper id="F02" 
+							  minimum="-90" maximum="90"
+							  stepSize="0.000001"
+							  value="{this.lat}"/>	
+		</s:HGroup>	
+		<s:HGroup>
+			<s:Label text="long." />
+			<s:NumericStepper id="F03" 
+							  minimum="-180" maximum="180"
+							  stepSize="0.000001"
+							  value="{this.lng}"/>
+		</s:HGroup>
+	</s:VGroup>
+</s:View>

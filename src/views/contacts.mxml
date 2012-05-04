@@ -116,7 +116,12 @@
 						this.antenne_contact_query.execute();
 						break;
 					}
+					
+					case "parcelles":
+					{
 						
+						break;
+					}
 					default:
 					{
 						break;
