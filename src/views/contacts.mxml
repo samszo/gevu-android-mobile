@@ -3,7 +3,7 @@
 		xmlns:s="library://ns.adobe.com/flex/spark" 
 		xmlns:view="views.*"
 		xmlns:sqlite="com.peterelst.air.sqlite.*" 
-		creationComplete="this.query_execution();this.get_antenne_id.execute()">
+		creationComplete="this.query_execution();">
 	
 			
 	<fx:Declarations>
@@ -113,6 +113,7 @@
 				{
 					case "antenne":
 					{
+						this.get_antenne_id.execute();
 						this.antenne_contact_query.execute();
 						break;
 					}
