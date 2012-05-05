@@ -108,7 +108,7 @@
 				{	
 					if(this.nom_lieu.text == "" ) new No_Name_Entered().open(this,false)
 					else {		 
-						this.mytree.nom_lieu=this.nom_lieu.text;
+						this.mytree.new_nom_lieu=this.nom_lieu.text;
 						this.mytree.get_lieu_info_add.execute();
 						this.nom_lieu.text='';
 						this.nom_lieu.visible=false;
