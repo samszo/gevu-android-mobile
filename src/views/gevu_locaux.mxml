@@ -1,13 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" 
-		xmlns:view="views.*">
+		xmlns:view="views.*"
+		xmlns:sqlite="com.peterelst.air.sqlite.*"
+		creationComplete="this.locaux_query.execute()">
+	
 	<fx:Script>
 		<![CDATA[
+			protected function update_locaux_resultHandler(event:SQLEvent):void
+			{
+				this.locaux_query.execute();
+				
+			}
+			
+			protected function SaveModif_clickHandler(event:MouseEvent):void
+			{
+				this.update_locaux.execute();
+				
+			}
+			
+		]]>
+	</fx:Script>
+	
+	
+	<fx:Declarations>
+		<sqlite:SQLite id="db" file="gevu_mobile.db" />
+		<sqlite:Query id="locaux_query" connection="{db.connection}"
+					  sql="select ref,activite from gevu_locaux where
+					  id_lieu={this.selected_id}"
+					  result="locaux_query_resultHandler(event)"
+					  error="locaux_query_errorHandler(event)" />
+		
+		<sqlite:Query id="update_locaux" connection="{db.connection}"
+					  sql="update gevu_locaux set 
+					  ref='{this.ref}',
+					  activite='{this.activite}',
+					  maj=strftime('%J','{this.toSqlDate(myDate)}')
+					  where id_lieu={this.selected_id}" 
+					  result="update_locaux_resultHandler(event)"
+					  error="locaux_query_errorHandler(event)" />
+	</fx:Declarations>
+	
+	
+	<fx:Script>
+		<![CDATA[
+			import spark.events.TextOperationEvent;
 			[Bindable] private var selected_id:int;
+			[Bindable] private var activite:String;
+			[Bindable] private var ref:String;
+			[Bindable] private var myDate:Date=new Date();
+			
 			public function set_selected_id(x:int):void{
 				this.selected_id=x;
 			}
+			
+			public function editModif(nom:String, val:String) : void {
+			 this.activite=val;
+			}
+			
+			
+			public function lpad(original:Object, length:int, pad:String):String
+			{
+				var padded:String = original == null ? "" : original.toString();
+				while (padded.length < length) padded = pad + padded;
+				return padded;
+			}
+			
+			public function toSqlDate(dateVal:Date):String
+			{
+				return dateVal == null ? null : dateVal.fullYear
+					+ "-" + lpad(dateVal.month + 1,2,'0')  // month is zero-based
+					+ "-" + lpad(dateVal.date,2,'0')
+					+ " " + lpad(dateVal.hours,2,'0')
+					+ ":" + lpad(dateVal.minutes,2,'0')
+					+ ":" + lpad(dateVal.seconds,2,'0')
+					;
+			}
+			
+			
+			protected function locaux_query_resultHandler(event:SQLEvent):void
+			{
+				var locaux_data:Array = this.locaux_query.data;	
+				this.ref=locaux_data[0].ref;
+				this.activite=locaux_data[0].activite;
+				if (this.activite=="Associative")
+					this.reponse_1.selected=true;
+				else 
+					this.reponse_2.selected=true; 
+			}
+			
+			protected function locaux_query_errorHandler(event:SQLErrorEvent):void
+			{
+				var o:Object=event;
+				
+			}
+			
+			protected function ref_changeHandler(event:TextOperationEvent):void
+			{
+				
+				this.ref=this.F2.text;
+			}
+			
 		]]>
 	</fx:Script>
 	<s:Panel  title="Local d'activité"
@@ -16,14 +109,14 @@
 		<s:VGroup>
 			<s:HGroup width="100%">
 				<s:Label text="Identifiant du local :" />
-				<s:TextInput id="F2" width="100%" />
+				<s:TextInput id="F2" width="100%" change="ref_changeHandler(event)" text="{this.ref}"/>
 			</s:HGroup>
 			<s:HGroup width="100%">
 				<s:Label text="Type d'activité : " />
-				<s:RadioButton groupName="type" id="reponse_1" label="Associative" color="0x323232" /> 
-				<s:RadioButton groupName="type" id="reponse_2" label="Commerciale" color="0x323232" />
+				<s:RadioButton groupName="type" id="reponse_1" label="Associative" color="0x323232" change="editModif('type', RadioButton(event.target).label)"/> 
+				<s:RadioButton groupName="type" id="reponse_2" label="Commerciale" color="0x323232" change="editModif('type', RadioButton(event.target).label)"/>
 			</s:HGroup>
-			<s:Button id="SaveModif" label="Enregistrer les modifications" />
+			<s:Button id="SaveModif" label="Enregistrer les modifications" click="SaveModif_clickHandler(event)"/>
 			
 		</s:VGroup>
 		
