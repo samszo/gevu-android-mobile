@@ -2,33 +2,137 @@
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" 
 		xmlns:view="views.*"
-		>
+		xmlns:sqlite="com.peterelst.air.sqlite.*"
+		creationComplete="{this.niveaux_query.execute()}">
 	
 	<fx:Script>
 		<![CDATA[
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<sqlite:SQLite id="db" file="gevu_mobile.db" />
+		<sqlite:Query id="niveaux_query" connection="{db.connection}"
+					  sql="SELECT id_niveau,ref,reponse_1,reponse_2,reponse_3
+					  FROM gevu_niveaux where id_lieu={this.selected_id}" 
+					  result="niveaux_query_resultHandler(event)"
+					  error="niveaux_query_errorHandler(event)" />
+		<sqlite:Query id="update_niveau" connection="{db.connection}"
+					  sql="update gevu_niveaux set 
+					  ref='{this.ref}',
+					  reponse_1={this.reponse_1},
+					  reponse_2={this.reponse_2},
+					  reponse_3={this.reponse_3},
+					  maj=strftime('%J','{this.toSqlDate(myDate)}')
+					  where id_niveau={this.niveau_id}"
+					  result="update_niveau_resultHandler(event)"
+					  error="niveaux_query_errorHandler(event)" />
+		
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import spark.events.TextOperationEvent;
 			[Bindable] private var selected_id:int;
+			[Bindable] private var niveau_id:int;
+			[Bindable] private var reponse_1:int;
+			[Bindable] private var reponse_2:int;
+			[Bindable] private var reponse_3:int;
+			[Bindable] private var ref:String;
+			[Bindable] private var myDate:Date = new Date();
 			public function set_selected_id(x:int):void{
 				this.selected_id=x;
 			}
+			
+			public function lpad(original:Object, length:int, pad:String):String
+			{
+				var padded:String = original == null ? "" : original.toString();
+				while (padded.length < length) padded = pad + padded;
+				return padded;
+			}
+			
+			public function toSqlDate(dateVal:Date):String
+			{
+				return dateVal == null ? null : dateVal.fullYear
+					+ "-" + lpad(dateVal.month + 1,2,'0')  // month is zero-based
+					+ "-" + lpad(dateVal.date,2,'0')
+					+ " " + lpad(dateVal.hours,2,'0')
+					+ ":" + lpad(dateVal.minutes,2,'0')
+					+ ":" + lpad(dateVal.seconds,2,'0')
+					;
+			}
+			
+			protected function niveaux_query_resultHandler(event:SQLEvent):void
+			{
+				var niv_data:Array= this.niveaux_query.data;
+				this.niveau_id=niv_data[0].id_niveau;
+				this.reponse_1=niv_data[0].reponse_1;
+				this.reponse_2=niv_data[0].reponse_2;
+				this.reponse_3=niv_data[0].reponse_3;
+				this.ref=niv_data[0].ref;
+				this.rep_1.cocheVals();
+				this.rep_2.cocheVals();
+				this.rep_3.cocheVals();
+				
+			}
+			
+			protected function niveaux_query_errorHandler(event:SQLErrorEvent):void
+			{
+			 trace(this.update_niveau.sql);
+			 var o:Object=event;	
+			}
+			
+			public function editModif1(val:int) : void {
+				this.reponse_1=val;
+			}
+			
+			public function editModif2(val:int) : void {
+				this.reponse_2=val;
+			}
+			
+			public function editModif3(val:int) : void {
+				this.reponse_3=val;
+			}
+			
+			protected function ref_changeHandler(event:TextOperationEvent):void
+			{
+				this.ref=this.F2.text;	
+				
+			}
+			
+			protected function SaveModif_clickHandler(event:MouseEvent):void
+			{
+				this.update_niveau.execute();	
+			}
+			
+			protected function update_niveau_resultHandler(event:SQLEvent):void
+			{
+				this.niveaux_query.execute();
+				
+			}
+			
 		]]>
 	</fx:Script>
 	<s:Panel x="4" y="1" width="600" height="986" title="Niveau">
 		<s:Scroller x="0" y="0" width="100%" height="100%">
 			<s:Group>
-				<s:VGroup width="100%">
-				<s:HGroup width="100%">
-				</s:HGroup>
+				<s:VGroup>
+					<view:repType2 id="rep_1" x="0" y="325" lblQ="Le niveau est desservi par un ascenseur (hors RdC) ?"
+								   Q="reponse_3" val="{this.reponse_1}" fnct="{this.editModif1}"/>
+					<view:repType2 id="rep_2" x="0" y="215" lblQ="Le niveau offre des prestations spécifiques (hors RdC) ?"
+								   Q="reponse_2" val="{this.reponse_2}" fnct="{this.editModif2}" />
+					<view:repType2 id="rep_3" x="-1" y="101"
+								   lblQ="Le niveau peut accueillir plus de 50 pers. (100 dans les établissements d’enseignement) ?"
+								   Q="reponse_1" val="{this.reponse_3}" fnct="{this.editModif3}"/>
+					<s:HGroup>
+						<s:Label x="5" y="54" text="ref"/>
+						<s:TextInput id="F2" text="{this.ref}" x="31" y="49" width="279" height="34"
+									 change="ref_changeHandler(event)"/>
+					</s:HGroup>
+					<s:Button id="SaveModif" x="0" y="450" label="Enregistrer les modifications"
+							  click="SaveModif_clickHandler(event)"/>
 				</s:VGroup>
-				<s:Button id="SaveModif" x="0" y="450" label="Enregistrer les modifications"/>
-				<view:repType2 x="0" y="325" lblQ="Le niveau est desservi par un ascenseur (hors RdC) ?"
-							   Q="reponse_3"/>
-				<view:repType2 x="0" y="215" lblQ="Le niveau offre des prestations spécifiques (hors RdC) ?"
-							   Q="reponse_2"/>
-				<view:repType2 x="-1" y="101"
-							   lblQ="Le niveau peut accueillir plus de 50 pers. (100 dans les établissements d’enseignement) ?"
-							   Q="reponse_1"/>
-				<s:TextInput id="F2" x="31" y="49" width="540" height="34"/>
-				<s:Label x="5" y="54" text="ref"/>
 			</s:Group>
 		</s:Scroller>
 	</s:Panel>

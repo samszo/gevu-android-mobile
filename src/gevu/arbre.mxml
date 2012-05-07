@@ -66,6 +66,13 @@
 					  result="geo_query_resultHandler(event)"
 					  error="query_errorHandler(event)"/>
 		
+		<sqlite:Query id="add_geo" connection="{db.connection}"
+					  sql="insert into gevu_geos 
+					  (id_instant,id_lieu,lat,lng,zoom_min,zoom_max,adresse,kml,type_carte,id_donnee,maj)
+					  values (0,(SELECT last_insert_rowid() FROM gevu_lieux),
+					  0.0,0.0,0,0,'','','hybird',0,strftime('%J','{this.toSqlDate(myDate)}'))"
+					  error="query_errorHandler(event)"/>					 
+					  
 		<sqlite:Query id="get_lieu_info_add" connection="{db.connection}"
 					  sql="select * from gevu_lieux where id_lieu={this.selected_id}"
 					  result="get_lieu_info_add_resultHandler(event)"/>
@@ -101,7 +108,7 @@
 					  strftime('%J','{this.toSqlDate(myDate)}'),
 					             {this.selected_id})" 
 					  error="query_errorHandler(event)"
-					  result="insert_update_resultHandler(event)"/>
+					  result="insert_lieu_resultHandler(event)"/>
 			<!-- ************************************************************* -->
 					  
 					  
@@ -126,7 +133,7 @@
 					  strftime('%J','{this.toSqlDate(myDate)}'),
 					  {this.selected_id})" 
 					  error="query_errorHandler(event)"
-					  result="insert_update_resultHandler(event)"/>
+					  result="insert_lieu_resultHandler(event)"/>
 		<!-- ********************************************************* -->
 		
 		<sqlite:Query id="deleting" connection="{db.connection}"
@@ -161,6 +168,8 @@
 			import flash.net.dns.SRVRecord;
 			import flash.sampler.NewObjectSample;
 			import flash.utils.getDefinitionByName;
+			
+			import flashx.textLayout.formats.Float;
 			
 			import mx.collections.IList;
 			import mx.core.FlexGlobals;
@@ -200,8 +209,9 @@
 			           private var finished:Boolean=false;
 			           private var fetchingChildNode:TreeItem; 
 			[Bindable] public var geo_adresse:String;
-			[Bindable] public var geo_lat:int;
-			[Bindable] public var geo_lng:int;
+			[Bindable] public var geo_lat:Number ;
+			[Bindable] public var geo_lng:Number;
+			
 			public function lpad(original:Object, length:int, pad:String):String
 			{
 				var padded:String = original == null ? "" : original.toString();
@@ -340,11 +350,6 @@
 					compo[i] = "gevu_batiments";
 					i++;
 				}
-				/*
-				if (info.getItemAt(0).id_geo !=null) {
-					compo[i] = "id_geo";
-					i++;
-				}*/
 				
 				if (info.getItemAt(0).id_diag !=null) {
 					compo[i] = "gevu_diagnostics";
@@ -544,6 +549,12 @@
 			
 			
 
+			
+			protected function insert_lieu_resultHandler(event:SQLEvent):void
+			{
+				this.add_geo.execute();
+				
+			}
 			
 		]]>	
 	</fx:Script>

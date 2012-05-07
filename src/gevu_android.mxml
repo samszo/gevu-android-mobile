@@ -164,16 +164,7 @@
 		<s:HorizontalLayout/>
 	</s:layout>	
 	<s:VGroup id="left_interface">
-		<s:HGroup>
-			
-			<s:Button id="add_button" click="prepare_add_clickHandler(event)" />
-			<s:Button id="delete_button" label="Suprimmer ce lieu"
-					  click="delete_clickHandler(event)" />
-			
-			<s:Button id="edit_button" click="prepare_edit_button_clickHandler(event)" />
-			
-			
-		</s:HGroup>
+		
 		<s:Label id="lab" text="Veuillez-écriver le nom: " visible="false" fontSize="15"/>
 		<s:HGroup>
 			<s:TextInput id="nom_lieu" width="150" visible="false" height="30"
@@ -186,6 +177,16 @@
 			<s:Button id="edit" visible="false" label="Modifier" click="edit_clickHandler(event)" 
 					  fontSize="10" width="75" height="25"
 					  />
+		</s:HGroup>
+		<s:HGroup>
+			
+			<s:Button id="add_button" click="prepare_add_clickHandler(event)" />
+			<s:Button id="delete_button" label="Suprimmer ce lieu"
+					  click="delete_clickHandler(event)" />
+			
+			<s:Button id="edit_button" click="prepare_edit_button_clickHandler(event)" />
+			
+			
 		</s:HGroup>
 		<gevu:arbre  id="mytree" width="250" height="300"/>
 		<s:VGroup id="arbre">

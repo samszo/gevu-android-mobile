@@ -7,22 +7,13 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import flashx.textLayout.formats.Float;
 			[Bindable] public var vis:Boolean;
 			[Bindable] public var adresse:String;
-			[Bindable] public var lat:int;
-			[Bindable] public var lng:int;
+			[Bindable] public var lat:Number;
+			[Bindable] public var lng:Number;
 			
-			public function setAdresse(x:String):void{
-				this.adresse=x;
-			}
 			
-			public function setLat(x:int):void{
-				this.lat=x;
-			}
-			
-			public function setLng(x:int):void{
-				this.lng=x;
-			}
 		]]>
 	</fx:Script>
 	

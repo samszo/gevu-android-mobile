@@ -1,12 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" 
-		xmlns:view="views.*">
+		xmlns:view="views.*"
+		xmlns:sqlite="com.peterelst.air.sqlite.*"
+		creationComplete="this.coummunes_query.execute();">
+	
+	<fx:Script>
+		<![CDATA[
+			import spark.events.TextOperationEvent;
+			protected function coummunes_query_resultHandler(event:SQLEvent):void
+			{
+				var coummune_data:Array=this.coummunes_query.data;
+				this.ref=coummune_data[0].ref;
+			}
+			
+			protected function ref_changeHandler(event:TextOperationEvent):void
+			{
+				this.ref=this.F2.text;
+				
+			}
+			
+			
+			public function lpad(original:Object, length:int, pad:String):String
+			{
+				var padded:String = original == null ? "" : original.toString();
+				while (padded.length < length) padded = pad + padded;
+				return padded;
+			}
+			
+			public function toSqlDate(dateVal:Date):String
+			{
+				return dateVal == null ? null : dateVal.fullYear
+					+ "-" + lpad(dateVal.month + 1,2,'0')  // month is zero-based
+					+ "-" + lpad(dateVal.date,2,'0')
+					+ " " + lpad(dateVal.hours,2,'0')
+					+ ":" + lpad(dateVal.minutes,2,'0')
+					+ ":" + lpad(dateVal.seconds,2,'0')
+					;
+			}
+			
+			protected function update_coumune_resultHandler(event:SQLEvent):void
+			{
+			this.coummunes_query.execute();
+			}
+			
+			protected function SaveModif_clickHandler(event:MouseEvent):void
+			{
+				this.update_coumune.execute();
+				
+			}
+			
+		]]>
+	</fx:Script>
+	
+	
+	<fx:Declarations>
+		<sqlite:SQLite id="db" file="gevu_mobile.db" />
+		<sqlite:Query  id="coummunes_query" connection="{db.connection}"
+					   sql="select ref from gevu_partiescommunes
+					   where id_lieu={this.selected_id}" 
+					   result="coummunes_query_resultHandler(event)"
+					   error="coummunes_query_errorHandler(event)" />
+		
+		<sqlite:Query id="update_coumune" connection="{db.connection}"
+					  sql="update gevu_partiescommunes set 
+					  ref='{this.ref}'
+					  maj=strftime('%J','{this.toSqlDate(myDate)}')"
+					  error="coummunes_query_errorHandler(event)"
+					  result="update_coumune_resultHandler(event)"/>
+		
+	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
 			[Bindable] private var selected_id:int;
+			[Bindable] private var ref:String;
+			[Bindable] private var myDate:Date= new Date();
 			public function set_selected_id(x:int):void{
 				this.selected_id=x;
+			}
+			
+			
+			protected function coummunes_query_errorHandler(event:SQLErrorEvent):void
+			{
+				var o:Object=event;
+				
 			}
 		]]>
 	</fx:Script>
@@ -18,8 +95,8 @@
 		</s:HGroup>
 		
 	</s:VGroup>
-	<s:Button id="SaveModif" x="0" y="83" label="Enregistrer les modifications"/>
-	<s:TextInput id="F2" x="242" y="16" width="100%"/>
+	<s:Button id="SaveModif" x="0" y="83" label="Enregistrer les modifications" click="SaveModif_clickHandler(event)"/>
+	<s:TextInput id="F2" x="242" y="16" width="100%" text="{this.ref}" change="ref_changeHandler(event)"/>
 	<s:Label x="0" y="27" text="Identifiant de la parties commune :"/>
 	
 	</s:Panel>
