@@ -64,7 +64,7 @@
 		
 		<sqlite:Query id="update_coumune" connection="{db.connection}"
 					  sql="update gevu_partiescommunes set 
-					  ref='{this.ref}'
+					  ref='{this.ref}',
 					  maj=strftime('%J','{this.toSqlDate(myDate)}')"
 					  error="coummunes_query_errorHandler(event)"
 					  result="update_coumune_resultHandler(event)"/>

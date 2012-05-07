@@ -188,7 +188,7 @@
 			
 			
 		</s:HGroup>
-		<gevu:arbre  id="mytree" width="250" height="300"/>
+		<gevu:arbre  id="mytree" width="300" height="300"/>
 		<s:VGroup id="arbre">
 		</s:VGroup> 
 		
