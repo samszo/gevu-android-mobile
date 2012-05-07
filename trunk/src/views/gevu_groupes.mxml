@@ -3,7 +3,7 @@
 		xmlns:s="library://ns.adobe.com/flex/spark" 
 		xmlns:sqlite="com.peterelst.air.sqlite.*"
 		xmlns:view="views.*"
-		creationComplete="this.init();this.get_ref.execute();">
+		creationComplete="this.get_ref.execute();">
 	<fx:Declarations>
 		<sqlite:SQLite id="db" file="gevu_mobile.db" />
 		<sqlite:Query id="get_ref" connection="{db.connection}" 
@@ -29,10 +29,7 @@
 				this.selected_id=x;
 			}
 			
-			private function init():void{
-				this.get_ref.addEventListener(SQLErrorEvent.ERROR,onError);
-				this.update_query.addEventListener(SQLErrorEvent.ERROR,onError);
-			}
+			
 			
 			private function onError(e:SQLErrorEvent):void{
 				trace(e.error);
