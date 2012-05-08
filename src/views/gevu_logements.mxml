@@ -1,11 +1,169 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" 
-		xmlns:view="views.*">
+		xmlns:view="views.*"
+		xmlns:sqlite="com.peterelst.air.sqlite.*"
+		creationComplete="this.logement_query.execute()">
+	
+	<fx:Script>
+		<![CDATA[
+			import spark.events.TextOperationEvent;
+			
+			public function lpad(original:Object, length:int, pad:String):String
+			{
+				var padded:String = original == null ? "" : original.toString();
+				while (padded.length < length) padded = pad + padded;
+				return padded;
+			}
+			
+			public function toSqlDate(dateVal:Date):String
+			{
+				return dateVal == null ? null : dateVal.fullYear
+					+ "-" + lpad(dateVal.month + 1,2,'0')  // month is zero-based
+					+ "-" + lpad(dateVal.date,2,'0')
+					+ " " + lpad(dateVal.hours,2,'0')
+					+ ":" + lpad(dateVal.minutes,2,'0')
+					+ ":" + lpad(dateVal.seconds,2,'0')
+					;
+			}
+			
+			protected function logement_query_resultHandler(event:SQLEvent):void
+			{
+			 var log_data:Array = this.logement_query.data;
+			 this.ref=log_data[0].ref;
+			 this.num_porte=log_data[0].num_porte;
+			 this.type=log_data[0].type;
+			 
+			 switch(this.type)
+			 {
+				 case "T1":
+				 {
+					 this.reponse_T1.selected=true;
+					 break;
+				 }
+					
+				 case "T2":
+				 {
+					 this.reponse_T2.selected=true;
+					 break;
+				 }
+					 
+				 case "T3":
+				 {
+					 this.reponse_T3.selected=true;
+					 break;
+				 }
+					 
+				 case "T4":
+				 {
+					 this.reponse_T4.selected=true;
+					 break;
+				 }
+					 
+				 case "T5":
+				 {
+					 this.reponse_T5.selected=true;
+					 break;
+				 }
+					 
+				 case "T6":
+				 {
+					 this.reponse_T6.selected=true;
+					 break;
+				 }
+					 
+				 case "T7":
+				 {
+					 this.reponse_T7.selected=true;
+					 break;
+				 }
+					 
+				 case "T8":
+				 {
+					 this.reponse_T8.selected=true;
+					 break;
+				 }
+					 
+				 case "T9":
+				 {
+					 this.reponse_T9.selected=true;
+					 break;
+				 }
+					 
+				 case "T10":
+				 {
+					 this.reponse_T10.selected=true;
+					 break;
+				 }
+				 default:
+				 {
+					 break;
+				 }
+			 }
+			}
+			
+			protected function logement_query_errorHandler(event:SQLErrorEvent):void
+			{
+			var o:Object=event;	
+			}
+			
+			public function editModif(nom:String, val:String) : void {
+				this.type=val;
+			}
+			
+			protected function update_log_resultHandler(event:SQLEvent):void
+			{
+				this.logement_query.execute();
+				
+			}
+			
+			protected function SaveModif_clickHandler(event:MouseEvent):void
+			{
+				this.update_log.execute();
+				
+			}
+			
+			protected function ref_changeHandler(event:TextOperationEvent):void
+			{
+				this.ref=this.F2.text;
+				
+			}
+			
+			protected function N_changeHandler(event:TextOperationEvent):void
+			{
+				this.num_porte=this.F3.text;
+				
+			}
+			
+		]]>
+	</fx:Script>
+	
+	
+	<fx:Declarations>
+		<sqlite:SQLite id="db" file="gevu_mobile.db" />
+		<sqlite:Query id="logement_query" connection="{db.connection}"
+					  sql="SELECT ref,num_porte,type FROM gevu_logements
+					       where id_lieu={this.selected_id}"
+					  result="logement_query_resultHandler(event)"
+					  error="logement_query_errorHandler(event)" />
+		<sqlite:Query id="update_log" connection="{db.connection}"
+					  sql="update gevu_logements set 
+					  ref='{this.ref}',
+					  num_porte='{this.num_porte}',
+					  type='{this.type}',
+					  maj=strftime('%J','{this.toSqlDate(myDate)}')
+					  where id_lieu={this.selected_id}" 
+					  result="update_log_resultHandler(event)"
+					  error="logement_query_errorHandler(event)" />
+	</fx:Declarations>
 	
 	<fx:Script>
 		<![CDATA[
 			[Bindable] private var selected_id:int;
+			[Bindable] private var num_porte:String;
+			[Bindable] private var ref:String;
+			[Bindable] private var type:String;
+			[Bindable] private var myDate:Date=new Date();
 			public function set_selected_id(x:int):void{
 				this.selected_id=x;
 			}
@@ -18,28 +176,28 @@
 			
 			<s:HGroup width="100%">
 				<s:Label text="Identifiant du logement :" />
-				<s:TextInput id="F2" width="100%" />
+				<s:TextInput id="F2" width="100%" change="ref_changeHandler(event)" text="{this.ref}"/>
 			</s:HGroup>
 			<s:HGroup>
 				<s:Label text="N° de porte :" />
-				<s:TextInput id="F3" width="100%" />
+				<s:TextInput id="F3" width="100%" change="N_changeHandler(event)" text="{this.num_porte}"/>
 			</s:HGroup>
 			<s:Label text="Type de logement : " />
 			<s:HGroup width="100%">
-				<s:RadioButton groupName="type" id="reponse_T1" label="T1" color="0x323232"  /> 
-				<s:RadioButton groupName="type" id="reponse_T2" label="T2" color="0x323232"  />
-				<s:RadioButton groupName="type" id="reponse_T3" label="T3" color="0x323232"  />
-				<s:RadioButton groupName="type" id="reponse_T4" label="T4" color="0x323232" />
-				<s:RadioButton groupName="type" id="reponse_T5" label="T5" color="0x323232"  />
+				<s:RadioButton groupName="type" id="reponse_T1" label="T1" color="0x323232"  change="editModif('type', RadioButton(event.target).label)"/> 
+				<s:RadioButton groupName="type" id="reponse_T2" label="T2" color="0x323232"  change="editModif('type', RadioButton(event.target).label)"/>
+				<s:RadioButton groupName="type" id="reponse_T3" label="T3" color="0x323232"  change="editModif('type', RadioButton(event.target).label)"/>
+				<s:RadioButton groupName="type" id="reponse_T4" label="T4" color="0x323232"  change="editModif('type', RadioButton(event.target).label)"/>
+				<s:RadioButton groupName="type" id="reponse_T5" label="T5" color="0x323232"  change="editModif('type', RadioButton(event.target).label)"/>
 			</s:HGroup>
 			<s:HGroup>
-				<s:RadioButton groupName="type" id="reponse_T6" label="T6" color="0x323232"  />
-				<s:RadioButton groupName="type" id="reponse_T7" label="T7" color="0x323232"  />
-				<s:RadioButton groupName="type" id="reponse_T8" label="T8" color="0x323232" />
-				<s:RadioButton groupName="type" id="reponse_T9" label="T9" color="0x323232"  />
-				<s:RadioButton groupName="type" id="reponse_T10" label="T10" color="0x323232" />
+				<s:RadioButton groupName="type" id="reponse_T6" label="T6" color="0x323232"   change="editModif('type', RadioButton(event.target).label)" />
+				<s:RadioButton groupName="type" id="reponse_T7" label="T7" color="0x323232"   change="editModif('type', RadioButton(event.target).label)"/>
+				<s:RadioButton groupName="type" id="reponse_T8" label="T8" color="0x323232"   change="editModif('type', RadioButton(event.target).label)"/>
+				<s:RadioButton groupName="type" id="reponse_T9" label="T9" color="0x323232"   change="editModif('type', RadioButton(event.target).label)" />
+				<s:RadioButton groupName="type" id="reponse_T10" label="T10" color="0x323232" change="editModif('type', RadioButton(event.target).label)" />
 			</s:HGroup>
-			<s:Button id="SaveModif" label="Enregistrer les modifications" />
+			<s:Button id="SaveModif" label="Enregistrer les modifications" click="SaveModif_clickHandler(event)"/>
 			
 		</s:VGroup>
 		

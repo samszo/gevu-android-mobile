@@ -1,13 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" 
-		xmlns:view="views.*">
+		xmlns:view="views.*"
+		xmlns:sqlite="com.peterelst.air.sqlite.*"
+		creationComplete="this.parcelle_query.execute()">
+	<fx:Script>
+		<![CDATA[
+			import spark.events.TextOperationEvent;
+			
+			protected function ref_changeHandler(event:TextOperationEvent):void
+			{
+				this.ref=this.F2.text;
+				
+			}
+			
+			protected function ref_cadastre_changeHandler(event:TextOperationEvent):void
+			{
+				this.ref_cadastre=this.F21.text;
+				
+			}
+			
+			protected function superficie_changeHandler(event:Event):void
+			{
+			  this.superficie=this.F3.value;	
+			}
+			
+			protected function update_parcelle_resultHandler(event:SQLEvent):void
+			{
+				this.parcelle_query.execute();
+				
+			}
+			
+			protected function saveModif_clickHandler(event:MouseEvent):void
+			{
+				this.update_parcelle.execute();	
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<sqlite:SQLite id="db" file="gevu_mobile.db"  />
+		<sqlite:Query id="parcelle_query" connection="{db.connection}"
+					  sql="select ref,superficie,cloture,ref_cadastre,contact_proprietaire
+					  from gevu_parcelles where id_lieu={this.selected_id}" 
+					  result="parcelle_query_resultHandler(event)" 
+					  error="parcelle_query_errorHandler(event)" />
+		
+		<sqlite:Query id="update_parcelle" connection="{db.connection}"
+					  sql="update gevu_parcelles set
+					  ref='{this.ref}',
+					  superficie={this.superficie},
+					  cloture='{this.cloture}',
+					  ref_cadastre='{this.ref_cadastre}',
+					  contact_proprietaire='{this.contact_proprietaire}',
+					  maj= strftime('%J','{this.toSqlDate(myDate)}')
+					  where id_lieu={this.selected_id}"
+					  result="update_parcelle_resultHandler(event)"
+					  error="parcelle_query_errorHandler(event)"/>
+	</fx:Declarations>	
 	<fx:Script>
 		<![CDATA[
 			[Bindable] private var selected_id:int;
+			[Bindable] private var ref:String;
+			[Bindable] private var contact_proprietaire:String;
+			[Bindable] private var superficie:Number;
+			[Bindable] private var cloture:String;
+			[Bindable] private var ref_cadastre:String;
+			[Bindable] private var myDate:Date=new Date();
+			
+			
+			public function lpad(original:Object, length:int, pad:String):String
+			{
+				var padded:String = original == null ? "" : original.toString();
+				while (padded.length < length) padded = pad + padded;
+				return padded;
+			}
+			
+			public function toSqlDate(dateVal:Date):String
+			{
+				return dateVal == null ? null : dateVal.fullYear
+					+ "-" + lpad(dateVal.month + 1,2,'0')  // month is zero-based
+					+ "-" + lpad(dateVal.date,2,'0')
+					+ " " + lpad(dateVal.hours,2,'0')
+					+ ":" + lpad(dateVal.minutes,2,'0')
+					+ ":" + lpad(dateVal.seconds,2,'0')
+					;
+			}
 			public function set_selected_id(x:int):void{
 				this.selected_id=x;
 			}
+			
+			protected function parcelle_query_resultHandler(event:SQLEvent):void
+			{
+			  var parcelle_data:Array = this.parcelle_query.data;
+			  this.ref=parcelle_data[0].ref;
+			  this.superficie=parcelle_data[0].superficie;
+			  this.cloture=parcelle_data[0].cloture;
+			  this.ref_cadastre=parcelle_data[0].ref_cadastre;
+			  this.contact_proprietaire=parcelle_data[0].contact_proprietaire;
+			  this.ctcPro.id_contact=this.contact_proprietaire;
+			  this.ctcPro.query_execution();
+			  this.rep.cocheVals();
+			}
+			
+			protected function parcelle_query_errorHandler(event:SQLErrorEvent):void
+			{
+			 var o:Object=event;
+			}
+			
+			public function editModif(val:String) : void {
+				this.cloture=val;
+			}
+			
 		]]>
 	</fx:Script>
 	<s:Panel  title="Parcelle" x="0" y="0"  width="600" height="986">
@@ -16,19 +120,21 @@
 				<s:VGroup>
 					<s:HGroup width="100%">
 						<s:Label text="identifiant" />
-						<s:TextInput id="F2" width="100%" />
+						<s:TextInput id="F2" width="100%" text="{this.ref}" change="ref_changeHandler(event)"/>
 					</s:HGroup>
 					<s:HGroup width="100%">
 						<s:Label text="Référence cadastre : " />
-						<s:TextInput id="F21" width="100%" />
+						<s:TextInput id="F21" width="100%" text="{this.ref_cadastre}" change="ref_cadastre_changeHandler(event)"/>
 					</s:HGroup>
-					<view:contacts id="ctcPro" width="585" height="340" query_type="parcelles"/> 
+					<view:contacts id="ctcPro" width="585" height="340" query_type="parcelles" /> 
 					<s:VGroup>
 						<s:Label text="Superficie de la parcelle extérieure (m²) :"/>
-						<s:NumericStepper id="F3" width="100%" stepSize="1" />
+						<s:NumericStepper id="F3" width="100%" stepSize="1" value="{this.superficie}"
+										  change="superficie_changeHandler(event)"/>
 					</s:VGroup>
-					<view:repType2 lblQ="La parcelle extérieure est-elle cloturée ?" Q="cloture" />
-					<s:Button id="saveModif" label="Enregistrer" />
+					<view:repType2 id="rep" lblQ="La parcelle extérieure est-elle cloturée ?" Q="cloture" 
+								   fnct="{this.editModif}"    val="{this.cloture}"/>
+					<s:Button id="saveModif" label="Enregistrer" click="saveModif_clickHandler(event)"/>
 					
 				</s:VGroup>
 			</s:Group>

@@ -5,6 +5,15 @@
 		xmlns:sqlite="com.peterelst.air.sqlite.*" 
 		creationComplete="this.query_execution();">
 	
+	<fx:Script>
+		<![CDATA[
+			protected function parcelle_contact_resultHandler(event:SQLEvent):void
+			{
+			   contact_info= new ArrayCollection(this.parcelle_contact.data);		
+			}
+		]]>
+	</fx:Script>
+	
 			
 	<fx:Declarations>
 		<sqlite:SQLite id="db" file="gevu_mobile.db"  />
@@ -54,6 +63,12 @@
 					  result="reset_table_resultHandler(event)"
 					  error="query_errorHandler(event)"/>
 		
+		<sqlite:Query id="parcelle_contact" connection="{db.connection}"
+					  sql="select id_contact,nom,prenom,fixe,mobile,fax,mail
+					       from gevu_contacts where id_contact={this.id_contact}"
+					  result="parcelle_contact_resultHandler(event)"   
+					  error="query_errorHandler(event)" />
+		
 		
 		
 	</fx:Declarations>
@@ -76,7 +91,7 @@
 			[Bindable] public var query_type:String;
 			[Bindable] private var last_inserted_id:int;
 			[Bindable] private var id_antenne:int;
-			
+			[Bindable] public var id_contact:String;
 			
 			protected function add_form_clickHandler(event:MouseEvent):void
 			{
@@ -108,7 +123,7 @@
 				
 			}
 			
-			private function query_execution():void{
+			public function query_execution():void{
 				switch(this.query_type)
 				{
 					case "antenne":
@@ -120,7 +135,7 @@
 					
 					case "parcelles":
 					{
-						
+						this.parcelle_contact.execute();
 						break;
 					}
 					default:
