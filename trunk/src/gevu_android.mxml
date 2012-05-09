@@ -49,7 +49,7 @@
 						<s:Label text="Voullez-vous supprimer un lieu"/>
 						<s:HGroup>	
 							<s:Button label="Oui" click="confirm_delete_clickHandler(event)"/>
-							<s:Button label="No"  click="close()"/>
+							<s:Button label="Non"  click="close()"/>
 						</s:HGroup>	
 					</s:VGroup>
 				</s:TitleWindow>
@@ -151,8 +151,9 @@
 					else {
 						this.mytree.set_lib(this.nom_lieu.text);
 						this.mytree.update_lib.execute();
-						this.nom_lieu.visible=true;
-						this.edit.visible=true;
+						this.nom_lieu.visible=false;
+						this.edit.visible=false;
+						this.lab.visible=false;
 					}
 				}
 			}

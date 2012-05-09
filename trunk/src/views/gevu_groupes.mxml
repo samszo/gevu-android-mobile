@@ -10,10 +10,33 @@
 					  sql="select ref,reponse_1 from gevu_groupes where id_lieu={selected_id}"
 					  result="groupes_query_resultHandler(event)"/>
 		<sqlite:Query id="update_query" connection="{db.connection}"
-					  sql="update gevu_groupes set ref='{this.updated_ref}',reponse_1='{this.reponse}'
+					  sql="update gevu_groupes set ref='{this.ref}',reponse_1='{this.reponse}'
 					       where id_lieu={this.selected_id}" 
 					  result="update_query_resultHandler(event)"
 					  error="update_query_errorHandler(event)"/>
+		
+		<fx:Component className="gro_incomplete_form">
+			<s:SkinnablePopUpContainer x="70" y="300">
+				<s:TitleWindow  close="close()">
+					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
+						<s:Label text="Veuillez inserer tous les donneé"/>
+						<s:Button label="OK" click="close()"/>
+					</s:VGroup>
+				</s:TitleWindow>
+			</s:SkinnablePopUpContainer>
+		</fx:Component>
+		
+		<fx:Component className="gro_modif_complete">
+			<s:SkinnablePopUpContainer x="70" y="300">
+				<s:TitleWindow  close="close()">
+					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
+						<s:Label text="Modification est complet"/>
+						<s:Button label="OK" click="close()"/>
+					</s:VGroup>
+				</s:TitleWindow>
+			</s:SkinnablePopUpContainer>
+		</fx:Component>
+		
 		
 	</fx:Declarations>
 	
@@ -21,7 +44,7 @@
 		<![CDATA[
 			import spark.events.TextOperationEvent;
 			[Bindable] private var selected_id:int;
-			[Bindable] private var updated_ref:String;
+			[Bindable] private var ref:String;
 			[Bindable] public var reponse:String;
 			
 			
@@ -37,7 +60,7 @@
 			protected function groupes_query_resultHandler(event:SQLEvent):void
 			{
 				var ref:Array=get_ref.data;
-				this.F2.text=ref[0].ref;
+				this.ref=ref[0].ref;
 				this.reponse=ref[0].reponse_1;
 				this.rep.cocheVals();
 			}
@@ -48,20 +71,22 @@
 			
 			protected function SaveModif_clickHandler(event:MouseEvent):void
 			  {
-			 if(this.updated_ref == null) this.updated_ref=this.F2.text;
-			 trace(this.update_query.sql);
+			  if(this.ref=="" || this.rep.val=="0")
+					new gro_incomplete_form().open(this,false);
+			  else 
 				this.update_query.execute();
+				
 				}
 			
 			protected function update_query_resultHandler(event:SQLEvent):void
 			{
-				trace(event.currentTarget);
-				
+				new gro_modif_complete().open(this,false);
+				this.get_ref.execute();
 			}
 			
 			protected function ref_changeHandler(event:TextOperationEvent):void
 			{
-			this.updated_ref=event.currentTarget.text;	
+			this.ref=event.currentTarget.text;	
 				
 			}
 			
@@ -79,7 +104,7 @@
 						   Q="reponse_1" val="{this.reponse}"  fnct="{this.editModif}" />
 			<s:HGroup height="37">
 			<s:Label width="27" height="31" text="ref"/>
-			<s:TextInput id="F2" change="ref_changeHandler(event)"/>
+			<s:TextInput id="F2" change="ref_changeHandler(event)" text="{this.ref}"/>
 			</s:HGroup>	
 		</s:VGroup>	
 		<s:Button id="SaveModif" x="0" y="197" label="Enregistrer" click="SaveModif_clickHandler(event)"/>

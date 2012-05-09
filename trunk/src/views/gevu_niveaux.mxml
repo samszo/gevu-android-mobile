@@ -29,6 +29,28 @@
 					  result="update_niveau_resultHandler(event)"
 					  error="niveaux_query_errorHandler(event)" />
 		
+		<fx:Component className="niv_Incomplete_form">
+			<s:SkinnablePopUpContainer x="70" y="300">
+				<s:TitleWindow  close="close()">
+					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
+						<s:Label text="Veuillez inserer tous les donneé"/>
+						<s:Button label="OK" click="close()"/>
+					</s:VGroup>
+				</s:TitleWindow>
+			</s:SkinnablePopUpContainer>
+		</fx:Component>
+		
+		<fx:Component className="niv_Modif_complete">
+			<s:SkinnablePopUpContainer x="70" y="300">
+				<s:TitleWindow  close="close()">
+					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
+						<s:Label text="Modification est complet"/>
+						<s:Button label="OK" click="close()"/>
+					</s:VGroup>
+				</s:TitleWindow>
+			</s:SkinnablePopUpContainer>
+		</fx:Component>
+		
 	</fx:Declarations>
 	
 	<fx:Script>
@@ -79,8 +101,7 @@
 			
 			protected function niveaux_query_errorHandler(event:SQLErrorEvent):void
 			{
-			 trace(this.update_niveau.sql);
-			 var o:Object=event;	
+				var o:Object=event;	
 			}
 			
 			public function editModif1(val:int) : void {
@@ -103,11 +124,18 @@
 			
 			protected function SaveModif_clickHandler(event:MouseEvent):void
 			{
-				this.update_niveau.execute();	
+				if(this.F2.text=="" || 
+					this.rep_1.val=="0" ||
+					this.rep_2.val=="0" ||
+					this.rep_3.val=="0" )
+					new niv_Incomplete_form().open(this,false);
+				else
+					this.update_niveau.execute();	
 			}
 			
 			protected function update_niveau_resultHandler(event:SQLEvent):void
 			{
+				new niv_Modif_complete().open(this,false);
 				this.niveaux_query.execute();
 				
 			}
