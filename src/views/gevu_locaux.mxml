@@ -9,13 +9,17 @@
 		<![CDATA[
 			protected function update_locaux_resultHandler(event:SQLEvent):void
 			{
+				new loc_modif_complete().open(this,false);
 				this.locaux_query.execute();
 				
 			}
 			
 			protected function SaveModif_clickHandler(event:MouseEvent):void
 			{
-				this.update_locaux.execute();
+				if(this.activite=="" || this.ref=="") 
+					new loc_incomplete_form().open(this,false);
+				else
+				  this.update_locaux.execute();
 				
 			}
 			
@@ -39,6 +43,28 @@
 					  where id_lieu={this.selected_id}" 
 					  result="update_locaux_resultHandler(event)"
 					  error="locaux_query_errorHandler(event)" />
+		
+		<fx:Component className="loc_incomplete_form">
+			<s:SkinnablePopUpContainer x="70" y="300">
+				<s:TitleWindow  close="close()">
+					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
+						<s:Label text="Veuillez inserer tous les donneé"/>
+						<s:Button label="OK" click="close()"/>
+					</s:VGroup>
+				</s:TitleWindow>
+			</s:SkinnablePopUpContainer>
+		</fx:Component>
+		
+		<fx:Component className="loc_modif_complete">
+			<s:SkinnablePopUpContainer x="70" y="300">
+				<s:TitleWindow  close="close()">
+					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
+						<s:Label text="Modification est complet"/>
+						<s:Button label="OK" click="close()"/>
+					</s:VGroup>
+				</s:TitleWindow>
+			</s:SkinnablePopUpContainer>
+		</fx:Component>
 	</fx:Declarations>
 	
 	
@@ -85,7 +111,7 @@
 				this.activite=locaux_data[0].activite;
 				if (this.activite=="Associative")
 					this.reponse_1.selected=true;
-				else 
+				if (this.activite=="Commerciale")
 					this.reponse_2.selected=true; 
 			}
 			

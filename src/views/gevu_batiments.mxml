@@ -3,7 +3,7 @@
 		xmlns:s="library://ns.adobe.com/flex/spark" 
 		xmlns:view="views.*"
 		xmlns:sqlite="com.peterelst.air.sqlite.*"
-		xmlns:DateChoser = "dateChoser.*"
+		xmlns:DateChoose="*"
 		creationComplete="this.get_data.execute();">
 	<fx:Declarations>
 		<sqlite:SQLite id="db" file="gevu_mobile.db"  />
@@ -84,6 +84,7 @@
 			import mx.collections.ArrayCollection;
 			
 			import spark.events.TextOperationEvent;
+		
 			[Bindable] private var selected_id:int;
 			[Bindable] private var id_contact:int;
 			[Bindable] private var reponse1:String;
@@ -372,20 +373,20 @@
 					<s:HGroup>
 						<s:VGroup>
 							<s:Label text="Date d'achèvement : " />
-							<s:Label text="aaaa-jj-mm"/>
-							<s:TextInput id="F14" width="100"/>
+							<DateChoose:SparkDateField id="Date_ach" skinClass="DateFieldListSkin" change="{trace(Date_ach.selectedDate.toDateString())}"/>
+							<s:TextInput id="F14" width="100" height="25"/>
 							
 						</s:VGroup>
 						<s:VGroup>
 							<s:Label text="Date du dépot de permis" />
-							<s:Label text="aaaa-jj-mm"/>
-							<s:TextInput id="F15" width="100"/>
+							<DateChoose:SparkDateField id="Date_dep" skinClass="DateFieldListSkin" change="{F15.text = Date_dep.selectedDate.toDateString()}"/>
+							<s:TextInput id="F15" width="100" height="25"/>
 							
 						</s:VGroup>
 						<s:VGroup>
 							<s:Label text="Date de la dernière réhabilitation" />
-							<s:Label text="aaaa-jj-mm"/>
-							<s:TextInput id="F16" width="100"/>
+							<DateChoose:SparkDateField id="Date_reha" skinClass="DateFieldListSkin" change="{F16.text = Date_reha.selectedDate.toDateString()}"/>
+							<s:TextInput id="F16" width="100" height="25"/>
 							
 						</s:VGroup>
 					</s:HGroup>
