@@ -52,10 +52,34 @@
 					  where id_lieu={this.selected_id}"
 					  result="update_batiment_resultHandler(event)"
 					  error="get_data_errorHandler(event)"/>
+	
+	<fx:Component className="Incomplete_form">
+			<s:SkinnablePopUpContainer x="70" y="300">
+				<s:TitleWindow  close="close()">
+					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
+						<s:Label text="Veuillez inserer tous les donneé"/>
+						<s:Button label="OK" click="close()"/>
+					</s:VGroup>
+				</s:TitleWindow>
+			</s:SkinnablePopUpContainer>
+	</fx:Component>
 		
+		<fx:Component className="Modif_complete">
+			<s:SkinnablePopUpContainer x="70" y="300">
+				<s:TitleWindow  close="close()">
+					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
+						<s:Label text="Modification est complet"/>
+						<s:Button label="OK" click="close()"/>
+					</s:VGroup>
+				</s:TitleWindow>
+			</s:SkinnablePopUpContainer>
+		</fx:Component>
 		
+	
+	
 	</fx:Declarations>
 	<fx:Script>
+		
 		<![CDATA[
 			import mx.collections.ArrayCollection;
 			
@@ -289,15 +313,31 @@
 			}
 			
 			protected function update_batiment_resultHandler(event:SQLEvent):void
-			{
+			{ 
+				new Modif_complete().open(this,false);
 				this.get_data.execute();
-				
 			}
 			
 			protected function SaveModif_clickHandler(event:MouseEvent):void
 			{
-				
-				this.update_batiment.execute();
+				if(this.F02.text=="" ||
+					this.F10.text=="" ||
+					this.F11.text=="" ||
+					this.F14.text=="" ||
+					this.F15.text=="" ||
+					this.F16.text== "" ||
+					this.rep_1.val=="0" ||
+					this.rep_2.val=="0" ||
+					this.rep_3.val=="0" ||
+					this.rep_4.val=="0" ||
+					this.rep_5.val=="0" ||
+					this.rep_6.val=="0" ||
+					this.rep_13.val=="0" ||
+					this.rep_14.val=="0" )
+					new Incomplete_form().open(this,false);
+				else {
+				   this.update_batiment.execute();
+				}
 			}
 			
 		]]>

@@ -1,21 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:mx="library://ns.adobe.com/flex/mx"
 		xmlns:view="views.*"
 		xmlns:sqlite="com.peterelst.air.sqlite.*" 
-		creationComplete="this.query_execution();">
+		creationComplete="this.query_execution()">
 	
 	<fx:Script>
 		<![CDATA[
+			import mx.events.ValidationResultEvent;
+			
+			import spark.events.TextOperationEvent;
 			protected function parcelle_contact_resultHandler(event:SQLEvent):void
 			{
 			   contact_info= new ArrayCollection(this.parcelle_contact.data);		
 			}
+			
+			
+					
 		]]>
 	</fx:Script>
 	
 			
 	<fx:Declarations>
+		
+		<fx:Component className="con_incomplete_form">
+			<s:SkinnablePopUpContainer x="70" y="300">
+				<s:TitleWindow  close="close()">
+					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
+						<s:Label text="Veuillez inserer tous les donneé"/>
+						<s:Button label="OK" click="close()"/>
+					</s:VGroup>
+				</s:TitleWindow>
+			</s:SkinnablePopUpContainer>
+		</fx:Component>
+		
+		<fx:Component className="Delete_msg">
+			<s:SkinnablePopUpContainer x="70" y="300">
+				
+				<fx:Script>
+					<![CDATA[
+						import mx.core.FlexGlobals;
+						import mx.core.UIComponent;
+						protected function delete_clickHandler(event:MouseEvent):void
+						{
+							//parentDocument.delete_query.execute();
+						}
+					]]>
+				</fx:Script>
+				
+				<s:TitleWindow  close="close()">
+					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
+						<s:Label text="Voulez-vous vraiment suprimer ce contact"/>
+					<s:HGroup>	
+						<s:Button label="Oui" click="delete_clickHandler(event)"/>
+						<s:Button label="No" click="close()"/>
+					</s:HGroup>	
+					</s:VGroup>
+				</s:TitleWindow>
+			</s:SkinnablePopUpContainer>
+		</fx:Component>
+		
+		<fx:Component className="Add_complete">
+			<s:SkinnablePopUpContainer x="70" y="300">
+				<s:TitleWindow  close="close()">
+					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
+						<s:Label text="Le contact a été bien ajouter"/>
+						<s:Button label="OK" click="close()"/>
+					</s:VGroup>
+				</s:TitleWindow>
+			</s:SkinnablePopUpContainer>
+		</fx:Component>
+		
+		
+		<fx:Component className="Invalid_mail">
+			<s:SkinnablePopUpContainer x="70" y="300">
+				<s:TitleWindow  close="close()">
+					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
+						<s:Label text="Veuillez vérifier le format du mail"/>
+						<s:Button label="OK" click="close()"/>
+					</s:VGroup>
+				</s:TitleWindow>
+			</s:SkinnablePopUpContainer>
+		</fx:Component>
+		<fx:Component className="Invalid_num">
+			<s:SkinnablePopUpContainer x="70" y="300">
+				<s:TitleWindow  close="close()">
+					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
+						<s:Label text="Veuillez vérifier le format du numero"/>
+						<s:Button label="OK" click="close()"/>
+					</s:VGroup>
+				</s:TitleWindow>
+			</s:SkinnablePopUpContainer>
+		</fx:Component>
+		
+		<s:NumberValidator id="fixe_in_val" 
+						   source="{this.fixe_in}" property="text" 
+						   domain="int" required="true"
+						   />
+
+		<s:NumberValidator id="mobile_in_val" 
+						   source="{this.mobile_in}" property="text" 
+						   domain="int" required="true"
+						   />
+
+		<s:NumberValidator id="fax_in_val" 
+						   source="{this.fax_in}" property="text" 
+						   domain="int" required="true"
+						   />
+		
+		<mx:EmailValidator id="mail_validator" 
+						   source="{this.mail_in}" property="text"
+						   required="true"
+						   />
+
+		
 		<sqlite:SQLite id="db" file="gevu_mobile.db"  />
 		
 		<sqlite:Query id="add_query" connection="{db.connection}"
@@ -96,25 +195,41 @@
 			protected function add_form_clickHandler(event:MouseEvent):void
 			{
 				this.add_contact_form.visible=true;	
+				this.nom_in.text="";
+				this.prenom_in.text="";
+				this.fixe_in.text="";
+				this.mobile_in.text="";
+				this.fax_in.text="";
+				this.mail_in.text="";
 			}
 			
 			protected function save_contact_clickHandler(event:MouseEvent):void
 			{
-				this.add_contact_form.visible=false;
-				this.nom=this.nom_in.text;
+				if(this.nom_in.text=="" ||
+				   this.prenom_in.text=="" ||
+				   this.fixe_in.text=="" || 
+				   this.mobile_in.text== "" ||
+				   this.fax_in.text=="" ||
+				   this.mail_in.text=="")
+				 new con_incomplete_form().open(this,false);
+				else{
+			    this.nom=this.nom_in.text;
 				this.prenom=this.prenom_in.text;
 				this.fixe=this.fixe_in.text;
 				this.mobile=this.mobile_in.text; 
 				this.fax=this.fax_in.text ; 
 				this.mail=this.mail_in.text;
 				this.add_query.execute();
-				}
+				} 
+			}
+			
 			
 			protected function delete_clickHandler(event:MouseEvent):void
 			{
 			var item:Object=this.dgContact.selectedItem;
 			this.deleting_id=item['id_contact'];
-			this.delete_query.execute();
+			
+			 new Delete_msg().open(this,false);
 			}
 			
 			protected function antenne_contact_query_resultHandler(event:SQLEvent):void
@@ -151,7 +266,8 @@
 			{
 				var last_id:Array=this.get_last_inserted_id.data;
 				this.last_inserted_id=last_id[0].max;
-				this.add_query2.execute();
+				 if(this.query_type=="antenne")
+				   this.add_query2.execute();
 				
 			}
 			
@@ -177,13 +293,14 @@
 			
 			protected function add_query_resultHandler(event:SQLEvent):void
 			{
+				this.add_contact_form.visible=false;
+				new Add_complete().open(this,false);
 				this.get_last_inserted_id.execute();
 			}
 			
 			protected function reset_table_resultHandler(event:SQLEvent):void
 			{
-				this.query_execution();
-				
+				this.query_execution();		
 			}
 			
 			
@@ -225,27 +342,31 @@
 			<s:VGroup id="add_contact_form" visible="false">
 				<s:HGroup>
 					<s:Label text="Nom:"/>
-					<s:TextInput id="nom_in" height="25"/>
+					<s:TextInput id="nom_in" height="25" width="125"/>
 				</s:HGroup>	
 				<s:HGroup>	
 					<s:Label text="prenom:"/>
-					<s:TextInput id="prenom_in" height="25"/>
+					<s:TextInput id="prenom_in" height="25" width="125" />
 				</s:HGroup>
 				<s:HGroup>	
 					<s:Label text="Fixe:"/>
-					<s:TextInput id="fixe_in" height="25"/>
+					<s:TextInput id="fixe_in" height="25" width="125"
+								 />
 				</s:HGroup>
 				<s:HGroup>	
 					<s:Label text="Mobile"/>
-					<s:TextInput id="mobile_in" height="25"/>
+					<s:TextInput id="mobile_in" height="25" width="125"
+								 />
 				</s:HGroup>
 				<s:HGroup>	
 					<s:Label text="Fax"/>
-					<s:TextInput id="fax_in" height="25"/>
+					<s:TextInput id="fax_in" height="25" width="125"
+								 />
 				</s:HGroup>
 				<s:HGroup>	
 					<s:Label text="Mail"/>
-					<s:TextInput id="mail_in" height="25"/>
+					<s:TextInput id="mail_in" height="25" width="125"
+								 />
 				</s:HGroup>	
 				<s:Button label="Enrigisterer ce contact" click="save_contact_clickHandler(event)"/>	
 			</s:VGroup>
