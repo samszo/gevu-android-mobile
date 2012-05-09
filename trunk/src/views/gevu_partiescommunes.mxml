@@ -41,12 +41,16 @@
 			
 			protected function update_coumune_resultHandler(event:SQLEvent):void
 			{
+				new com_modif_complete().open(this,false);
 			this.coummunes_query.execute();
 			}
 			
 			protected function SaveModif_clickHandler(event:MouseEvent):void
 			{
-				this.update_coumune.execute();
+				if(this.ref=="")
+					new com_incomplete_form().open(this,false);
+				else
+				 this.update_coumune.execute();
 				
 			}
 			
@@ -68,6 +72,29 @@
 					  maj=strftime('%J','{this.toSqlDate(myDate)}')"
 					  error="coummunes_query_errorHandler(event)"
 					  result="update_coumune_resultHandler(event)"/>
+		
+		<fx:Component className="com_incomplete_form">
+			<s:SkinnablePopUpContainer x="70" y="300">
+				<s:TitleWindow  close="close()">
+					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
+						<s:Label text="Veuillez inserer tous les donneé"/>
+						<s:Button label="OK" click="close()"/>
+					</s:VGroup>
+				</s:TitleWindow>
+			</s:SkinnablePopUpContainer>
+		</fx:Component>
+		
+		<fx:Component className="com_modif_complete">
+			<s:SkinnablePopUpContainer x="70" y="300">
+				<s:TitleWindow  close="close()">
+					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
+						<s:Label text="Modification est complet"/>
+						<s:Button label="OK" click="close()"/>
+					</s:VGroup>
+				</s:TitleWindow>
+			</s:SkinnablePopUpContainer>
+		</fx:Component>
+		
 		
 	</fx:Declarations>
 	<fx:Script>

@@ -113,12 +113,16 @@
 			
 			protected function update_log_resultHandler(event:SQLEvent):void
 			{
+				new log_modif_complete().open(this,false);
 				this.logement_query.execute();
 				
 			}
 			
 			protected function SaveModif_clickHandler(event:MouseEvent):void
 			{
+				if(this.ref=="" || this.num_porte=="" || this.type=="")
+					new log_incomplete_form().open(this,false);
+				else
 				this.update_log.execute();
 				
 			}
@@ -155,6 +159,28 @@
 					  where id_lieu={this.selected_id}" 
 					  result="update_log_resultHandler(event)"
 					  error="logement_query_errorHandler(event)" />
+		
+		<fx:Component className="log_incomplete_form">
+			<s:SkinnablePopUpContainer x="70" y="300">
+				<s:TitleWindow  close="close()">
+					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
+						<s:Label text="Veuillez inserer tous les donneé"/>
+						<s:Button label="OK" click="close()"/>
+					</s:VGroup>
+				</s:TitleWindow>
+			</s:SkinnablePopUpContainer>
+		</fx:Component>
+		
+		<fx:Component className="log_modif_complete">
+			<s:SkinnablePopUpContainer x="70" y="300">
+				<s:TitleWindow  close="close()">
+					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
+						<s:Label text="Modification est complet"/>
+						<s:Button label="OK" click="close()"/>
+					</s:VGroup>
+				</s:TitleWindow>
+			</s:SkinnablePopUpContainer>
+		</fx:Component>
 	</fx:Declarations>
 	
 	<fx:Script>
