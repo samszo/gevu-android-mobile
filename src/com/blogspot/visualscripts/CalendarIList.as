@@ -1,4 +1,4 @@
-package {
+package com.blogspot.visualscripts {
 
 import mx.collections.ArrayList;
 
@@ -8,8 +8,7 @@ import mx.collections.ArrayList;
  *  a calendar if index 0 is the first Sunday
  *  in a week view
  */
-public class CalendarIList extends ArrayList
-{
+public class CalendarIList extends ArrayList{
 // a full implementation would disable most of the IList modification
 // methods like addItem, removeItem
 	
@@ -21,11 +20,9 @@ public class CalendarIList extends ArrayList
 	 *  @param month 0-based index of month (0 = January)
 	 *  @param year The year to display (2009)
 	 */
-	public function setMonthAndYear(month:int, year:int):void
-	{
+	public function setMonthAndYear(month:int, year:int):void{
 		_month = month;
 		_year = year;
-		
 		// choose noon on the first to try to avoid DST issues
 		var d:Date = new Date(year, month, 1, 12);
 		// get day of week (0 = Sunday)
@@ -33,16 +30,14 @@ public class CalendarIList extends ArrayList
 	
 		// back up to Sunday
 		var value:Number = d.time;
-		while (dofw > 0)
-		{
+		while (dofw > 0){
 			value -= dayOfMS;
 			dofw--;
 		}
 		
 		var arr:Array = [];
 		
-		for (var i:int = 0; i < 42; i++)
-		{
+		for (var i:int = 0; i < 42; i++){
 			var dt:Date = new Date(value);
 			var data:CalendarIListDay = new CalendarIListDay();
 			data.date = dt;
@@ -56,16 +51,14 @@ public class CalendarIList extends ArrayList
 	private var _month:int;
 	
 	[Bindable("collectionChange")]
-	public function get month():int
-	{
+	public function get month():int{
 		return _month;
 	}
 	
 	private var _year:int;
 	
 	[Bindable("collectionChange")]
-	public function get year():int
-	{
+	public function get year():int{
 		return _year;
 	}
 

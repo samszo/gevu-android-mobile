@@ -3,7 +3,7 @@
 		xmlns:s="library://ns.adobe.com/flex/spark" 
 		xmlns:view="views.*"
 		xmlns:sqlite="com.peterelst.air.sqlite.*"
-		xmlns:DateChoose="*"
+		xmlns:DateChoose="com.blogspot.visualscripts.*"
 		creationComplete="this.get_data.execute();">
 	<fx:Declarations>
 		<sqlite:SQLite id="db" file="gevu_mobile.db"  />
@@ -31,9 +31,9 @@
 					  horaires_batiment='{this.horaires_batiment}',
 					  superficie_parcelle={this.superficie_parcelle},
 					  superficie_batiment={this.superficie_batiment},
-					  date_achevement=strftime('%J','{this.toSqlDate(myDate)}'),
-					  date_depot_permis=strftime('%J','{this.toSqlDate(myDate)}'),
-					  date_reha=strftime('%J','{this.toSqlDate(myDate)}'),
+					  date_achevement=strftime('%J','{this.toSqlDate(date_achevement)}'),
+					  date_depot_permis=strftime('%J','{this.toSqlDate(date_rehab)}'),
+					  date_reha=strftime('%J','{this.toSqlDate(date_depot)}'),
 					  reponse_1='{this.reponse1}',
 					  reponse_2='{this.reponse2}',
 					  reponse_3='{this.reponse3}',
@@ -52,8 +52,8 @@
 					  where id_lieu={this.selected_id}"
 					  result="update_batiment_resultHandler(event)"
 					  error="get_data_errorHandler(event)"/>
-	
-	<fx:Component className="Incomplete_form">
+		
+		<fx:Component className="Incomplete_form">
 			<s:SkinnablePopUpContainer x="70" y="300">
 				<s:TitleWindow  close="close()">
 					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
@@ -62,7 +62,7 @@
 					</s:VGroup>
 				</s:TitleWindow>
 			</s:SkinnablePopUpContainer>
-	</fx:Component>
+		</fx:Component>
 		
 		<fx:Component className="Modif_complete">
 			<s:SkinnablePopUpContainer x="70" y="300">
@@ -75,8 +75,8 @@
 			</s:SkinnablePopUpContainer>
 		</fx:Component>
 		
-	
-	
+		
+		
 	</fx:Declarations>
 	<fx:Script>
 		
@@ -84,7 +84,7 @@
 			import mx.collections.ArrayCollection;
 			
 			import spark.events.TextOperationEvent;
-		
+			
 			[Bindable] private var selected_id:int;
 			[Bindable] private var id_contact:int;
 			[Bindable] private var reponse1:String;
@@ -107,6 +107,9 @@
 			[Bindable] private var superficie_parcelle:int;
 			[Bindable] private var superficie_batiment:int;
 			[Bindable] private var myDate:Date=new Date();
+			[Bindable] private var date_achevement:Date=new Date();
+			[Bindable] private var date_depot:Date=new Date();
+			[Bindable] private var date_rehab:Date=new Date();
 			
 			public function lpad(original:Object, length:int, pad:String):String
 			{
@@ -150,10 +153,11 @@
 				this.F13.value=data.getItemAt(0).superficie_batiment;
 				this.superficie_batiment=data.getItemAt(0).superficie_batiment;
 				
+				/*
 				this.F14.text=data.getItemAt(0).date_achevement;
 				this.F15.text=data.getItemAt(0).date_depot_permis;
 				this.F16.text=data.getItemAt(0).date_reha;
-				
+				*/
 				
 				this.reponse1=data.getItemAt(0).reponse_1;
 				
@@ -324,9 +328,9 @@
 				if(this.F02.text=="" ||
 					this.F10.text=="" ||
 					this.F11.text=="" ||
-					this.F14.text=="" ||
-					this.F15.text=="" ||
-					this.F16.text== "" ||
+					this.date_ach.labelDisplay.text=="" ||
+					this.date_reha.labelDisplay.text=="" ||
+					this.date_depo.labelDisplay.text=="" ||
 					this.rep_1.val=="0" ||
 					this.rep_2.val=="0" ||
 					this.rep_3.val=="0" ||
@@ -337,7 +341,7 @@
 					this.rep_14.val=="0" )
 					new Incomplete_form().open(this,false);
 				else {
-				   this.update_batiment.execute();
+					this.update_batiment.execute();
 				}
 			}
 			
@@ -373,21 +377,16 @@
 					<s:HGroup>
 						<s:VGroup>
 							<s:Label text="Date d'achèvement : " />
-							<DateChoose:SparkDateField id="Date_ach" skinClass="DateFieldListSkin" change="{trace(Date_ach.selectedDate.toDateString())}"/>
-							<s:TextInput id="F14" width="100" height="25"/>
+							<DateChoose:SparkDateComponent id="date_ach" skinClass="com.blogspot.visualscripts.SparkDateFieldSkin"
+													change="{this.date_achevement=date_ach.selectedDate}"	   />
 							
-						</s:VGroup>
-						<s:VGroup>
 							<s:Label text="Date du dépot de permis" />
-							<DateChoose:SparkDateField id="Date_dep" skinClass="DateFieldListSkin" change="{F15.text = Date_dep.selectedDate.toDateString()}"/>
-							<s:TextInput id="F15" width="100" height="25"/>
+							<DateChoose:SparkDateComponent id="date_depo" skinClass="com.blogspot.visualscripts.SparkDateFieldSkin"
+														   change="{this.date_depot=date_depo.selectedDate}"/>
 							
-						</s:VGroup>
-						<s:VGroup>
 							<s:Label text="Date de la dernière réhabilitation" />
-							<DateChoose:SparkDateField id="Date_reha" skinClass="DateFieldListSkin" change="{F16.text = Date_reha.selectedDate.toDateString()}"/>
-							<s:TextInput id="F16" width="100" height="25"/>
-							
+							<DateChoose:SparkDateComponent id="date_reha" skinClass="com.blogspot.visualscripts.SparkDateFieldSkin"
+														   change="{this.date_rehab=date_reha.selectedDate}"/>
 						</s:VGroup>
 					</s:HGroup>
 					<view:repType2 id="rep_1" lblQ="Le bâtiment est-il uniquement un lieu de travail ?" Q="reponse_1"  fnct="{this.editModif1}" val="{this.reponse1}"/>
