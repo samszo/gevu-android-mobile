@@ -1,4 +1,4 @@
-package {
+package com.blogspot.visualscripts {
 import flash.events.EventDispatcher;
 import mx.core.IUID;
 
