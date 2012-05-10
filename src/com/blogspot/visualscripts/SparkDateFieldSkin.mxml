@@ -89,13 +89,13 @@
 				</s:Ellipse>
 			</s:Group>
 			
-			<s:Label text="S     M     T     W     T       F     S" top="42" x="12" fontWeight="bold"/>
+			<s:Label text="S     D     L     M     M     J     V" top="42" x="12" fontWeight="bold"/>
 			
             <s:DataGroup id="dataGroup" top="60" left="6" right="6" bottom="6"
 						 itemRenderer="com.blogspot.visualscripts.SparkDateComponentDayRenderer" click="currentState='normal'">
 				<s:layout>
 					<s:TileLayout requestedColumnCount="7" requestedRowCount="6" 
-								  columnWidth="24" rowHeight="23"
+								  columnWidth="31" rowHeight="23"
 								  horizontalGap="0" verticalGap="0"/>
 				</s:layout>
             </s:DataGroup>
