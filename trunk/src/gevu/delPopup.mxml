@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnablePopUpContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+						   xmlns:s="library://ns.adobe.com/flex/spark" 
+						   xmlns:mx="library://ns.adobe.com/flex/mx" > 
+						   
+		<fx:Script>
+			<![CDATA[
+			  [Bindable] public var fnct:Function;
+				public function delete_clickHandler(event:MouseEvent):void
+				{
+				 fnct();
+				 close();
+				}
+			]]>
+		</fx:Script>
+	<s:TitleWindow  title="Attention">
+		<s:VGroup horizontalAlign="center">
+			<s:Label id="msg" text="Voulez vous vraiment suprimer!" paddingTop="10"/>
+			<s:HGroup>
+				<s:Button label="Oui" click="delete_clickHandler(event)"/>	
+				<s:Button label="Non" click="close()"/>
+			</s:HGroup>
+			
+		</s:VGroup>
+	</s:TitleWindow>
+	
+	
+</s:SkinnablePopUpContainer>
