@@ -117,7 +117,7 @@
 					}
 					else {
 						this.mytree.set_lib(this.nom_lieu.text);
-						this.mytree.update_lib.execute();
+						this.mytree.edit();
 						this.nom_lieu.visible=false;
 						this.edit.visible=false;
 						this.lab.visible=false;
