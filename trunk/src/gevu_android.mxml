@@ -32,6 +32,7 @@
 			import flash.utils.getQualifiedClassName;
 			
 			import gevu.arbre;
+			import gevu.delPopup;
 			import gevu.popup;
 			
 			import mx.core.FlexGlobals;
@@ -40,6 +41,7 @@
 			import mx.events.PropertyChangeEvent;
 			
 			private var popmsg:popup = new popup();
+			private var	delpopup:delPopup = new delPopup();
 			
 			protected function delete_clickHandler(event:MouseEvent):void
 			{
@@ -48,7 +50,9 @@
 					popmsg.open(this,false);
 				}
 				else {
-					mytree.delete_lieu();
+				
+					delpopup.fnct=mytree.delete_lieu;
+					delpopup.open(this,false);
 				}
 			}
 			
