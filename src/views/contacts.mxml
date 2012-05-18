@@ -88,13 +88,16 @@
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
-			import mx.core.FlexGlobals;
-			import mx.collections.ArrayCollection;
-			import mx.utils.OnDemandEventDispatcher;
-			import mx.events.ValidationResultEvent;
-			import spark.events.TextOperationEvent;
-			import spark.events.GridItemEditorEvent;
+			import gevu.delPopup;
 			import gevu.popup;
+			
+			import mx.collections.ArrayCollection;
+			import mx.core.FlexGlobals;
+			import mx.events.ValidationResultEvent;
+			import mx.utils.OnDemandEventDispatcher;
+			
+			import spark.events.GridItemEditorEvent;
+			import spark.events.TextOperationEvent;
 			
 			[Bindable] public var id_lieu:int;
 			[Bindable] private var contact_info:ArrayCollection =new ArrayCollection;
@@ -111,6 +114,7 @@
 			[Bindable] private var id_antenne:int;
 			[Bindable] public var id_contact:String;
 			private var popmsg:popup = new popup();
+			private var delpopup:delPopup = new delPopup();
 			
 			protected function parcelle_contact_resultHandler(event:SQLEvent):void
 			{
@@ -152,6 +156,10 @@
 			}
 			
 			
+			private function delContact():void {
+				this.delete_query.execute();	
+			}
+			
 			protected function delete_clickHandler(event:MouseEvent):void
 			{
 				
@@ -162,9 +170,10 @@
                     popmsg.open(this,false); 
 				}	
 				else {
-					item=this.dgContact.selectedItem == null	
+					item=this.dgContact.selectedItem;	
 					this.deleting_id=item['id_contact'];
-					//new Delete_msg().open(this,false);
+					delpopup.fnct=delContact;
+					delpopup.open(this,false);
 				}
 			}
 			

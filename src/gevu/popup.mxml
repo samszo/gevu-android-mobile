@@ -2,7 +2,7 @@
 <!-- containers\spark\myComponents\MyAlertPopUp.mxml -->
 <s:SkinnablePopUpContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 						   xmlns:s="library://ns.adobe.com/flex/spark" 
-						   xmlns:mx="library://ns.adobe.com/flex/mx" width="600" height="600"
+						   xmlns:mx="library://ns.adobe.com/flex/mx" 
 						   creationComplete="creationCompleteHandler(event)">
 	
 	<fx:Script>
@@ -29,8 +29,8 @@
 	
 	
 	<s:TitleWindow  title="Attention">
-		<s:VGroup horizontalAlign="center"  width="100%">
-			<s:Label id="msg" />
+		<s:VGroup horizontalAlign="center" >
+			<s:Label id="msg" paddingTop="10"/>
 			<s:Button label="OK" click="close()"/>
 		</s:VGroup>
 	</s:TitleWindow>
