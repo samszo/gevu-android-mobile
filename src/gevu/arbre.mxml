@@ -477,7 +477,17 @@
 			 
 			}
 			
-			
+			public function edit():void{
+				var temp:XML;
+				temp=this.dataProvider.getItemAt(0).source.descendants().(@idLieu == this.selected_id)[0];
+			   if(temp!=null) 	
+				 temp.@label=this.nom_lieu;
+			   else 
+			   {
+			     xmlist[0].@label=this.nom_lieu;
+			    }
+				this.update_lib.execute();
+			}
 			
 			
 			
