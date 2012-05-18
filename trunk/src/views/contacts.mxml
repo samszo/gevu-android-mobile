@@ -6,106 +6,8 @@
 		xmlns:sqlite="com.peterelst.air.sqlite.*" 
 		creationComplete="this.query_execution()">
 	
-	<fx:Script>
-		<![CDATA[
-			import mx.events.ValidationResultEvent;
-			
-			import spark.events.TextOperationEvent;
-			protected function parcelle_contact_resultHandler(event:SQLEvent):void
-			{
-				contact_info= new ArrayCollection(this.parcelle_contact.data);		
-			}
-			
-			
-			
-		]]>
-	</fx:Script>
-	
-	
 	<fx:Declarations>
 		
-		<fx:Component className="Con_No_Item_Selected">
-			<s:SkinnablePopUpContainer x="70" y="300">
-				<s:TitleWindow  close="close()">
-					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
-						<s:Label text="Veuillez séléctioné un item"/>
-						<s:Button label="OK" click="close()"/>
-					</s:VGroup>
-				</s:TitleWindow>
-			</s:SkinnablePopUpContainer>
-		</fx:Component>
-		
-		<fx:Component className="con_incomplete_form">
-			<s:SkinnablePopUpContainer x="70" y="300">
-				<s:TitleWindow  close="close()">
-					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
-						<s:Label text="Veuillez inserer tous les donneé"/>
-						<s:Button label="OK" click="close()"/>
-					</s:VGroup>
-				</s:TitleWindow>
-			</s:SkinnablePopUpContainer>
-		</fx:Component>
-		
-		
-		
-		<fx:Component className="Delete_msg">
-			<s:SkinnablePopUpContainer x="70" y="300">
-				
-				<fx:Script>
-					<![CDATA[
-						import mx.core.FlexGlobals;
-						import mx.core.UIComponent;
-						protected function delete_clickHandler(event:MouseEvent):void
-						{
-							//parentDocument.delete_query.execute();
-						}
-					]]>
-				</fx:Script>
-				
-				<s:TitleWindow  close="close()">
-					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
-						<s:Label text="Voulez-vous vraiment suprimer ce contact"/>
-						<s:HGroup>	
-							<s:Button label="Oui" click="delete_clickHandler(event)"/>
-							<s:Button label="No" click="close()"/>
-						</s:HGroup>	
-					</s:VGroup>
-				</s:TitleWindow>
-			</s:SkinnablePopUpContainer>
-		</fx:Component>
-		
-		<fx:Component className="Add_complete">
-			<s:SkinnablePopUpContainer x="70" y="300">
-				<s:TitleWindow  close="close()">
-					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
-						<s:Label text="Le contact a été bien ajouter"/>
-						<s:Button label="OK" click="close()"/>
-					</s:VGroup>
-				</s:TitleWindow>
-			</s:SkinnablePopUpContainer>
-		</fx:Component>
-		
-		
-		<fx:Component className="Invalid_mail">
-			<s:SkinnablePopUpContainer x="70" y="300">
-				<s:TitleWindow  close="close()">
-					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
-						<s:Label text="Veuillez vérifier le format du mail"/>
-						<s:Button label="OK" click="close()"/>
-					</s:VGroup>
-				</s:TitleWindow>
-			</s:SkinnablePopUpContainer>
-		</fx:Component>
-		<fx:Component className="Invalid_num">
-			<s:SkinnablePopUpContainer x="70" y="300">
-				<s:TitleWindow  close="close()">
-					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
-						<s:Label text="Veuillez vérifier le format du numero"/>
-						<s:Button label="OK" click="close()"/>
-					</s:VGroup>
-				</s:TitleWindow>
-			</s:SkinnablePopUpContainer>
-		</fx:Component>
 		
 		<s:NumberValidator id="fixe_in_val" 
 						   source="{this.fixe_in}" property="text" 
@@ -189,8 +91,11 @@
 			import mx.core.FlexGlobals;
 			import mx.collections.ArrayCollection;
 			import mx.utils.OnDemandEventDispatcher;
-			
+			import mx.events.ValidationResultEvent;
+			import spark.events.TextOperationEvent;
 			import spark.events.GridItemEditorEvent;
+			import gevu.popup;
+			
 			[Bindable] public var id_lieu:int;
 			[Bindable] private var contact_info:ArrayCollection =new ArrayCollection;
 			[Bindable] private var nom:String = new String;
@@ -205,6 +110,12 @@
 			[Bindable] private var last_inserted_id:int;
 			[Bindable] private var id_antenne:int;
 			[Bindable] public var id_contact:String;
+			private var popmsg:popup = new popup();
+			
+			protected function parcelle_contact_resultHandler(event:SQLEvent):void
+			{
+				contact_info= new ArrayCollection(this.parcelle_contact.data);		
+			}
 			
 			protected function add_form_clickHandler(event:MouseEvent):void
 			{
@@ -225,7 +136,10 @@
 					this.mobile_in.text== "" ||
 					this.fax_in.text=="" ||
 					this.mail_in.text=="")
-					new con_incomplete_form().open(this,false);
+				{
+					
+				}
+					
 				else{
 					this.nom=this.nom_in.text;
 					this.prenom=this.prenom_in.text;
@@ -243,11 +157,14 @@
 				
 				var item:Object;
 				if(this.dgContact.selectedItem == null)
-					new Con_No_Item_Selected().open(this,false);
+				{
+					popmsg.setMsg("Veuillez séléctioner un contact");
+                    popmsg.open(this,false); 
+				}	
 				else {
 					item=this.dgContact.selectedItem == null	
 					this.deleting_id=item['id_contact'];
-					new Delete_msg().open(this,false);
+					//new Delete_msg().open(this,false);
 				}
 			}
 			
@@ -313,7 +230,8 @@
 			protected function add_query_resultHandler(event:SQLEvent):void
 			{
 				this.add_contact_form.visible=false;
-				new Add_complete().open(this,false);
+				popmsg.setMsg("la modification est complète");
+				popmsg.open(this,false);
 				this.get_last_inserted_id.execute();
 			}
 			
@@ -342,22 +260,6 @@
 		
 		<s:VGroup id="viewContactUnique" x="0" y="55" width="588" height="250" paddingBottom="6"
 				  paddingLeft="6" paddingRight="6" paddingTop="6">
-			<s:DataGrid width="100%" height="246" id="dgContact" dataProvider="{this.contact_info}"
-						editable="true" gridItemEditorSessionSave="dgContact_gridItemEditorSessionSaveHandler(event)"
-						>
-				<s:columns>
-					<s:ArrayCollection>
-						<s:GridColumn dataField="id_contact" visible="false"/>
-						<s:GridColumn headerText="Nom" dataField="nom"/>
-						<s:GridColumn headerText="Prénom" dataField="prenom"/>
-						<s:GridColumn headerText="Fixe" dataField="fixe"/>
-						<s:GridColumn headerText="Mobile" dataField="mobile"/>
-						<s:GridColumn headerText="Fax" dataField="fax"/>
-						<s:GridColumn headerText="Mail" dataField="mail"/>
-					</s:ArrayCollection>
-				</s:columns>
-			</s:DataGrid>
-			
 			<s:VGroup id="add_contact_form" visible="false">
 				<s:HGroup>
 					<s:Label text="Nom:"/>
@@ -387,9 +289,24 @@
 					<s:TextInput id="mail_in" height="25" width="125"
 								 />
 				</s:HGroup>	
-				<s:Button label="Enrigisterer ce contact" click="save_contact_clickHandler(event)"/>	
+				<s:Button label="Enregistrer ce contact" click="save_contact_clickHandler(event)"/>	
 			</s:VGroup>
 			
 		</s:VGroup>	
+		<s:DataGrid id="dgContact" x="0" y="49" width="100%" height="246"
+					dataProvider="{this.contact_info}" editable="true"
+					gridItemEditorSessionSave="dgContact_gridItemEditorSessionSaveHandler(event)">
+			<s:columns>
+				<s:ArrayCollection>
+					<s:GridColumn dataField="id_contact" visible="false"/>
+					<s:GridColumn headerText="Nom" dataField="nom"/>
+					<s:GridColumn headerText="Prénom" dataField="prenom"/>
+					<s:GridColumn headerText="Fixe" dataField="fixe"/>
+					<s:GridColumn headerText="Mobile" dataField="mobile"/>
+					<s:GridColumn headerText="Fax" dataField="fax"/>
+					<s:GridColumn headerText="Mail" dataField="mail"/>
+				</s:ArrayCollection>
+			</s:columns>
+		</s:DataGrid>
 	</s:Panel>
 </s:View>	

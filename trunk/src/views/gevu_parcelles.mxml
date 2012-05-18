@@ -6,40 +6,6 @@
 		creationComplete="this.parcelle_query.execute()">
 	<fx:Script>
 		<![CDATA[
-			import spark.events.TextOperationEvent;
-			
-			protected function ref_changeHandler(event:TextOperationEvent):void
-			{
-				this.ref=this.F2.text;
-				
-			}
-			
-			protected function ref_cadastre_changeHandler(event:TextOperationEvent):void
-			{
-				this.ref_cadastre=this.F21.text;
-				
-			}
-			
-			protected function superficie_changeHandler(event:Event):void
-			{
-				this.superficie=this.F3.value;	
-			}
-			
-			protected function update_parcelle_resultHandler(event:SQLEvent):void
-			{
-				new par_modif_complete().open(this,false);
-				this.parcelle_query.execute();
-				
-			}
-			
-			protected function saveModif_clickHandler(event:MouseEvent):void
-			{
-				if(this.ref=="" || this.cloture=="0" || this.ref_cadastre==""
-					|| this.contact_proprietaire=="")
-					new par_incomplete_form().open(this,false);
-				else
-					this.update_parcelle.execute();	
-			}
 			
 		]]>
 	</fx:Script>
@@ -63,30 +29,13 @@
 					  result="update_parcelle_resultHandler(event)"
 					  error="parcelle_query_errorHandler(event)"/>
 		
-		<fx:Component className="par_incomplete_form">
-			<s:SkinnablePopUpContainer x="70" y="300">
-				<s:TitleWindow  close="close()">
-					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
-						<s:Label text="Veuillez inserer tous les donneé"/>
-						<s:Button label="OK" click="close()"/>
-					</s:VGroup>
-				</s:TitleWindow>
-			</s:SkinnablePopUpContainer>
-		</fx:Component>
-		
-		<fx:Component className="par_modif_complete">
-			<s:SkinnablePopUpContainer x="70" y="300">
-				<s:TitleWindow  close="close()">
-					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
-						<s:Label text="Modification est complet"/>
-						<s:Button label="OK" click="close()"/>
-					</s:VGroup>
-				</s:TitleWindow>
-			</s:SkinnablePopUpContainer>
-		</fx:Component>
 	</fx:Declarations>	
 	<fx:Script>
 		<![CDATA[
+			import gevu.popup;
+			
+			import spark.events.TextOperationEvent;
+			
 			[Bindable] private var selected_id:int;
 			[Bindable] private var ref:String;
 			[Bindable] private var contact_proprietaire:String;
@@ -94,6 +43,49 @@
 			[Bindable] private var cloture:String;
 			[Bindable] private var ref_cadastre:String;
 			[Bindable] private var myDate:Date=new Date();
+			           private var popmsg:popup = new popup(); 
+			
+			
+			
+			protected function ref_changeHandler(event:TextOperationEvent):void
+			{
+				this.ref=this.F2.text;
+				
+			}
+			
+			protected function ref_cadastre_changeHandler(event:TextOperationEvent):void
+			{
+				this.ref_cadastre=this.F21.text;
+				
+			}
+			
+			protected function superficie_changeHandler(event:Event):void
+			{
+				this.superficie=this.F3.value;	
+			}
+			
+			protected function update_parcelle_resultHandler(event:SQLEvent):void
+			{
+				
+				popmsg.setMsg("La modification est complète");
+				popmsg.open(this,false);
+				this.parcelle_query.execute();
+				
+			}
+			
+			protected function saveModif_clickHandler(event:MouseEvent):void
+			{
+				if(this.ref=="" || this.cloture=="0" || this.ref_cadastre==""
+					|| this.contact_proprietaire=="")
+				{
+					popmsg.setMsg("Veuillez insérer tous les données");
+					popmsg.open(this,false);	
+				}
+				else
+					this.update_parcelle.execute();	
+			}
+			
+			
 			
 			
 			public function lpad(original:Object, length:int, pad:String):String
@@ -156,8 +148,8 @@
 					<view:contacts id="ctcPro" width="585" height="340" query_type="parcelles" /> 
 					<s:VGroup>
 						<s:Label text="Superficie de la parcelle extérieure (m²) :"/>
-						<s:NumericStepper id="F3" width="100%" stepSize="1" value="{this.superficie}"
-										  change="superficie_changeHandler(event)"/>
+						<s:NumericStepper id="F3"  stepSize="1" value="{this.superficie}"
+										  change="superficie_changeHandler(event)" width="75"/>
 					</s:VGroup>
 					<view:repType2 id="rep" lblQ="La parcelle extérieure est-elle cloturée ?" Q="cloture" 
 								   fnct="{this.editModif}"    val="{this.cloture}"/>

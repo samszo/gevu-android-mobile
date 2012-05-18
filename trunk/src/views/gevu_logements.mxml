@@ -7,138 +7,7 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import spark.events.TextOperationEvent;
-			
-			public function lpad(original:Object, length:int, pad:String):String
-			{
-				var padded:String = original == null ? "" : original.toString();
-				while (padded.length < length) padded = pad + padded;
-				return padded;
-			}
-			
-			public function toSqlDate(dateVal:Date):String
-			{
-				return dateVal == null ? null : dateVal.fullYear
-					+ "-" + lpad(dateVal.month + 1,2,'0')  // month is zero-based
-					+ "-" + lpad(dateVal.date,2,'0')
-					+ " " + lpad(dateVal.hours,2,'0')
-					+ ":" + lpad(dateVal.minutes,2,'0')
-					+ ":" + lpad(dateVal.seconds,2,'0')
-					;
-			}
-			
-			protected function logement_query_resultHandler(event:SQLEvent):void
-			{
-			 var log_data:Array = this.logement_query.data;
-			 this.ref=log_data[0].ref;
-			 this.num_porte=log_data[0].num_porte;
-			 this.type=log_data[0].type;
-			 
-			 switch(this.type)
-			 {
-				 case "T1":
-				 {
-					 this.reponse_T1.selected=true;
-					 break;
-				 }
 					
-				 case "T2":
-				 {
-					 this.reponse_T2.selected=true;
-					 break;
-				 }
-					 
-				 case "T3":
-				 {
-					 this.reponse_T3.selected=true;
-					 break;
-				 }
-					 
-				 case "T4":
-				 {
-					 this.reponse_T4.selected=true;
-					 break;
-				 }
-					 
-				 case "T5":
-				 {
-					 this.reponse_T5.selected=true;
-					 break;
-				 }
-					 
-				 case "T6":
-				 {
-					 this.reponse_T6.selected=true;
-					 break;
-				 }
-					 
-				 case "T7":
-				 {
-					 this.reponse_T7.selected=true;
-					 break;
-				 }
-					 
-				 case "T8":
-				 {
-					 this.reponse_T8.selected=true;
-					 break;
-				 }
-					 
-				 case "T9":
-				 {
-					 this.reponse_T9.selected=true;
-					 break;
-				 }
-					 
-				 case "T10":
-				 {
-					 this.reponse_T10.selected=true;
-					 break;
-				 }
-				 default:
-				 {
-					 break;
-				 }
-			 }
-			}
-			
-			protected function logement_query_errorHandler(event:SQLErrorEvent):void
-			{
-			var o:Object=event;	
-			}
-			
-			public function editModif(nom:String, val:String) : void {
-				this.type=val;
-			}
-			
-			protected function update_log_resultHandler(event:SQLEvent):void
-			{
-				new log_modif_complete().open(this,false);
-				this.logement_query.execute();
-				
-			}
-			
-			protected function SaveModif_clickHandler(event:MouseEvent):void
-			{
-				if(this.ref=="" || this.num_porte=="" || this.type=="")
-					new log_incomplete_form().open(this,false);
-				else
-				this.update_log.execute();
-				
-			}
-			
-			protected function ref_changeHandler(event:TextOperationEvent):void
-			{
-				this.ref=this.F2.text;
-				
-			}
-			
-			protected function N_changeHandler(event:TextOperationEvent):void
-			{
-				this.num_porte=this.F3.text;
-				
-			}
-			
 		]]>
 	</fx:Script>
 	
@@ -160,39 +29,171 @@
 					  result="update_log_resultHandler(event)"
 					  error="logement_query_errorHandler(event)" />
 		
-		<fx:Component className="log_incomplete_form">
-			<s:SkinnablePopUpContainer x="70" y="300">
-				<s:TitleWindow  close="close()">
-					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
-						<s:Label text="Veuillez inserer tous les donneé"/>
-						<s:Button label="OK" click="close()"/>
-					</s:VGroup>
-				</s:TitleWindow>
-			</s:SkinnablePopUpContainer>
-		</fx:Component>
-		
-		<fx:Component className="log_modif_complete">
-			<s:SkinnablePopUpContainer x="70" y="300">
-				<s:TitleWindow  close="close()">
-					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
-						<s:Label text="Modification est complet"/>
-						<s:Button label="OK" click="close()"/>
-					</s:VGroup>
-				</s:TitleWindow>
-			</s:SkinnablePopUpContainer>
-		</fx:Component>
 	</fx:Declarations>
 	
 	<fx:Script>
 		<![CDATA[
+			import gevu.popup;
+			
+			import spark.events.TextOperationEvent;
+			
 			[Bindable] private var selected_id:int;
 			[Bindable] private var num_porte:String;
 			[Bindable] private var ref:String;
 			[Bindable] private var type:String;
 			[Bindable] private var myDate:Date=new Date();
+			           private var popmsg:popup= new popup();
 			public function set_selected_id(x:int):void{
 				this.selected_id=x;
 			}
+			
+			
+			
+			public function lpad(original:Object, length:int, pad:String):String
+			{
+				var padded:String = original == null ? "" : original.toString();
+				while (padded.length < length) padded = pad + padded;
+				return padded;
+			}
+			
+			public function toSqlDate(dateVal:Date):String
+			{
+				return dateVal == null ? null : dateVal.fullYear
+					+ "-" + lpad(dateVal.month + 1,2,'0')  // month is zero-based
+					+ "-" + lpad(dateVal.date,2,'0')
+					+ " " + lpad(dateVal.hours,2,'0')
+					+ ":" + lpad(dateVal.minutes,2,'0')
+					+ ":" + lpad(dateVal.seconds,2,'0')
+					;
+			}
+			
+			protected function logement_query_resultHandler(event:SQLEvent):void
+			{
+				var log_data:Array = this.logement_query.data;
+				this.ref=log_data[0].ref;
+				this.num_porte=log_data[0].num_porte;
+				this.type=log_data[0].type;
+				
+				switch(this.type)
+				{
+					case "T1":
+					{
+						this.reponse_T1.selected=true;
+						break;
+					}
+						
+					case "T2":
+					{
+						this.reponse_T2.selected=true;
+						break;
+					}
+						
+					case "T3":
+					{
+						this.reponse_T3.selected=true;
+						break;
+					}
+						
+					case "T4":
+					{
+						this.reponse_T4.selected=true;
+						break;
+					}
+						
+					case "T5":
+					{
+						this.reponse_T5.selected=true;
+						break;
+					}
+						
+					case "T6":
+					{
+						this.reponse_T6.selected=true;
+						break;
+					}
+						
+					case "T7":
+					{
+						this.reponse_T7.selected=true;
+						break;
+					}
+						
+					case "T8":
+					{
+						this.reponse_T8.selected=true;
+						break;
+					}
+						
+					case "T9":
+					{
+						this.reponse_T9.selected=true;
+						break;
+					}
+						
+					case "T10":
+					{
+						this.reponse_T10.selected=true;
+						break;
+					}
+					default:
+					{
+						break;
+					}
+				}
+			}
+			
+			protected function logement_query_errorHandler(event:SQLErrorEvent):void
+			{
+				var o:Object=event;	
+			}
+			
+			public function editModif(nom:String, val:String) : void {
+				this.type=val;
+			}
+			
+			protected function update_log_resultHandler(event:SQLEvent):void
+			{
+				popmsg.setMsg("La modification est complète");
+				popmsg.open(this,false);
+				this.logement_query.execute();
+				
+			}
+			
+			protected function SaveModif_clickHandler(event:MouseEvent):void
+			{
+				if(this.ref=="" || this.num_porte=="" || this.type=="")
+				{
+					popmsg.setMsg("Veuillez insérer tous les données");
+					popmsg.open(this,false);
+				}
+				else
+					this.update_log.execute();
+				
+			}
+			
+			protected function ref_changeHandler(event:TextOperationEvent):void
+			{
+				this.ref=this.F2.text;
+				
+			}
+			
+			protected function N_changeHandler(event:TextOperationEvent):void
+			{
+				this.num_porte=this.F3.text;
+				
+			}
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 		]]>
 	</fx:Script>
 	<s:Panel   title="Logement"

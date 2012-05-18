@@ -15,38 +15,17 @@
 					  result="update_query_resultHandler(event)"
 					  error="update_query_errorHandler(event)"/>
 		
-		<fx:Component className="gro_incomplete_form">
-			<s:SkinnablePopUpContainer x="70" y="300">
-				<s:TitleWindow  close="close()">
-					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
-						<s:Label text="Veuillez inserer tous les donneé"/>
-						<s:Button label="OK" click="close()"/>
-					</s:VGroup>
-				</s:TitleWindow>
-			</s:SkinnablePopUpContainer>
-		</fx:Component>
-		
-		<fx:Component className="gro_modif_complete">
-			<s:SkinnablePopUpContainer x="70" y="300">
-				<s:TitleWindow  close="close()">
-					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
-						<s:Label text="Modification est complet"/>
-						<s:Button label="OK" click="close()"/>
-					</s:VGroup>
-				</s:TitleWindow>
-			</s:SkinnablePopUpContainer>
-		</fx:Component>
-		
-		
 	</fx:Declarations>
 	
 	<fx:Script>
 		<![CDATA[
+			import gevu.popup;
+			
 			import spark.events.TextOperationEvent;
 			[Bindable] private var selected_id:int;
 			[Bindable] private var ref:String;
 			[Bindable] public var reponse:String;
-			
+			           private var popmsg:popup = new popup();
 			
 			public function set_selected_id(x:int):void{
 				this.selected_id=x;
@@ -72,7 +51,10 @@
 			protected function SaveModif_clickHandler(event:MouseEvent):void
 			  {
 			  if(this.ref=="" || this.rep.val=="0")
-					new gro_incomplete_form().open(this,false);
+			  { 
+				  popmsg.setMsg("Veuillez insérer tous les données");
+				  popmsg.open(this,false);
+			  }
 			  else 
 				this.update_query.execute();
 				
@@ -80,7 +62,8 @@
 			
 			protected function update_query_resultHandler(event:SQLEvent):void
 			{
-				new gro_modif_complete().open(this,false);
+				popmsg.setMsg("La modification est complète");
+				popmsg.open(this,false);
 				this.get_ref.execute();
 			}
 			

@@ -4,19 +4,20 @@
 		 xmlns:tr="com.sparkTree.*"
 		 xmlns:mx="library://ns.adobe.com/flex/halo"
 		 xmlns:sqlite="com.peterelst.air.sqlite.*"
-		 width="100%" height="100%" itemIdentifyField="@id" allowItemDisSelection="false"
+		 width="100%" height="100%" itemIdentifyField="@idLieu" allowItemDisSelection="false"
 		 useVirtualLayout="false" dragEnabled="false" dropEnabled="false" labelField="@label"
 		 click="tree_clickHandler(event)"
+		 creationComplete="init_tree()"
 		 >
 	
 	<fx:Declarations>
 	<s:XMLListCollection id="TreeData">
 		</s:XMLListCollection>
 		<fx:XMLList id="xmlist">
-			
+			<node label="univers" idLieu="1" lieu_parent="-1"/>
 		</fx:XMLList>
 		
-		<sqlite:SQLite id="db" file="gevu_mobile.db" open="this.tree_query.execute();"/>
+		<sqlite:SQLite id="db" file="gevu_mobile.db"/>
 		<sqlite:Query id="tree_query" connection="{db.connection}" 
 					  sql="SELECT node.niv,node.lib, node.id_lieu, node.lieu_parent,node.lft,node.rgt
 					  FROM gevu_lieux AS node,
@@ -136,6 +137,11 @@
 					  result="insert_lieu_resultHandler(event)"/>
 		<!-- ********************************************************* -->
 		
+		<sqlite:Query id="last_inserted_id" connection="{db.connection}"
+					  sql="select max(id_lieu) as max from gevu_lieux"
+					  result="last_inserted_id_resultHandler(event)"
+					  error="query_errorHandler(event)"/>
+		
 		<sqlite:Query id="deleting" connection="{db.connection}"
 					  sql="DELETE FROM gevu_lieux WHERE lft BETWEEN {this.selected_lft} AND {this.selected_rgt}"
 					  error="query_errorHandler(event)"
@@ -156,6 +162,7 @@
 		<!-- ********************************************************* -->
 		
 		<s:ArrayCollection id="testData" />
+		
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
@@ -211,6 +218,8 @@
 			[Bindable] public var geo_adresse:String;
 			[Bindable] public var geo_lat:Number ;
 			[Bindable] public var geo_lng:Number;
+			          private var last_id:int; 
+			           
 			
 			public function lpad(original:Object, length:int, pad:String):String
 			{
@@ -237,47 +246,40 @@
 			public function set_lib(lib:String):void{
 				this.nom_lieu=lib;
 			}
+			
+			public function init_tree():void{
+				TreeData = new XMLListCollection(xmlist);
+                this.dataProvider=TreeData;
+				this.tree_query.execute();
+			}
 			/* 
 			 * This function is responsible for
              * Building the tree			
              */	
 			private function onSelectResult():void {
-				var xml:XML;
-				var temp:XML;
-				var tempString:String;
-				var tempInt:int;
-				var parent_id:int;
-				var niv:int;
-				var XmlList:XMLList;
-				if	(tree_query.data != null)
-				{	
-					var res:ArrayCollection=new ArrayCollection(tree_query.data);
-					
-					xml = new XML(<{res.getItemAt(0).id_lieu} label={res.getItemAt(0).lib} id={res.getItemAt(0).id_lieu}/>);
-					for(var i:int=1;i<res.length;i++)
-					{
-					parent_id=res.getItemAt(i).lieu_parent;	
-					temp=xml.descendants(parent_id)[0];
-					 if (temp!=null)
-					    temp.appendChild(<{res.getItemAt(i).id_lieu} label={res.getItemAt(i).lib} id={res.getItemAt(i).id_lieu}/>);
-					 else
-						xml.appendChild(<{res.getItemAt(i).id_lieu} label={res.getItemAt(i).lib} id={res.getItemAt(i).id_lieu}/>); 
-					}//for loop
-					XmlList = new XMLList(xml);
-					this.TreeData = new XMLListCollection(XmlList);
-					this.dataProvider=TreeData;
-					
-					//this.xmlist.appendChild(data.*);
-				}//not null
-			}
+				var xml_nodes:XMLList;
+				var x:XML;
+				var nodes:ArrayCollection = new ArrayCollection(this.tree_query.data);
+				var idnoeud:int;	
+				for (var i:int=1;i<nodes.length;i++)
+				{
+				idnoeud=nodes.getItemAt(i).lieu_parent;	
+				x=xmlist.descendants().(@idLieu==idnoeud)[0];
+				if(x!=null)
+					x.appendChild(<node label={nodes.getItemAt(i).lib} idLieu={nodes.getItemAt(i).id_lieu} lieu_parent={idnoeud}/>);
+				else
+					xmlist.appendChild(<node label={nodes.getItemAt(i).lib} idLieu={nodes.getItemAt(i).id_lieu} lieu_parent={idnoeud}/>);
+				}
 			
+		   }
 			
             
 			protected function tree_clickHandler(event:MouseEvent):void
 			{
 			 this.treeItem= event.currentTarget.selectedItem as TreeItem;
-			 this.selected_id=this.treeItem.source.@id;
+			 this.selected_id=this.treeItem.source.@idLieu;
 			 this.nom_lieu=this.treeItem.source.@label;
+			 FlexGlobals.topLevelApplication.nom_lieu.text=this.nom_lieu;
 			 if(this.selected_id != 1) {
 			 form_query.execute();
 			 geo_query.execute();
@@ -442,14 +444,8 @@
 			
 			
 			public function add_lieu():void{
-			/*
-			 var i:int=0;	
-			 var temp :XML;
-			 temp = new XML(<{i} label={this.new_nom_lieu} id={i}/>);
-			 this.treeItem.source.appendChild(temp);
-			 this.expandItem(this.treeItem);
-			*/
 			
+			 
 				if (this.selected_rgt != this.selected_lft +1)
 				{	
 					//this.db.connection.begin();
@@ -468,22 +464,20 @@
 					this.insert_no_child.execute();
 					
 				}//not parent
-				this.tree_query.execute();
-				this.finished=true;
+				
 			}
 			
 			public function delete_lieu():void{
-			 //this.db.connection.begin();	
+			
+			 var node:TreeItem = this.selectedItem;
+			 node.branch.removeItem(node);
 			 this.deleting.execute();
 			 this.deleting_update_1.execute();
 			 this.deleting_update_2.execute();
-			 this.tree_query.execute();
-			 this.finished=true;
+			 
 			}
 			
-			public function onerror(e:SQLErrorEvent):void{
-             trace(e.error);				
-			}
+			
 			
 			
 			
@@ -521,7 +515,6 @@
 			protected function update_lib_resultHandler(event:SQLEvent):void
 			{
 			this.tree_query.execute();
-			this.finished=true;
 				
 			}
 			
@@ -553,7 +546,21 @@
 			protected function insert_lieu_resultHandler(event:SQLEvent):void
 			{
 				this.add_geo.execute();
-				
+			    this.last_inserted_id.execute();	
+			}
+			
+			
+			
+			protected function last_inserted_id_resultHandler(event:SQLEvent):void
+			{
+				var data_id:Array= this.last_inserted_id.data;
+				this.last_id=data_id[0].max;
+			    var i:int;
+				var temp :XML
+				temp = this.dataProvider.getItemAt(0).source.descendants().(@idLieu == this.selected_id)[0];
+				temp.appendChild(<node label={this.new_nom_lieu} idLieu={this.last_id} lieu_parent={this.selected_id}/>);
+				this.expandItem(this.treeItem);
+				 	
 			}
 			
 		]]>	

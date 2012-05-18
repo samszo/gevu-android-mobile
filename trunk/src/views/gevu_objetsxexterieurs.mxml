@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" 
-		xmlns:view="views.*">
+		xmlns:view="views.*"
+		xmlns:sqlite="com.peterelst.air.sqlite.*">
+	
+	<fx:Declarations>
+		<sqlite:SQLite id="db" file="gevu_mobile.db"/>
+		<sqlite:Query/>
+			
+		
+	</fx:Declarations>	
 	<fx:Script>
 		<![CDATA[
 			[Bindable] private var selected_id:int;
+			[Bindable] private var ref:String;
+			
 			public function set_selected_id(x:int):void{
 				this.selected_id=x;
 			}
