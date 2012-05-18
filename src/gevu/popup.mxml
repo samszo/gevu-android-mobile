@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- containers\spark\myComponents\MyAlertPopUp.mxml -->
+<s:SkinnablePopUpContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+						   xmlns:s="library://ns.adobe.com/flex/spark" 
+						   xmlns:mx="library://ns.adobe.com/flex/mx" width="600" height="600"
+						   creationComplete="creationCompleteHandler(event)">
+	
+	<fx:Script>
+		<![CDATA[
+			import flash.sampler.NewObjectSample;
+			
+			import mx.events.FlexEvent;
+			private var textmsg:String;
+		    
+			public function setMsg(x:String):void{
+				if(this.msg!=null) 
+				  this.msg.text=x;
+				else
+			      this.textmsg=x;
+			}
+		protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				this.msg.text=this.textmsg;
+				
+			}
+			
+		]]>
+	</fx:Script>
+	
+	
+	<s:TitleWindow  title="Attention">
+		<s:VGroup horizontalAlign="center"  width="100%">
+			<s:Label id="msg" />
+			<s:Button label="OK" click="close()"/>
+		</s:VGroup>
+	</s:TitleWindow>
+	
+	
+</s:SkinnablePopUpContainer>

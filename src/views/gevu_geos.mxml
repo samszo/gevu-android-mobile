@@ -21,21 +21,19 @@
 		
 		<s:HGroup width="100%">
 			<s:Label text="adresse" />
-			<s:TextInput id="F01"  text="{this.adresse}"/>
+			<s:Scroller>
+			<s:Group>	
+			  <s:TextArea id="F01"  text="{this.adresse}" width="150"/>
+			</s:Group>	
+			</s:Scroller>	
 		</s:HGroup>
 		<s:HGroup width="100%">
 			<s:Label text="lat."/>
-			<s:NumericStepper id="F02" 
-							  minimum="-90" maximum="90"
-							  stepSize="0.000001"
-							  value="{this.lat}"/>	
+			<s:TextInput id="F02"  text="{this.lat}" width="100"/>	
 		</s:HGroup>	
 		<s:HGroup>
-			<s:Label text="long." />
-			<s:NumericStepper id="F03" 
-							  minimum="-180" maximum="180"
-							  stepSize="0.000001"
-							  value="{this.lng}"/>
+			<s:Label text="lng." />
+			<s:TextInput id="F03" text="{this.lng}" width="100"/>
 		</s:HGroup>
 	</s:VGroup>
 </s:View>

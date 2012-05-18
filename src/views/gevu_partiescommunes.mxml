@@ -5,8 +5,42 @@
 		xmlns:sqlite="com.peterelst.air.sqlite.*"
 		creationComplete="this.coummunes_query.execute();">
 	
+	<fx:Declarations>
+		<sqlite:SQLite id="db" file="gevu_mobile.db" />
+		<sqlite:Query  id="coummunes_query" connection="{db.connection}"
+					   sql="select ref from gevu_partiescommunes
+					   where id_lieu={this.selected_id}" 
+					   result="coummunes_query_resultHandler(event)"
+					   error="coummunes_query_errorHandler(event)" />
+		
+		<sqlite:Query id="update_coumune" connection="{db.connection}"
+					  sql="update gevu_partiescommunes set 
+					  ref='{this.ref}',
+					  maj=strftime('%J','{this.toSqlDate(myDate)}')"
+					  error="coummunes_query_errorHandler(event)"
+					  result="update_coumune_resultHandler(event)"/>
+		
+		
+		
+	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
+			import gevu.popup;
+			[Bindable] private var selected_id:int;
+			[Bindable] private var ref:String;
+			[Bindable] private var myDate:Date= new Date();
+			           private var popmsg:popup=new popup(); 
+			public function set_selected_id(x:int):void{
+				this.selected_id=x;
+			}
+			
+			
+			protected function coummunes_query_errorHandler(event:SQLErrorEvent):void
+			{
+				var o:Object=event;
+				
+			}
+			
 			import spark.events.TextOperationEvent;
 			protected function coummunes_query_resultHandler(event:SQLEvent):void
 			{
@@ -41,77 +75,24 @@
 			
 			protected function update_coumune_resultHandler(event:SQLEvent):void
 			{
-				new com_modif_complete().open(this,false);
-			this.coummunes_query.execute();
+				popmsg.setMsg("La modification est complète");
+				popmsg.open(this,false);
+				this.coummunes_query.execute();
 			}
 			
 			protected function SaveModif_clickHandler(event:MouseEvent):void
 			{
 				if(this.ref=="")
-					new com_incomplete_form().open(this,false);
+				{
+					popmsg.setMsg("Veuillez insérer tous les données");
+					popmsg.open(this,false);
+
+				}
 				else
-				 this.update_coumune.execute();
+					this.update_coumune.execute();
 				
 			}
 			
-		]]>
-	</fx:Script>
-	
-	
-	<fx:Declarations>
-		<sqlite:SQLite id="db" file="gevu_mobile.db" />
-		<sqlite:Query  id="coummunes_query" connection="{db.connection}"
-					   sql="select ref from gevu_partiescommunes
-					   where id_lieu={this.selected_id}" 
-					   result="coummunes_query_resultHandler(event)"
-					   error="coummunes_query_errorHandler(event)" />
-		
-		<sqlite:Query id="update_coumune" connection="{db.connection}"
-					  sql="update gevu_partiescommunes set 
-					  ref='{this.ref}',
-					  maj=strftime('%J','{this.toSqlDate(myDate)}')"
-					  error="coummunes_query_errorHandler(event)"
-					  result="update_coumune_resultHandler(event)"/>
-		
-		<fx:Component className="com_incomplete_form">
-			<s:SkinnablePopUpContainer x="70" y="300">
-				<s:TitleWindow  close="close()">
-					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
-						<s:Label text="Veuillez inserer tous les donneé"/>
-						<s:Button label="OK" click="close()"/>
-					</s:VGroup>
-				</s:TitleWindow>
-			</s:SkinnablePopUpContainer>
-		</fx:Component>
-		
-		<fx:Component className="com_modif_complete">
-			<s:SkinnablePopUpContainer x="70" y="300">
-				<s:TitleWindow  close="close()">
-					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
-						<s:Label text="Modification est complet"/>
-						<s:Button label="OK" click="close()"/>
-					</s:VGroup>
-				</s:TitleWindow>
-			</s:SkinnablePopUpContainer>
-		</fx:Component>
-		
-		
-	</fx:Declarations>
-	<fx:Script>
-		<![CDATA[
-			[Bindable] private var selected_id:int;
-			[Bindable] private var ref:String;
-			[Bindable] private var myDate:Date= new Date();
-			public function set_selected_id(x:int):void{
-				this.selected_id=x;
-			}
-			
-			
-			protected function coummunes_query_errorHandler(event:SQLErrorEvent):void
-			{
-				var o:Object=event;
-				
-			}
 		]]>
 	</fx:Script>
 <s:Panel  title="Parties Communes" width="100%" height="100%"

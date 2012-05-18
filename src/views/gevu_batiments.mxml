@@ -52,35 +52,12 @@
 					  where id_lieu={this.selected_id}"
 					  result="update_batiment_resultHandler(event)"
 					  error="get_data_errorHandler(event)"/>
-		
-		<fx:Component className="Incomplete_form">
-			<s:SkinnablePopUpContainer x="70" y="300">
-				<s:TitleWindow  close="close()">
-					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
-						<s:Label text="Veuillez inserer tous les donneé"/>
-						<s:Button label="OK" click="close()"/>
-					</s:VGroup>
-				</s:TitleWindow>
-			</s:SkinnablePopUpContainer>
-		</fx:Component>
-		
-		<fx:Component className="Modif_complete">
-			<s:SkinnablePopUpContainer x="70" y="300">
-				<s:TitleWindow  close="close()">
-					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
-						<s:Label text="Modification est complet"/>
-						<s:Button label="OK" click="close()"/>
-					</s:VGroup>
-				</s:TitleWindow>
-			</s:SkinnablePopUpContainer>
-		</fx:Component>
-		
-		
-		
 	</fx:Declarations>
 	<fx:Script>
 		
 		<![CDATA[
+			import gevu.popup;
+			
 			import mx.collections.ArrayCollection;
 			
 			import spark.events.TextOperationEvent;
@@ -110,6 +87,7 @@
 			[Bindable] private var date_achevement:Date=new Date();
 			[Bindable] private var date_depot:Date=new Date();
 			[Bindable] private var date_rehab:Date=new Date();
+		               private var popmsg:popup=new popup();
 			
 			public function lpad(original:Object, length:int, pad:String):String
 			{
@@ -153,30 +131,16 @@
 				this.F13.value=data.getItemAt(0).superficie_batiment;
 				this.superficie_batiment=data.getItemAt(0).superficie_batiment;
 				
-				/*
-				this.F14.text=data.getItemAt(0).date_achevement;
-				this.F15.text=data.getItemAt(0).date_depot_permis;
-				this.F16.text=data.getItemAt(0).date_reha;
-				*/
-				
 				this.reponse1=data.getItemAt(0).reponse_1;
-				
-				
 				this.reponse2=data.getItemAt(0).reponse_2;
-				
 				
 				this.reponse3=data.getItemAt(0).reponse_3;
 				
-				
 				this.reponse4=data.getItemAt(0).reponse_4;
-				
-				
 				this.reponse5=data.getItemAt(0).reponse_5;
 				
 				
 				this.reponse6=data.getItemAt(0).reponse_6;
-				
-				
 				this.F23.value=data.getItemAt(0).reponse_7;
 				this.reponse7=data.getItemAt(0).reponse_7;
 				
@@ -319,7 +283,8 @@
 			
 			protected function update_batiment_resultHandler(event:SQLEvent):void
 			{ 
-				new Modif_complete().open(this,false);
+				popmsg.setMsg("La modification est complète");
+				popmsg.open(this,false);
 				this.get_data.execute();
 			}
 			
@@ -339,7 +304,11 @@
 					this.rep_6.val=="0" ||
 					this.rep_13.val=="0" ||
 					this.rep_14.val=="0" )
-					new Incomplete_form().open(this,false);
+				{
+					popmsg.setMsg("Veuillez insérer tous les données");
+					popmsg.open(this,false);
+					 	
+				}
 				else {
 					this.update_batiment.execute();
 				}
