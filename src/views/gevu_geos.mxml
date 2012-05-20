@@ -23,17 +23,17 @@
 			<s:Label text="adresse" />
 			<s:Scroller>
 			<s:Group>	
-			  <s:TextArea id="F01"  text="{this.adresse}" width="150"/>
+			  <s:TextArea id="F01"  text="{this.adresse}" width="250"/>
 			</s:Group>	
 			</s:Scroller>	
 		</s:HGroup>
 		<s:HGroup width="100%">
-			<s:Label text="lat."/>
-			<s:TextInput id="F02"  text="{this.lat}" width="100"/>	
+			<s:Label text="lat." width="55"/>
+			<s:TextInput id="F02"  text="{this.lat}" width="175"/>	
 		</s:HGroup>	
 		<s:HGroup>
-			<s:Label text="lng." />
-			<s:TextInput id="F03" text="{this.lng}" width="100"/>
+			<s:Label text="lng." width="55"/>
+			<s:TextInput id="F03" text="{this.lng}" width="175"/>
 		</s:HGroup>
 	</s:VGroup>
 </s:View>

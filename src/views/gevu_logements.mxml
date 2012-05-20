@@ -199,7 +199,7 @@
 	<s:Panel   title="Logement"
 			   width="100%" height="100%" 
 			   >
-		<s:VGroup>
+		<s:VGroup paddingLeft="13">
 			
 			<s:HGroup width="100%">
 				<s:Label text="Identifiant du logement :" />
@@ -224,7 +224,7 @@
 				<s:RadioButton groupName="type" id="reponse_T9" label="T9" color="0x323232"   change="editModif('type', RadioButton(event.target).label)" />
 				<s:RadioButton groupName="type" id="reponse_T10" label="T10" color="0x323232" change="editModif('type', RadioButton(event.target).label)" />
 			</s:HGroup>
-			<s:Button id="SaveModif" label="Enregistrer les modifications" click="SaveModif_clickHandler(event)"/>
+			<s:Button x="13" id="SaveModif" label="Enregistrer les modifications" click="SaveModif_clickHandler(event)"/>
 			
 		</s:VGroup>
 		
