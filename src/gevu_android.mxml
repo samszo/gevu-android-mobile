@@ -50,6 +50,7 @@
 			this.add.visible=true;
 			this.edit.visible=false;
 			this.back.visible=true;
+			this.nom_lieu.text="";
 		    viewstack.selectedIndex = 1
 			}
 			
