@@ -6,7 +6,8 @@
 			   xmlns:sqlite="com.peterelst.air.sqlite.*" 
 			   xmlns:gevu="gevu.*"
 			   xmlns:view="views.*"
-			   creationComplete="init_tree()">
+			   xmlns:f4cb="com.oreilly.f4cb.*"
+			   >
 	<fx:Style>
 		@namespace s "library://ns.adobe.com/flex/spark";
 		@namespace mx "library://ns.adobe.com/flex/mx";
@@ -42,6 +43,31 @@
 			
 			private var popmsg:popup = new popup();
 			private var	delpopup:delPopup = new delPopup();
+		
+			private function PrepareAdd():void
+				
+			{
+			this.add.visible=true;
+			this.edit.visible=false;
+			this.back.visible=true;
+		    viewstack.selectedIndex = 1
+			}
+			
+			private function show_tree_clickHandler(event:MouseEvent):void
+			{
+			 this.back.visible=false;
+			 viewstack.selectedIndex = 0;
+			}
+			
+			private function PrepareEdit():void
+				
+			{
+				this.nom_lieu.text=this.mytree.get_lib();
+				this.add.visible=false;
+				this.edit.visible=true;
+				this.back.visible=true;
+				viewstack.selectedIndex = 1
+			}
 			
 			protected function delete_clickHandler(event:MouseEvent):void
 			{
@@ -50,7 +76,7 @@
 					popmsg.open(this,false);
 				}
 				else {
-				
+					
 					delpopup.fnct=mytree.delete_lieu;
 					delpopup.open(this,false);
 				}
@@ -72,31 +98,12 @@
 					else {		 
 						this.mytree.new_nom_lieu=this.nom_lieu.text;
 						this.mytree.get_lieu_info_add.execute();
-						this.nom_lieu.text='';
-						this.nom_lieu.visible=false;
-						this.add.visible=false;
-						this.lab.visible=false;
+						
 					}
 				}
 			}
 			
-			protected function prepare_add_clickHandler(event:MouseEvent):void
-			{
-				this.nom_lieu.text="";
-				this.edit.visible=false;
-				this.nom_lieu.visible=true;
-				this.add.visible=true;
-				this.lab.visible=true;
-			}
 			
-			protected function prepare_edit_button_clickHandler(event:MouseEvent):void
-			{
-				this.nom_lieu.text=this.mytree.get_lib();
-				this.nom_lieu.visible=true;
-				this.edit.visible=true;
-				this.add.visible=false;
-				this.lab.visible=true;
-			}
 			
 			private function get_lib():String{
 				var lib:String= this.mytree.get_lib();
@@ -118,9 +125,6 @@
 					else {
 						this.mytree.set_lib(this.nom_lieu.text);
 						this.mytree.edit();
-						this.nom_lieu.visible=false;
-						this.edit.visible=false;
-						this.lab.visible=false;
 					}
 				}
 			}
@@ -130,6 +134,8 @@
 				this.mytree.setStyle("horizontalScrollPolicy",ScrollPolicy.ON)	
 			}
 			
+			
+			
 		]]>
 	</fx:Script>
 	<s:layout>
@@ -137,34 +143,40 @@
 	</s:layout>
 	<s:VGroup id="left_interface" paddingLeft="13" paddingTop="13">
 		<s:HGroup>
-			
-			<s:Button id="add_button" click="prepare_add_clickHandler(event)"/>
+			<s:Image id="back" visible="false" source="@Embed('assets/back.gif')" click="show_tree_clickHandler(event)"/>
+			<s:Button id="add_button" click="PrepareAdd()" />
+			<s:Button id="edit_button" click="PrepareEdit()"/>
 			<s:Button id="delete_button" label="Suprimmer ce lieu"
 					  click="delete_clickHandler(event)"/>
-			<s:Button id="edit_button" click="prepare_edit_button_clickHandler(event)"/>
+			
 		</s:HGroup>
-		<gevu:arbre  id="mytree" width="300" height="300"/>
 		
-		
+		<f4cb:CustomViewStack id="viewstack" width="300" height="300"
+					skinClass="com.oreilly.f4cb.CustomBorderSkin">
+			
+			<gevu:arbre  id="mytree" width="300" height="300"/>
+			<s:VGroup paddingLeft="13" paddingTop="13">
+						
+				<s:Label id="lab" text="Veuillez-écriver le nom: " fontSize="15"/>
+				
+					<s:TextInput id="nom_lieu" width="150"  height="30"/>
+				<s:HGroup>
+					<s:Button id="add"  label="Enrigistrer" click="add_clickHandler(event)" 
+							  fontSize="10" width="75" height="25"
+							  />
+					
+					
+					<s:Button id="edit"  label="Modifier" click="edit_clickHandler(event)" 
+							  fontSize="10" width="75" height="25"
+							  />
+				</s:HGroup>
+			</s:VGroup>
+		 	
+		</f4cb:CustomViewStack>
 		
 		<s:VGroup id="arbre">
 		</s:VGroup>
 		
-		<s:Label id="lab" text="Veuillez-écriver le nom: " visible="false" fontSize="15"/>
-		<s:HGroup>
-			<s:TextInput id="nom_lieu" width="150" visible="false" height="30"
-						 />
-			<s:Button id="add" visible="false" label="Enrigistrer" click="add_clickHandler(event)" 
-					  fontSize="10" width="75" height="25"
-					  />
-			
-			
-			<s:Button id="edit" visible="false" label="Modifier" click="edit_clickHandler(event)" 
-					  fontSize="10" width="75" height="25"
-					  />
-		</s:HGroup>
-		
-			
 		
 	</s:VGroup>
 	
@@ -172,8 +184,5 @@
 		<s:VGroup id="main_interface">
 		</s:VGroup>	
 	</s:Scroller>
-		
-		
-		
 	
 </s:Application>

@@ -28,7 +28,7 @@
 			}
 		]]>
 	</fx:Script>
-	<s:BitmapImage source="@Embed('assets/disclosureClosedIcon.png')"/>
+	<s:BitmapImage source="@Embed('assets/AddRecord.png')"/>
 	<!-- SkinParts
 	name=iconDisplay, type=spark.primitives.BitmapImage, required=false
 	name=labelDisplay, type=spark.core.IDisplayText, required=false
