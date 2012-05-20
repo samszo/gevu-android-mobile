@@ -169,6 +169,7 @@
 			import com.sparkTree.TreeDataProvider;
 			import com.sparkTree.TreeEvent;
 			import com.sparkTree.TreeItem;
+			import com.sparkTree.TreeItemCollection;
 			import com.sparkTree.XMLList1;
 			
 			import flash.display.DisplayObject;
@@ -469,7 +470,7 @@
 			
 			public function delete_lieu():void{
 			
-			 var node:TreeItem = this.selectedItem;
+			 var node:TreeItem = this.treeItem;
 			 node.branch.removeItem(node);
 			 this.deleting.execute();
 			 this.deleting_update_1.execute();
@@ -478,14 +479,9 @@
 			}
 			
 			public function edit():void{
-				var temp:XML;
-				temp=this.dataProvider.getItemAt(0).source.descendants().(@idLieu == this.selected_id)[0];
-			   if(temp!=null) 	
-				 temp.@label=this.nom_lieu;
-			   else 
-			   {
-			     xmlist[0].@label=this.nom_lieu;
-			    }
+				var temp:TreeItem;
+			    temp=this.treeItem;
+				temp.source.@label=this.nom_lieu;
 				this.update_lib.execute();
 			}
 			
@@ -519,13 +515,12 @@
 			protected function insert_update_resultHandler(event:SQLEvent):void
 			{
 				
-			
+			var o:Object=event;
 			}
 			
 			protected function update_lib_resultHandler(event:SQLEvent):void
 			{
-			this.tree_query.execute();
-				
+				FlexGlobals.topLevelApplication.viewstack.selectedIndex = 0;
 			}
 			
 			
@@ -563,13 +558,20 @@
 			
 			protected function last_inserted_id_resultHandler(event:SQLEvent):void
 			{
-				var data_id:Array= this.last_inserted_id.data;
+				var data_id:Array= this.last_inserted_id.data; 
+				var temp :XML;
+				var x:XML; 
 				this.last_id=data_id[0].max;
-			    var i:int;
-				var temp :XML
+				x = <node label={this.new_nom_lieu} idLieu={this.last_id} lieu_parent={this.selected_id}/>;
 				temp = this.dataProvider.getItemAt(0).source.descendants().(@idLieu == this.selected_id)[0];
-				temp.appendChild(<node label={this.new_nom_lieu} idLieu={this.last_id} lieu_parent={this.selected_id}/>);
+				if(this.treeItem.hasChildren()==true)
+				{	
+					var node:TreeItem= new TreeItem(this.treeItem.collection,this.treeItem,x,this.last_id);
+					node.branch.addItem(node);
+				}
+				temp.appendChild(x);
 				this.expandItem(this.treeItem);
+				FlexGlobals.topLevelApplication.viewstack.selectedIndex = 0;
 				 	
 			}
 			
