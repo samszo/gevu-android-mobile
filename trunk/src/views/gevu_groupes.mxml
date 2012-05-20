@@ -82,7 +82,7 @@
 		]]>
 	</fx:Script>
 	<s:Panel width="600" height="278" title="Groupe">
-		<s:VGroup >
+		<s:VGroup paddingLeft="13">
 			<view:repType2 id="rep" width="357" height="102" lblQ="Le bâtiment est t-il en ZPPAUP ?"
 						   Q="reponse_1" val="{this.reponse}"  fnct="{this.editModif}" />
 			<s:HGroup height="37">
@@ -90,7 +90,7 @@
 			<s:TextInput id="F2" change="ref_changeHandler(event)" text="{this.ref}"/>
 			</s:HGroup>	
 		</s:VGroup>	
-		<s:Button id="SaveModif" x="0" y="197" label="Enregistrer" click="SaveModif_clickHandler(event)"/>
+		<s:Button id="SaveModif" x="13" y="197" label="Enregistrer" click="SaveModif_clickHandler(event)"/>
 	</s:Panel>
 </s:View>
 

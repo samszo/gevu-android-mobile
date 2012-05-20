@@ -4,7 +4,8 @@
 		xmlns:mx="library://ns.adobe.com/flex/mx"
 		xmlns:view="views.*"
 		xmlns:sqlite="com.peterelst.air.sqlite.*" 
-		creationComplete="this.query_execution()">
+		creationComplete="this.query_execution()"
+		xmlns:f4cb="com.oreilly.f4cb.*">
 	
 	<fx:Declarations>
 		
@@ -123,7 +124,7 @@
 			
 			protected function add_form_clickHandler(event:MouseEvent):void
 			{
-				this.add_contact_form.visible=true;	
+				Conviewstack.selectedIndex = 1;	
 				this.nom_in.text="";
 				this.prenom_in.text="";
 				this.fixe_in.text="";
@@ -238,7 +239,6 @@
 			
 			protected function add_query_resultHandler(event:SQLEvent):void
 			{
-				this.add_contact_form.visible=false;
 				popmsg.setMsg("la modification est complète");
 				popmsg.open(this,false);
 				this.get_last_inserted_id.execute();
@@ -246,6 +246,7 @@
 			
 			protected function reset_table_resultHandler(event:SQLEvent):void
 			{
+				Conviewstack.selectedIndex = 0;
 				this.query_execution();		
 			}
 			
@@ -259,17 +260,37 @@
 		]]>
 	</fx:Script>
 	<s:Panel title="Contacts">
-		<s:VGroup id="viewContact" 
-				  >
+		<s:VGroup id="viewContact" >
 			<s:HGroup>
 				<s:Button   label="Ajouter un contact" click="add_form_clickHandler(event)"/>
 				<s:Button   label="Supprimer un contact" click="delete_clickHandler(event)"/>
 			</s:HGroup>	
 		</s:VGroup>
 		
-		<s:VGroup id="viewContactUnique" x="0" y="55" width="588" height="250" paddingBottom="6"
+		<f4cb:CustomViewStack id="Conviewstack" y="51" width="300" height="300"
+							  skinClass="com.oreilly.f4cb.CustomBorderSkin">
+		
+		<s:DataGrid id="dgContact"  width="100%" height="300"
+					dataProvider="{this.contact_info}" editable="true"
+					gridItemEditorSessionSave="dgContact_gridItemEditorSessionSaveHandler(event)">
+			<s:columns>
+				<s:ArrayCollection>
+					<s:GridColumn dataField="id_contact" visible="false"/>
+					<s:GridColumn headerText="Nom" dataField="nom"/>
+					<s:GridColumn headerText="Prénom" dataField="prenom"/>
+					<s:GridColumn headerText="Fixe" dataField="fixe"/>
+					<s:GridColumn headerText="Mobile" dataField="mobile"/>
+					<s:GridColumn headerText="Fax" dataField="fax"/>
+					<s:GridColumn headerText="Mail" dataField="mail"/>
+				</s:ArrayCollection>
+			</s:columns>
+		</s:DataGrid>
+		
+		
+		<s:VGroup id="viewContactUnique"  width="588" height="250" paddingBottom="6"
 				  paddingLeft="6" paddingRight="6" paddingTop="6">
-			<s:VGroup id="add_contact_form" visible="false">
+			
+			<s:VGroup id="add_contact_form">
 				<s:HGroup>
 					<s:Label text="Nom:"/>
 					<s:TextInput id="nom_in" height="25" width="125"/>
@@ -301,21 +322,7 @@
 				<s:Button label="Enregistrer ce contact" click="save_contact_clickHandler(event)"/>	
 			</s:VGroup>
 			
-		</s:VGroup>	
-		<s:DataGrid id="dgContact" x="0" y="49" width="100%" height="246"
-					dataProvider="{this.contact_info}" editable="true"
-					gridItemEditorSessionSave="dgContact_gridItemEditorSessionSaveHandler(event)">
-			<s:columns>
-				<s:ArrayCollection>
-					<s:GridColumn dataField="id_contact" visible="false"/>
-					<s:GridColumn headerText="Nom" dataField="nom"/>
-					<s:GridColumn headerText="Prénom" dataField="prenom"/>
-					<s:GridColumn headerText="Fixe" dataField="fixe"/>
-					<s:GridColumn headerText="Mobile" dataField="mobile"/>
-					<s:GridColumn headerText="Fax" dataField="fax"/>
-					<s:GridColumn headerText="Mail" dataField="mail"/>
-				</s:ArrayCollection>
-			</s:columns>
-		</s:DataGrid>
+		   </s:VGroup>	
+		</f4cb:CustomViewStack>
 	</s:Panel>
 </s:View>	

@@ -24,7 +24,7 @@
 <s:Panel  title="Objet extérieur"
 		   width="100%" height="100%"
 		   >
-	<s:VGroup width="553" height="266">
+	<s:VGroup width="553" height="266" paddingLeft="13">
 		<s:HGroup width="100%">
 			<s:Label text="ref" />
 			<s:TextInput id="F2" width="50%"  />

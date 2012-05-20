@@ -319,7 +319,7 @@
 	<s:Panel title="Batiment" x="0" y="0" >
 		<s:Scroller height="600">
 			<s:Group> 
-				<s:VGroup>
+				<s:VGroup paddingLeft="13">
 					<s:HGroup width="100%">
 						<s:Label text="Identifiant du bâtiment : " />
 					</s:HGroup>
