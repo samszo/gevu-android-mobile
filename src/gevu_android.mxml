@@ -75,6 +75,7 @@
 				if(mytree.treeItem == null) {
 					popmsg.setMsg("Veuillez séléctioner un lieu");
 					popmsg.open(this,false);
+					
 				}
 				else {
 					
@@ -165,8 +166,6 @@
 					<s:Button id="add"  label="Enrigistrer" click="add_clickHandler(event)" 
 							  fontSize="10" width="75" height="25"
 							  />
-					
-					
 					<s:Button id="edit"  label="Modifier" click="edit_clickHandler(event)" 
 							  fontSize="10" width="75" height="25"
 							  />
