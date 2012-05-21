@@ -103,7 +103,7 @@
 		</s:HGroup>
 		</s:VGroup>
 	    <s:Button id="SaveModif" x="13" y="83" label="Enregistrer les modifications" click="SaveModif_clickHandler(event)"/>
-	    <s:TextInput id="F2" x="242" y="16" width="100" text="{this.ref}" change="ref_changeHandler(event)"/>
+	    <s:TextInput id="F2" x="261" y="10" width="100" text="{this.ref}" change="ref_changeHandler(event)"/>
 	    <s:Label x="13" y="27" text="Identifiant de la parties commune :"/>
 	
 	</s:Panel>

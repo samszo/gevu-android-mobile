@@ -572,7 +572,9 @@
 					var node:TreeItem= new TreeItem(this.treeItem.collection,this.treeItem,x,this.last_id);
 					node.branch.addItem(node);
 				}
+				if(temp!=null){
 				temp.appendChild(x);
+				}
 				this.expandItem(this.treeItem);
 				FlexGlobals.topLevelApplication.viewstack.selectedIndex = 0;
 				 	

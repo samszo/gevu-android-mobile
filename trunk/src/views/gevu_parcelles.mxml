@@ -136,26 +136,32 @@
 	<s:Panel  title="Parcelle" x="0" y="0"  width="600" height="986">
 		<s:Scroller width="100%" height="100%">
 			<s:Group>
-				<s:VGroup paddingLeft="13">
+				<s:VGroup height="741" paddingLeft="13" paddingTop="10">
+					
 					<s:HGroup width="100%">
-						<s:Label text="identifiant" />
-						<s:TextInput id="F2" width="100%" text="{this.ref}" change="ref_changeHandler(event)"/>
+						<s:Label text="identifiant:" width="145"/>
+						<s:TextInput id="F2" width="100" text="{this.ref}" change="ref_changeHandler(event)"/>
 					</s:HGroup>
+					
 					<s:HGroup width="100%">
 						<s:Label text="Référence cadastre : " />
-						<s:TextInput id="F21" width="100%" text="{this.ref_cadastre}" change="ref_cadastre_changeHandler(event)"/>
+						<s:TextInput id="F21" width="100" text="{this.ref_cadastre}" change="ref_cadastre_changeHandler(event)"/>
 					</s:HGroup>
-					<view:contacts id="ctcPro" width="585" height="340" query_type="parcelles" /> 
-					<s:VGroup>
-						<s:Label text="Superficie de la parcelle extérieure (m²) :"/>
-						<s:NumericStepper id="F3"  stepSize="1" value="{this.superficie}"
-										  change="superficie_changeHandler(event)" width="75"/>
-					</s:VGroup>
+					
+					<view:contacts id="ctcPro"  query_type="parcelles" />
+					
+					<s:Label text="Superficie de la parcelle extérieure (m²) :"/>
+					
+					<s:NumericStepper id="F3"  stepSize="1" value="{this.superficie}"
+									  maximum="1000"
+									  change="superficie_changeHandler(event)" width="75"/>
 					<view:repType2 id="rep" lblQ="La parcelle extérieure est-elle cloturée ?" Q="cloture" 
 								   fnct="{this.editModif}"    val="{this.cloture}"/>
-					<s:Button x="13" id="saveModif" label="Enregistrer" click="saveModif_clickHandler(event)"/>
+					<s:Button id="saveModif" label="Enregistrer"
+							  click="saveModif_clickHandler(event)"/>
 					
-				</s:VGroup>
+				   </s:VGroup>
+				
 			</s:Group>
 		</s:Scroller>	
 	</s:Panel>

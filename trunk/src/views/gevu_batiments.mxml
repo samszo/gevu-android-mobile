@@ -319,7 +319,7 @@
 	<s:Panel title="Batiment" x="0" y="0" >
 		<s:Scroller height="600">
 			<s:Group> 
-				<s:VGroup paddingLeft="13">
+				<s:VGroup paddingLeft="13" paddingTop="13">
 					<s:HGroup width="100%">
 						<s:Label text="Identifiant du bâtiment : " />
 					</s:HGroup>
@@ -367,30 +367,30 @@
 					<s:HGroup width="100%">
 						<s:VGroup>
 							<s:Label text="Nombre de niveaux avec RDC : "/>
-							<s:NumericStepper id="F23"  stepSize="1" change="N_S_changeHandler('F23',event)"/>
+							<s:NumericStepper id="F23"  maximum="1000" stepSize="1" change="N_S_changeHandler('F23',event)"/>
 						</s:VGroup>
 						<s:VGroup>
 							<s:Label text="Nombre de niveaux au dessus du RDC : "/>
-							<s:NumericStepper id="F24"  stepSize="1" change="N_S_changeHandler('F24',event)" />
+							<s:NumericStepper id="F24" maximum="1000"  stepSize="1" change="N_S_changeHandler('F24',event)" />
 						</s:VGroup>
 						<s:VGroup>
 							<s:Label text="Nombre de niveaux en dessous du RDC : "/>
-							<s:NumericStepper id="F25" stepSize="1" change="N_S_changeHandler('F25',event)" />
+							<s:NumericStepper id="F25" maximum="1000" stepSize="1" change="N_S_changeHandler('F25',event)" />
 						</s:VGroup>
 					</s:HGroup>		
 					
 					<s:HGroup>
 						<s:VGroup>
 							<s:Label text="Nombre d'entrée(s) principale(s) : "/>
-							<s:NumericStepper id="F26" stepSize="1" change="N_S_changeHandler('F26',event)"/>
+							<s:NumericStepper id="F26" maximum="1000" stepSize="1" change="N_S_changeHandler('F26',event)"/>
 						</s:VGroup>
 						<s:VGroup>
 							<s:Label text="Nombre d'ascenseur(s) : "/>
-							<s:NumericStepper id="F27" stepSize="1" change="N_S_changeHandler('F27',event)"/>
+							<s:NumericStepper id="F27" maximum="1000" stepSize="1" change="N_S_changeHandler('F27',event)"/>
 						</s:VGroup>
 						<s:VGroup>
 							<s:Label text="Nombre d'escalier(s) : "/>
-							<s:NumericStepper id="F28"  stepSize="1" change="N_S_changeHandler('F28',event)"/>
+							<s:NumericStepper id="F28" maximum="1000" stepSize="1" change="N_S_changeHandler('F28',event)"/>
 						</s:VGroup>
 					</s:HGroup>		
 					
