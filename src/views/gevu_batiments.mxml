@@ -87,7 +87,7 @@
 			[Bindable] private var date_achevement:Date=new Date();
 			[Bindable] private var date_depot:Date=new Date();
 			[Bindable] private var date_rehab:Date=new Date();
-		               private var popmsg:popup=new popup();
+			private var popmsg:popup=new popup();
 			
 			public function lpad(original:Object, length:int, pad:String):String
 			{
@@ -307,7 +307,7 @@
 				{
 					popmsg.setMsg("Veuillez insérer tous les données");
 					popmsg.open(this,false);
-					 	
+					
 				}
 				else {
 					this.update_batiment.execute();
@@ -336,18 +336,18 @@
 					<s:HGroup width="100%">
 						<s:VGroup>
 							<s:Label text="Superficie de la parcelle : "/>
-							<s:NumericStepper id="F12" stepSize="1" change="N_S_changeHandler('F12',event)" />
+							<s:NumericStepper id="F12" maximum="1000" stepSize="1" change="N_S_changeHandler('F12',event)" />
 						</s:VGroup>
 						<s:VGroup>
 							<s:Label text="Superficie du bâtiment" />
-							<s:NumericStepper id="F13" stepSize="1" change="N_S_changeHandler('F13',event)"/>
+							<s:NumericStepper id="F13" maximum="1000" stepSize="1" change="N_S_changeHandler('F13',event)"/>
 						</s:VGroup>
 					</s:HGroup>
 					<s:HGroup>
 						<s:VGroup>
 							<s:Label text="Date d'achèvement : " />
 							<DateChoose:SparkDateComponent id="date_ach" skinClass="com.blogspot.visualscripts.SparkDateFieldSkin"
-													change="{this.date_achevement=date_ach.selectedDate}"	   />
+														   change="{this.date_achevement=date_ach.selectedDate}"	   />
 							
 							<s:Label text="Date du dépot de permis" />
 							<DateChoose:SparkDateComponent id="date_depo" skinClass="com.blogspot.visualscripts.SparkDateFieldSkin"

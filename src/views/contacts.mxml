@@ -259,7 +259,7 @@
 			
 		]]>
 	</fx:Script>
-	<s:Panel title="Contacts">
+	<s:Panel left="0" right="245" top="0" bottom="602" title="Contacts">
 		<s:VGroup id="viewContact" >
 			<s:HGroup>
 				<s:Button   label="Ajouter un contact" click="add_form_clickHandler(event)"/>

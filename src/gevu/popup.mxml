@@ -5,7 +5,6 @@
 						   xmlns:mx="library://ns.adobe.com/flex/mx" 
 						   creationComplete="creationCompleteHandler(event)"
 						   x="250" y="300">
-	
 	<fx:Script>
 		<![CDATA[
 			import flash.sampler.NewObjectSample;
