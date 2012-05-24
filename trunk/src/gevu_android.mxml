@@ -41,9 +41,12 @@
 			import mx.events.FlexEvent;
 			import mx.events.PropertyChangeEvent;
 			
+			import views.Upload;
+			
 			private var popmsg:popup = new popup();
 			private var	delpopup:delPopup = new delPopup();
-		
+		    
+			
 			private function PrepareAdd():void
 				
 			{
@@ -138,6 +141,11 @@
 			
 			
 			
+			protected function photo_clickHandler(event:MouseEvent):void
+			{
+			  this.view2.selectedIndex=1;	
+			}
+			
 		]]>
 	</fx:Script>
 	<s:layout>
@@ -150,7 +158,7 @@
 			<s:Button id="edit_button" click="PrepareEdit()"/>
 			<s:Button id="delete_button" label="Suprimmer ce lieu"
 					  click="delete_clickHandler(event)"/>
-			
+			<s:Image id="photo" source="@Embed('assets/cam.gif')" click="photo_clickHandler(event)"/>
 		</s:HGroup>
 		
 		<f4cb:CustomViewStack id="viewstack" width="300" height="300"
@@ -171,18 +179,20 @@
 							  />
 				</s:HGroup>
 			</s:VGroup>
-		 	
 		</f4cb:CustomViewStack>
 		
 		<s:VGroup id="arbre">
 		</s:VGroup>
 		
-		
 	</s:VGroup>
+	<f4cb:CustomViewStack id="view2" width="100%" height="100%">
 	
-	<s:Scroller width="100%" height="100%">
+	<s:Group>	
+	 <s:Scroller width="100%" height="100%">
 		<s:VGroup id="main_interface">
-		</s:VGroup>	
-	</s:Scroller>
-	
+		</s:VGroup>
+	 </s:Scroller>	 
+	</s:Group>
+	<view:Upload/>
+	</f4cb:CustomViewStack>	
 </s:Application>

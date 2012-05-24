@@ -71,7 +71,9 @@
 					  sql="insert into gevu_geos 
 					  (id_instant,id_lieu,lat,lng,zoom_min,zoom_max,adresse,kml,type_carte,id_donnee,maj)
 					  values (0,(SELECT last_insert_rowid() FROM gevu_lieux),
-					  0.0,0.0,0,0,'','','hybird',0,strftime('%J','{this.toSqlDate(myDate)}'))"
+					  {this.lat},
+					  {this.lng},
+					  0,0,'','','hybird',0,strftime('%J','{this.toSqlDate(myDate)}'))"
 					  error="query_errorHandler(event)"/>					 
 					  
 		<sqlite:Query id="get_lieu_info_add" connection="{db.connection}"
@@ -175,6 +177,7 @@
 			import flash.display.DisplayObject;
 			import flash.net.dns.SRVRecord;
 			import flash.sampler.NewObjectSample;
+			import flash.sensors.Geolocation;
 			import flash.utils.getDefinitionByName;
 			
 			import flashx.textLayout.formats.Float;
@@ -220,8 +223,8 @@
 			[Bindable] public var geo_lat:Number ;
 			[Bindable] public var geo_lng:Number;
 			          private var last_id:int; 
-			           
-			
+			[Bindable] private var lat:Number =0.0;
+			[Bindable] private var lng:Number =0.0;
 			public function lpad(original:Object, length:int, pad:String):String
 			{
 				var padded:String = original == null ? "" : original.toString();
@@ -281,6 +284,7 @@
 			 this.selected_id=this.treeItem.source.@idLieu;
 			 this.nom_lieu=this.treeItem.source.@label;
 			 FlexGlobals.topLevelApplication.nom_lieu.text=this.nom_lieu;
+			 FlexGlobals.topLevelApplication.view2.selectedIndex=0;
 			 if(this.selected_id != 1) {
 			 form_query.execute();
 			 geo_query.execute();
@@ -531,12 +535,33 @@
 				FlexGlobals.topLevelApplication.arbre.addElement(instance);
 				}
 			
-			
+			private function get_new_geo():void {
+				var geo:Geolocation;
+				if(Geolocation.isSupported){
+				  geo = new Geolocation();
+				  geo.setRequestedUpdateInterval(100);
+				  geo.addEventListener(StatusEvent.STATUS,onStatus);
+				  geo.addEventListener(GeolocationEvent.UPDATE,onUpdateGeo);
+				 }
+				else {
+					this.add_geo.execute();//there is no suppor for the geoLocalization
+				}
+				
+			}
 
+			private function onUpdateGeo(event:GeolocationEvent):void{
+			 this.lat=event.latitude;
+			 this.lng=event.longitude;
+			 this.add_geo.execute();
+			}
+			
+			private function onStatus(event:StatusEvent):void {
+			trace(event.code);	
+			}
 			
 			protected function insert_lieu_resultHandler(event:SQLEvent):void
 			{
-				this.add_geo.execute();
+				this.get_new_geo();
 			    this.last_inserted_id.execute();	
 			}
 			
