@@ -2,30 +2,49 @@
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" 
 		xmlns:mx="library://ns.adobe.com/flex/mx" 
-		title="Photo Upload">
+		title="Photo Upload" xmlns:f4cb="com.oreilly.f4cb.*">
 	
 	<fx:Script>
 		<![CDATA[
+			import flash.media.Camera;
 			
-		    import flash.media.Camera;
+			import mx.core.FlexGlobals;
+			import mx.graphics.codec.JPEGEncoder;
 			private var urlRequest:URLRequest = new URLRequest("http://www._____.com/upload.php");
 			private var file:File;
 			
 			private function takePicture(event:MouseEvent):void {	
-				var bmd:BitmapData = new BitmapData(240,180);
+				var bmd:BitmapData = new BitmapData(300,180);
 				bmd.draw(myVid);				
+				//create a new instance of the encoder, and set the jpeg compression level from 0 to 100
+				var jpgenc:JPEGEncoder = new JPEGEncoder(80);
+				//encode the bitmapdata object and keep the encoded ByteArray
+				var imgByteArray:ByteArray = jpgenc.encode(bmd);
 				imagen.source = new Bitmap(bmd);
-				this.myVid.visible=false;
-				this.imagen.visible=true;
+				var fl:File = File.applicationStorageDirectory.resolvePath(FlexGlobals.topLevelApplication.nom_lieu.text+".jpg");
+				//Use a FileStream to save the bytearray as bytes to the new file
+				var fs:FileStream = new FileStream();
+				try{
+					//open file in write mode
+					fs.open(fl,FileMode.WRITE);
+					//write bytes from the byte array
+					fs.writeBytes(imgByteArray);
+					//close the file
+					fs.close();
+				}catch(e:Error){
+					trace(e.message);
+				}
+				imageView.selectedIndex=1;
 			}
 			
-			private function initCamera():void {			
+			public  function initCamera():void {			
 				var cam:Camera = Camera.getCamera();
-				var myCam:Video = new Video(320,240);
+				var myCam:Video = new Video(150,150);
 				cam.setMode(320, 240, 15);
 				cam.setQuality(0, 0);
 				myCam.attachCamera(cam);
 				myVid.addChild(myCam);
+				imageView.selectedIndex=0;
 			}
 
 			
@@ -37,7 +56,6 @@
 					trace("camera is supported");
 					var myCam:CameraUI = new CameraUI();
 					myCam.launch(MediaType.IMAGE);
-					myCam.addEventListener(MediaEvent.COMPLETE,selectCompleteHandler);
 				}
 				else
 				{
@@ -45,7 +63,7 @@
 					initCamera();
 				}
 			}
-			
+			/*
 			//select a picture from the camera roll (gallery)
 			protected function uploadGallery_clickHandler(event:MouseEvent):void
 			{
@@ -82,14 +100,19 @@
 			protected function openUploadHandler(event:Event):void
 			{
 				
-			}
+			}*/
 		]]>
 	</fx:Script>
 	
-	<s:VGroup x="21" y="23" width="200" height="200">
+	<s:VGroup x="0" y="0" width="200" height="200">
 		<s:HGroup>
-		<s:VideoDisplay id="myVid" visible="true" width="240" height="180" creationComplete="initCamera()"/>
-		<s:Image  id="imagen" visible="true"/>
+		<f4cb:CustomViewStack id="imageView" width="200" height="200">
+		<s:VGroup>	
+		  <s:VideoDisplay id="myVid"  width="150" height="150" creationComplete="initCamera()"/>
+		  <s:Button label="Engeristerer" click="takePicture(event)"/>	
+		</s:VGroup>	
+		<s:Image  id="imagen" />		
+			</f4cb:CustomViewStack>	
 		</s:HGroup>	
 	</s:VGroup>
 </s:View>
