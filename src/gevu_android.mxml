@@ -143,7 +143,11 @@
 			
 			protected function photo_clickHandler(event:MouseEvent):void
 			{
-			  this.view2.selectedIndex=1;	
+			  this.view2.selectedIndex=1;
+			  if(this.photoPanel.imageView !=null)
+				 this.photoPanel.imageView.selectedIndex=0;
+			   
+				   
 			}
 			
 		]]>
@@ -193,6 +197,6 @@
 		</s:VGroup>
 	 </s:Scroller>	 
 	</s:Group>
-	<view:Upload/>
+	<view:Upload id="photoPanel"/>
 	</f4cb:CustomViewStack>	
 </s:Application>
