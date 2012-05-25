@@ -190,13 +190,10 @@
 		
 	</s:VGroup>
 	<f4cb:CustomViewStack id="view2" width="100%" height="100%">
-	
-		
 	 <s:Scroller width="100%" height="100%">
 		<s:VGroup id="main_interface" paddingLeft="13" paddingTop="13">
 		</s:VGroup>
 	 </s:Scroller>	 
-	
 	<view:Upload id="photoPanel"/>
-	</f4cb:CustomViewStack>	
+  </f4cb:CustomViewStack>	
 </s:Application>
