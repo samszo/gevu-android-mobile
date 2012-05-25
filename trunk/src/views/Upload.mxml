@@ -21,7 +21,7 @@
 				//encode the bitmapdata object and keep the encoded ByteArray
 				var imgByteArray:ByteArray = jpgenc.encode(bmd);
 				imagen.source = new Bitmap(bmd);
-				var fl:File = File.applicationStorageDirectory.resolvePath(FlexGlobals.topLevelApplication.nom_lieu.text+".jpg");
+				var fl:File = File.applicationDirectory.resolvePath(FlexGlobals.topLevelApplication.nom_lieu.text+".jpg");
 				//Use a FileStream to save the bytearray as bytes to the new file
 				var fs:FileStream = new FileStream();
 				try{

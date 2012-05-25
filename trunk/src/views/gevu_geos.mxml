@@ -23,7 +23,7 @@
 			<s:Label text="adresse" />
 			<s:Scroller>
 			<s:Group>	
-			  <s:TextArea id="F01"  text="{this.adresse}" width="250"/>
+			  <s:TextArea id="F01"  text="{this.adresse}" width="240"/>
 			</s:Group>	
 			</s:Scroller>	
 		</s:HGroup>
