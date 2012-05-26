@@ -10,12 +10,14 @@
 			
 			import mx.core.FlexGlobals;
 			import mx.graphics.codec.JPEGEncoder;
+			private var tofH:int = 400;
+			private var tofW:int = 400;
 			[Bindable] private var path:String;
 			[Bindable] private var DateNow:Date;
 			[Bindable] private var FileName:String;
 			           private var trim:RegExp = /[~+%&\\;:"',<>?#\s]/g
 			private function takePicture(event:MouseEvent):void {	
-				var bmd:BitmapData = new BitmapData(300,180);
+				var bmd:BitmapData = new BitmapData(tofH,tofW);
 				bmd.draw(myVid);				
 				//create a new instance of the encoder, and set the jpeg compression level from 0 to 100
 				var jpgenc:JPEGEncoder = new JPEGEncoder(80);
@@ -47,8 +49,8 @@
 			
 			public  function initCamera():void {			
 				var cam:Camera = Camera.getCamera();
-				var myCam:Video = new Video(150,150);
-				cam.setMode(320, 240, 15);
+				var myCam:Video = new Video(tofH,tofW);
+				cam.setMode(tofH,tofW, 15);
 				cam.setQuality(0, 0);
 				myCam.attachCamera(cam);
 				myVid.addChild(myCam);
@@ -112,12 +114,12 @@
 		]]>
 	</fx:Script>
 	
-	<s:VGroup x="0" y="0" width="200" height="200">
+	<s:VGroup x="0" y="0" width="500" height="500">
 		<s:HGroup>
-		<f4cb:CustomViewStack id="imageView" width="200" height="200">
+		<f4cb:CustomViewStack id="imageView" width="500" height="500">
 			
 		<s:VGroup>
-		  <s:VideoDisplay id="myVid"  width="150" height="150" creationComplete="initCamera()"/>
+		  <s:VideoDisplay id="myVid"  width="{tofW}" height="{tofH}" creationComplete="initCamera()"/>
 		  <s:Button label="Enregistrer" click="takePicture(event)"/>	
 		</s:VGroup>	
 		<s:Image  id="imagen" />		
