@@ -10,9 +10,10 @@
 			
 			import mx.core.FlexGlobals;
 			import mx.graphics.codec.JPEGEncoder;
-			private var urlRequest:URLRequest = new URLRequest("http://www._____.com/upload.php");
-			private var file:File;
-			
+			[Bindable] private var path:String;
+			[Bindable] private var DateNow:Date;
+			[Bindable] private var FileName:String;
+			           private var trim:RegExp = /[~+%&\\;:"',<>?#\s]/g
 			private function takePicture(event:MouseEvent):void {	
 				var bmd:BitmapData = new BitmapData(300,180);
 				bmd.draw(myVid);				
@@ -21,7 +22,14 @@
 				//encode the bitmapdata object and keep the encoded ByteArray
 				var imgByteArray:ByteArray = jpgenc.encode(bmd);
 				imagen.source = new Bitmap(bmd);
-				var fl:File = File.applicationDirectory.resolvePath(FlexGlobals.topLevelApplication.nom_lieu.text+".jpg");
+				DateNow=new Date();
+				FileName=DateNow.toString();
+				trace(FileName);
+				FileName=FileName.replace(trim,"");
+				trace(FileName);
+				var fl:File= File.applicationStorageDirectory.resolvePath("galary/"+FlexGlobals.topLevelApplication.nom_lieu.text+"/"+FileName+ ".jpg");
+				this.path=fl.nativePath;
+				trace(this.path);
 				//Use a FileStream to save the bytearray as bytes to the new file
 				var fs:FileStream = new FileStream();
 				try{
@@ -107,9 +115,10 @@
 	<s:VGroup x="0" y="0" width="200" height="200">
 		<s:HGroup>
 		<f4cb:CustomViewStack id="imageView" width="200" height="200">
-		<s:VGroup>	
+			
+		<s:VGroup>
 		  <s:VideoDisplay id="myVid"  width="150" height="150" creationComplete="initCamera()"/>
-		  <s:Button label="Engeristerer" click="takePicture(event)"/>	
+		  <s:Button label="Enregistrer" click="takePicture(event)"/>	
 		</s:VGroup>	
 		<s:Image  id="imagen" />		
 			</f4cb:CustomViewStack>	

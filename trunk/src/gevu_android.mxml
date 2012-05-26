@@ -7,6 +7,7 @@
 			   xmlns:gevu="gevu.*"
 			   xmlns:view="views.*"
 			   xmlns:f4cb="com.oreilly.f4cb.*"
+			   xmlns:galary="galary.*"
 			   >
 	<fx:Style>
 		@namespace s "library://ns.adobe.com/flex/spark";
@@ -46,7 +47,13 @@
 			private var popmsg:popup = new popup();
 			private var	delpopup:delPopup = new delPopup();
 		    
-			
+			protected function galary_clickHandler(event:MouseEvent):void
+			{
+				this.view2.selectedIndex=2;
+				 if(this.myGalary!=null)
+					 this.myGalary.initGalary();
+				
+			}
 			private function PrepareAdd():void
 				
 			{
@@ -163,6 +170,7 @@
 			<s:Button id="delete_button" label="Suprimmer ce lieu"
 					  click="delete_clickHandler(event)"/>
 			<s:Image id="photo" source="@Embed('assets/cam.gif')" click="photo_clickHandler(event)"/>
+			<s:Image id="galary" source="@Embed('assets/galary.gif')" click="galary_clickHandler(event)"/>
 		</s:HGroup>
 		
 		<f4cb:CustomViewStack id="viewstack" width="300" height="300"
@@ -175,7 +183,7 @@
 				
 					<s:TextInput id="nom_lieu" width="150"  height="30"/>
 				<s:HGroup>
-					<s:Button id="add"  label="Enrigistrer" click="add_clickHandler(event)" 
+					<s:Button id="add"  label="Enregistrer" click="add_clickHandler(event)" 
 							  fontSize="10" width="75" height="25"
 							  />
 					<s:Button id="edit"  label="Modifier" click="edit_clickHandler(event)" 
@@ -195,5 +203,6 @@
 		</s:VGroup>
 	 </s:Scroller>	 
 	<view:Upload id="photoPanel"/>
+	<galary:galary id="myGalary"/>	
   </f4cb:CustomViewStack>	
 </s:Application>
