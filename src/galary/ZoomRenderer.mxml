@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				autoDrawBackground="false"
+				depth="0" depth.hovered="1" depth.selected="2"
+				transformX="80" transformY="60"
+				width="160" height="120" xmlns:mx="library://ns.adobe.com/flex/mx" >
+	
+	<fx:Script>
+		<![CDATA[
+			override public function set data(value:Object):void {
+				super.data = value;
+				if (data == null)
+					return;
+				
+				img.source = data.imageURL;
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="hovered" />
+		<s:State name="selected" />
+	</s:states>
+	
+	<!--       The Zoom effect      -->
+	<s:postLayoutTransformOffsets>
+		<s:TransformOffsets id="tOffsets"
+							scaleX="1" scaleY="1"
+							scaleX.hovered="1.5" scaleY.hovered="1.5" 
+							scaleX.selected="1.1" scaleY.selected="1.1" />
+	</s:postLayoutTransformOffsets>
+	
+	<!--       Transitions          -->
+	<s:transitions>
+		<s:Transition toState="hovered" autoReverse="true">
+			<s:Animate target="{tOffsets}" duration="200">
+				<s:SimpleMotionPath property="scaleX" />
+				<s:SimpleMotionPath property="scaleY" />
+			</s:Animate>
+		</s:Transition>
+		<s:Transition fromState="hovered" autoReverse="true">
+			<s:Animate target="{tOffsets}" duration="200">
+				<s:SimpleMotionPath property="scaleX" />
+				<s:SimpleMotionPath property="scaleY" />
+			</s:Animate>
+		</s:Transition>
+	</s:transitions>
+	
+	
+	<s:Rect left="0" right="0" top="0" bottom="0">
+		<s:fill>
+			<s:SolidColor 
+				color.normal="0x808080"
+				color.hovered="{getStyle('rollOverColor')}"    
+				color.selected="{getStyle('selectionColor')}"
+				/>
+		</s:fill>
+	</s:Rect>
+	
+	
+	<s:Image id="img"
+			  verticalAlign="middle" horizontalAlign="center"
+			  left="4" right="4" top="4" bottom="4" />
+	
+</s:ItemRenderer>
