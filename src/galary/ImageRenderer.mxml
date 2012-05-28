@@ -9,6 +9,7 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.core.FlexGlobals;
+			public var xx:int;
 			override public function set data(value:Object):void {
 				super.data = value;
 				if (data == null)
@@ -17,13 +18,6 @@
 				img.source = data.imageURL;
 			}
 			
-			protected function img_clickHandler(event:MouseEvent):void
-			{
-				var im:Image=event.currentTarget as Image;
-				FlexGlobals.topLevelApplication.Preview.source=im.source;
-				FlexGlobals.topLevelApplication.previewPanel.visible=true;
-				
-			}
 			
 		]]>
 	</fx:Script>
@@ -44,7 +38,6 @@
 	</s:Rect>
 	<s:Image id="img"
 			  verticalAlign="middle" horizontalAlign="center"
-			  left="4" right="4" top="4" bottom="4" 
-			  click="img_clickHandler(event)"/>
+			  left="4" right="4" top="4" bottom="4" />
 	
 </s:ItemRenderer>
