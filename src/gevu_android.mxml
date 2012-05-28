@@ -49,6 +49,8 @@
 		    
 			protected function galary_clickHandler(event:MouseEvent):void
 			{
+				this.Preview.source="";
+				this.previewPanel.visible=false;
 				this.view2.selectedIndex=2;
 				 if(this.myGalary!=null)
 					 this.myGalary.initGalary();
@@ -151,6 +153,7 @@
 			protected function photo_clickHandler(event:MouseEvent):void
 			{
 			  this.view2.selectedIndex=1;
+			  this.previewPanel.visible=false;
 			  if(this.photoPanel.imageView !=null)
 				 this.photoPanel.imageView.selectedIndex=0;
 			   
@@ -163,7 +166,7 @@
 		<s:HorizontalLayout/>
 	</s:layout>
 	<s:VGroup id="left_interface" paddingLeft="13" paddingTop="13">
-		<s:HGroup>
+		<s:HGroup gap="25">
 			<s:Image id="back" visible="false" source="@Embed('assets/back.gif')" click="show_tree_clickHandler(event)"/>
 			<s:Button id="add_button" click="PrepareAdd()" />
 			<s:Button id="edit_button" click="PrepareEdit()"/>
@@ -198,11 +201,20 @@
 		
 	</s:VGroup>
 	<f4cb:CustomViewStack id="view2" width="100%" height="100%">
-	 <s:Scroller width="100%" height="100%">
+	 
+	<s:Scroller width="100%" height="100%">
 		<s:VGroup id="main_interface" paddingLeft="13" paddingTop="13">
 		</s:VGroup>
-	 </s:Scroller>	 
+	 </s:Scroller>
+	
 	<view:Upload id="photoPanel"/>
-	<galary:galary id="myGalary"/>	
+	
+	<s:VGroup>	
+	  <s:HGroup id="previewPanel" paddingLeft="110" paddingTop="15" visible="false">	
+	    <s:Image id="Preview"  left="40" top="15"/>
+		<s:Image id="deleteImage" source="@Embed('assets/delete.png')"/> 
+	  </s:HGroup>	 
+	 <galary:galary id="myGalary" /> 
+   </s:VGroup>	
   </f4cb:CustomViewStack>	
 </s:Application>
