@@ -160,6 +160,13 @@
 				   
 			}
 			
+			protected function deleteImage_clickHandler(event:MouseEvent):void
+			{
+				
+				delpopup.fnct=this.myGalary.deleteImage;
+				delpopup.open(this,false);
+			}
+			
 		]]>
 	</fx:Script>
 	<s:layout>
@@ -212,7 +219,7 @@
 	<s:VGroup>	
 	  <s:HGroup id="previewPanel" paddingLeft="110" paddingTop="15" visible="false">	
 	    <s:Image id="Preview"  left="40" top="15"/>
-		<s:Image id="deleteImage" source="@Embed('assets/delete.png')"/> 
+		<s:Image id="deleteImage" source="@Embed('assets/delete.png')" click="deleteImage_clickHandler(event)"/> 
 	  </s:HGroup>	 
 	 <galary:galary id="myGalary" /> 
    </s:VGroup>	

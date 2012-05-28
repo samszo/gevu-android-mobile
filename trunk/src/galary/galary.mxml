@@ -5,9 +5,24 @@
 		>
 	<fx:Script>
 		<![CDATA[
+		import galary.ImageRenderer;
+		
 		import mx.core.FlexGlobals;
-		 public function initGalary():void{
-			 
+		
+		import spark.components.Image;
+		private var url:String;	
+			
+		
+		public function deleteImage():void{
+		var image:File= File.applicationStorageDirectory.resolvePath(url);
+		image.deleteFile();
+		FlexGlobals.topLevelApplication.Preview.source="";
+		FlexGlobals.topLevelApplication.previewPanel.visible=false;
+		
+		initGalary();
+		}
+			
+	public function initGalary():void{
 		 var dir:File=File.applicationStorageDirectory.resolvePath("galary/"+FlexGlobals.topLevelApplication.nom_lieu.text);
 		if(dir.exists)
 		{
@@ -27,9 +42,10 @@
 			
 			protected function lst3_clickHandler(event:MouseEvent):void
 			{
-			 var o:Object=event.currentTarget;
-			 trace(o);
-				
+				this.url = event.currentTarget.selectedItem.imageURL;
+				FlexGlobals.topLevelApplication.Preview.source=url;
+				FlexGlobals.topLevelApplication.previewPanel.visible=true;
+					
 			}
 			
 		]]>
