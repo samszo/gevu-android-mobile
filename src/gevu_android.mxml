@@ -167,20 +167,34 @@
 				delpopup.open(this,false);
 			}
 			
+			protected function gps_clickHandler(event:MouseEvent):void
+			{
+			 this.viewstack.selectedIndex=2;
+			 this.back.visible=true;
+			 this.lat.text=this.mytree.getLat() as String
+			 this.lng.text=this.mytree.getLng() as String;	
+			}
+			
 		]]>
 	</fx:Script>
 	<s:layout>
 		<s:HorizontalLayout/>
 	</s:layout>
 	<s:VGroup id="left_interface" paddingLeft="13" paddingTop="13">
-		<s:HGroup gap="25">
-			<s:Image id="back" visible="false" source="@Embed('assets/back.gif')" click="show_tree_clickHandler(event)"/>
+		<s:HGroup gap="20">
+			<s:Image id="back" visible="false" source="@Embed('assets/back.gif')" click="show_tree_clickHandler(event)"
+					 width="25" height="25"/>
 			<s:Button id="add_button" click="PrepareAdd()" />
 			<s:Button id="edit_button" click="PrepareEdit()"/>
 			<s:Button id="delete_button" label="Suprimmer ce lieu"
 					  click="delete_clickHandler(event)"/>
-			<s:Image id="photo" source="@Embed('assets/cam.gif')" click="photo_clickHandler(event)"/>
-			<s:Image id="galary" source="@Embed('assets/galary.gif')" click="galary_clickHandler(event)"/>
+			<s:Image id="photo" source="@Embed('assets/cam.jpg')" click="photo_clickHandler(event)"
+					 width="25" height="25"/>
+			<s:Image id="galary" source="@Embed('assets/galary.gif')" click="galary_clickHandler(event)"
+					 width="25" height="25" />
+			
+			<s:Image id="gps" source="@Embed('assets/gps.gif')" click="gps_clickHandler(event)"
+			width="25" height="25" />
 		</s:HGroup>
 		
 		<f4cb:CustomViewStack id="viewstack" width="300" height="300"
@@ -201,6 +215,18 @@
 							  />
 				</s:HGroup>
 			</s:VGroup>
+			
+			<s:VGroup paddingLeft="13" paddingTop="13">
+				<s:HGroup width="100%">
+				  <s:Label text="lat." width="55"/>
+				  <s:TextInput id="lat"   width="175"/>	
+		        </s:HGroup>	
+				<s:HGroup>
+					<s:Label text="lng."  width="55"/>
+					<s:TextInput id="lng" width="175"/>
+				</s:HGroup>
+			</s:VGroup>
+			
 		</f4cb:CustomViewStack>
 		
 		<s:VGroup id="arbre">

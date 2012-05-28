@@ -7,7 +7,7 @@
 		 width="100%" height="100%" itemIdentifyField="@idLieu" allowItemDisSelection="false"
 		 useVirtualLayout="false" dragEnabled="false" dropEnabled="false" labelField="@label"
 		 click="tree_clickHandler(event)"
-		 creationComplete="init_tree()"
+		 creationComplete="init_tree();get_new_geo()"
 		 >
 	
 	<fx:Declarations>
@@ -225,6 +225,14 @@
 			          private var last_id:int; 
 			[Bindable] private var lat:Number =0.0;
 			[Bindable] private var lng:Number =0.0;
+			
+			public function getLat():Number{
+				return this.geo_lat;
+			}
+			
+			public function getLng():Number{
+				return this.geo_lng;
+			}
 			public function lpad(original:Object, length:int, pad:String):String
 			{
 				var padded:String = original == null ? "" : original.toString();
@@ -545,7 +553,7 @@
 				  geo.addEventListener(GeolocationEvent.UPDATE,onUpdateGeo);
 				 }
 				else {
-					this.add_geo.execute();//there is no suppor for the geoLocalization
+					trace("Geo Not supported")
 				}
 				
 			}
@@ -553,7 +561,6 @@
 			private function onUpdateGeo(event:GeolocationEvent):void{
 			 this.lat=event.latitude;
 			 this.lng=event.longitude;
-			 this.add_geo.execute();
 			}
 			
 			private function onStatus(event:StatusEvent):void {
@@ -587,6 +594,7 @@
 			
 			protected function last_inserted_id_resultHandler(event:SQLEvent):void
 			{
+				this.add_geo.execute();
 				var data_id:Array= this.last_inserted_id.data; 
 				var temp :XML;
 				var x:XML; 
