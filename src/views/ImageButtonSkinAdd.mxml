@@ -28,7 +28,7 @@
 			}
 		]]>
 	</fx:Script>
-	<s:BitmapImage source="@Embed('assets/AddRecord.png')"/>
+	<s:Image source="@Embed('assets/AddRecord.png')" width="25" height="25"/>
 	<!-- SkinParts
 	name=iconDisplay, type=spark.primitives.BitmapImage, required=false
 	name=labelDisplay, type=spark.core.IDisplayText, required=false
