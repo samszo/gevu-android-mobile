@@ -7,9 +7,10 @@
 		<![CDATA[
 		import mx.core.FlexGlobals;
 		 public function initGalary():void{
+			 
 		 var dir:File=File.applicationStorageDirectory.resolvePath("galary/"+FlexGlobals.topLevelApplication.nom_lieu.text);
-		if(dir.exists) {
-		
+		if(dir.exists)
+		{
 		 var photos:Array=dir.getDirectoryListing();
 		 var path:String;
 		 var pic:File;
@@ -17,12 +18,20 @@
 		  for (var i:int=0; i < photos.length;i++)
 		  {  
 			pic=File.applicationStorageDirectory.resolvePath("galary/"+FlexGlobals.topLevelApplication.nom_lieu.text+"/"+photos[i].name);
-			path=pic.nativePath;
+			path=pic.url;
 			sampleData.addItem({imageURL:path});
 		  }
 		}
 		
 		 }	
+			
+			protected function lst3_clickHandler(event:MouseEvent):void
+			{
+			 var o:Object=event.currentTarget;
+			 trace(o);
+				
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -33,44 +42,18 @@
 		</s:ArrayList>
 	</fx:Declarations>
 	
-	<!--	<s:Label text="Plain Image List"
-				 paddingTop="20" paddingLeft="40"/>
-		<s:List id="lst1"
-				dataProvider="{sampleData}"
-				itemRenderer="cc.ImageRenderer"
-				rollOverColor="#cccccc" selectionColor="#eeee00"
-				width="100%">
-			<s:layout>
-				<s:HorizontalLayout gap="4"/>
-			</s:layout>
-		</s:List>
-		
-		
-		<s:Label text="Image List with Zoom"
-				 paddingTop="20" paddingLeft="40"/>
-		<s:List id="lst2"
-				dataProvider="{sampleData}"
-				itemRenderer="cc.ZoomRenderer"
-				rollOverColor="#cccccc" selectionColor="#eeee00"
-				width="100%">
-			<s:layout>
-				<s:HorizontalLayout gap="4"/>
-			</s:layout>
-		</s:List>-->
-	<s:Scroller>
-	<s:VGroup width="100%" gap="10"
-			  fontSize="16" fontWeight="bold">
+	
 		
 		<s:List id="lst3"
 				dataProvider="{sampleData}"
 				itemRenderer="galary.ImageRenderer"
-				borderVisible="false"
+				borderVisible="true"
 				skinClass="galary.BetterListSkin"
-				width="100%">
+				width="700"
+				click="lst3_clickHandler(event)">
 			<s:layout>
-				<s:HorizontalLayout gap="4"/>
+				<s:HorizontalLayout gap="12"/>
 			</s:layout>
 		</s:List>
-	</s:VGroup>
-	</s:Scroller>	
+	
 </s:View>

@@ -285,6 +285,7 @@
 			 this.nom_lieu=this.treeItem.source.@label;
 			 FlexGlobals.topLevelApplication.nom_lieu.text=this.nom_lieu;
 			 FlexGlobals.topLevelApplication.view2.selectedIndex=0;
+			 FlexGlobals.topLevelApplication.previewPanel.visible=false;
 			 if(this.selected_id != 1) {
 			 form_query.execute();
 			 geo_query.execute();

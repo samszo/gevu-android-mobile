@@ -10,12 +10,12 @@
 			
 			import mx.core.FlexGlobals;
 			import mx.graphics.codec.JPEGEncoder;
-			private var tofH:int = 400;
-			private var tofW:int = 400;
+			[Bindable] private var tofH:int = 400;
+			[Bindable] private var tofW:int = 400;
 			[Bindable] private var path:String;
 			[Bindable] private var DateNow:Date;
 			[Bindable] private var FileName:String;
-			           private var trim:RegExp = /[~+%&\\;:"',<>?#\s]/g
+			private var trim:RegExp = /[~+%&\\;:"',<>?#\s]/g
 			private function takePicture(event:MouseEvent):void {	
 				var bmd:BitmapData = new BitmapData(tofH,tofW);
 				bmd.draw(myVid);				
@@ -26,12 +26,10 @@
 				imagen.source = new Bitmap(bmd);
 				DateNow=new Date();
 				FileName=DateNow.toString();
-				trace(FileName);
 				FileName=FileName.replace(trim,"");
-				trace(FileName);
+				var dir:File=File.applicationStorageDirectory.resolvePath("galary");
+				if(dir.exists==false) dir.createDirectory();
 				var fl:File= File.applicationStorageDirectory.resolvePath("galary/"+FlexGlobals.topLevelApplication.nom_lieu.text+"/"+FileName+ ".jpg");
-				this.path=fl.nativePath;
-				trace(this.path);
 				//Use a FileStream to save the bytearray as bytes to the new file
 				var fs:FileStream = new FileStream();
 				try{
@@ -56,7 +54,7 @@
 				myVid.addChild(myCam);
 				imageView.selectedIndex=0;
 			}
-
+			
 			
 			//take a new picture with the camera
 			protected function uploadCamera_clickHandler(event:MouseEvent):void
@@ -77,52 +75,52 @@
 			//select a picture from the camera roll (gallery)
 			protected function uploadGallery_clickHandler(event:MouseEvent):void
 			{
-				if (CameraRoll.supportsBrowseForImage)
-				{
-					trace("camera roll is supported");
-					var roll:CameraRoll = new CameraRoll();
-					roll.browseForImage();
-					roll.addEventListener(MediaEvent.SELECT,selectCompleteHandler);
-				}
-				else
-				{
-					trace("camera roll not supported");
-					
-				}
+			if (CameraRoll.supportsBrowseForImage)
+			{
+			trace("camera roll is supported");
+			var roll:CameraRoll = new CameraRoll();
+			roll.browseForImage();
+			roll.addEventListener(MediaEvent.SELECT,selectCompleteHandler);
+			}
+			else
+			{
+			trace("camera roll not supported");
+			
+			}
 			}
 			
 			//when the selection is complete upload it
 			protected function selectCompleteHandler(event:MediaEvent):void
 			{
-				trace("event.data.file.url; = "+event.data.file.url);
-				file = event.data.file;
-				file.addEventListener(Event.COMPLETE,uploadCompleteHandler);
-				file.addEventListener(Event.OPEN,openUploadHandler);
-				file.upload(urlRequest);
-				
+			trace("event.data.file.url; = "+event.data.file.url);
+			file = event.data.file;
+			file.addEventListener(Event.COMPLETE,uploadCompleteHandler);
+			file.addEventListener(Event.OPEN,openUploadHandler);
+			file.upload(urlRequest);
+			
 			}
 			
 			protected function uploadCompleteHandler(event:Event):void
 			{
-				
+			
 			}
 			
 			protected function openUploadHandler(event:Event):void
 			{
-				
+			
 			}*/
 		]]>
 	</fx:Script>
 	
 	<s:VGroup x="0" y="0" width="500" height="500">
 		<s:HGroup>
-		<f4cb:CustomViewStack id="imageView" width="500" height="500">
-			
-		<s:VGroup>
-		  <s:VideoDisplay id="myVid"  width="{tofW}" height="{tofH}" creationComplete="initCamera()"/>
-		  <s:Button label="Enregistrer" click="takePicture(event)"/>	
-		</s:VGroup>	
-		<s:Image  id="imagen" />		
+			<f4cb:CustomViewStack id="imageView" width="500" height="500">
+				
+				<s:VGroup>
+					<s:VideoDisplay id="myVid"  width="{tofW}" height="{tofH}" creationComplete="initCamera()"/>
+					<s:Button label="Enregistrer" click="takePicture(event)"/>	
+				</s:VGroup>			
+				<s:Image id="imagen" />
 			</f4cb:CustomViewStack>	
 		</s:HGroup>	
 	</s:VGroup>
