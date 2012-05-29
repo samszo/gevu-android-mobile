@@ -95,8 +95,10 @@
 			import mx.collections.ArrayCollection;
 			import mx.core.FlexGlobals;
 			import mx.events.ValidationResultEvent;
+			import mx.managers.PopUpManager;
 			import mx.utils.OnDemandEventDispatcher;
 			
+			import spark.components.Application;
 			import spark.events.GridItemEditorEvent;
 			import spark.events.TextOperationEvent;
 			
@@ -185,6 +187,11 @@
 			}
 			
 			public function query_execution():void{
+				PopUpManager.addPopUp(delpopup,this,false);
+				PopUpManager.centerPopUp(delpopup);
+				PopUpManager.addPopUp(popmsg,this,false);
+				PopUpManager.centerPopUp(popmsg);
+				
 				switch(this.query_type)
 				{
 					case "antenne":
@@ -267,10 +274,10 @@
 			</s:HGroup>	
 		</s:VGroup>
 		
-		<f4cb:CustomViewStack id="Conviewstack" y="51" width="300" height="300"
+		<f4cb:CustomViewStack id="Conviewstack" y="51" width="600" height="300"
 							  skinClass="com.oreilly.f4cb.CustomBorderSkin">
 		
-		<s:DataGrid id="dgContact"  width="100%" height="300"
+		<s:DataGrid id="dgContact"  width="700" height="300"
 					dataProvider="{this.contact_info}" editable="true"
 					gridItemEditorSessionSave="dgContact_gridItemEditorSessionSaveHandler(event)">
 			<s:columns>

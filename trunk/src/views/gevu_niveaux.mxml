@@ -35,6 +35,8 @@
 		<![CDATA[
 			import gevu.popup;
 			
+			import mx.managers.PopUpManager;
+			
 			import spark.events.TextOperationEvent;
 			[Bindable] private var selected_id:int;
 			[Bindable] private var niveau_id:int;
@@ -68,6 +70,9 @@
 			
 			protected function niveaux_query_resultHandler(event:SQLEvent):void
 			{
+				
+				PopUpManager.addPopUp(popmsg,this,false);
+				PopUpManager.centerPopUp(popmsg);
 				var niv_data:Array= this.niveaux_query.data;
 				this.niveau_id=niv_data[0].id_niveau;
 				this.reponse_1=niv_data[0].reponse_1;

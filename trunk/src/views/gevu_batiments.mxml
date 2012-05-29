@@ -59,6 +59,7 @@
 			import gevu.popup;
 			
 			import mx.collections.ArrayCollection;
+			import mx.managers.PopUpManager;
 			
 			import spark.events.TextOperationEvent;
 			
@@ -115,6 +116,9 @@
 			
 			protected function get_data_resultHandler(event:SQLEvent):void
 			{
+				
+				PopUpManager.addPopUp(popmsg,this,false);
+				PopUpManager.centerPopUp(popmsg);
 				var data:ArrayCollection= new ArrayCollection(this.get_data.data);
 				this.F02.text=data.getItemAt(0).ref;
 				this.ref=data.getItemAt(0).ref;

@@ -227,11 +227,11 @@
 			[Bindable] private var lng:Number =0.0;
 			
 			public function getLat():Number{
-				return this.geo_lat;
+				return this.lat;
 			}
 			
 			public function getLng():Number{
-				return this.geo_lng;
+				return this.lng;
 			}
 			public function lpad(original:Object, length:int, pad:String):String
 			{

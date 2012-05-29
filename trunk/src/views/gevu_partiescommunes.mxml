@@ -26,6 +26,8 @@
 	<fx:Script>
 		<![CDATA[
 			import gevu.popup;
+			
+			import mx.managers.PopUpManager;
 			[Bindable] private var selected_id:int;
 			[Bindable] private var ref:String;
 			[Bindable] private var myDate:Date= new Date();
@@ -44,6 +46,9 @@
 			import spark.events.TextOperationEvent;
 			protected function coummunes_query_resultHandler(event:SQLEvent):void
 			{
+				
+				PopUpManager.addPopUp(popmsg,this,false);
+				PopUpManager.centerPopUp(popmsg);
 				var coummune_data:Array=this.coummunes_query.data;
 				this.ref=coummune_data[0].ref;
 			}

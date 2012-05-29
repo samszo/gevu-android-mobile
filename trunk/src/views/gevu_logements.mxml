@@ -34,7 +34,7 @@
 	<fx:Script>
 		<![CDATA[
 			import gevu.popup;
-			
+			import mx.managers.PopUpManager;
 			import spark.events.TextOperationEvent;
 			
 			[Bindable] private var selected_id:int;
@@ -69,6 +69,9 @@
 			
 			protected function logement_query_resultHandler(event:SQLEvent):void
 			{
+				
+				PopUpManager.addPopUp(popmsg,this,false);
+				PopUpManager.centerPopUp(popmsg);
 				var log_data:Array = this.logement_query.data;
 				this.ref=log_data[0].ref;
 				this.num_porte=log_data[0].num_porte;
