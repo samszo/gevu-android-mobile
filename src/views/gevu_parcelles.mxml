@@ -34,6 +34,8 @@
 		<![CDATA[
 			import gevu.popup;
 			
+			import mx.managers.PopUpManager;
+			
 			import spark.events.TextOperationEvent;
 			
 			[Bindable] private var selected_id:int;
@@ -111,6 +113,9 @@
 			
 			protected function parcelle_query_resultHandler(event:SQLEvent):void
 			{
+				
+				PopUpManager.addPopUp(popmsg,this,false);
+				PopUpManager.centerPopUp(popmsg);
 				var parcelle_data:Array = this.parcelle_query.data;
 				this.ref=parcelle_data[0].ref;
 				this.superficie=parcelle_data[0].superficie;
@@ -136,7 +141,7 @@
 	<s:Panel  title="Parcelle" x="0" y="0"  width="600" height="986">
 		<s:Scroller width="100%" height="100%">
 			<s:Group>
-				<s:VGroup height="741" paddingLeft="13" paddingTop="10">
+				<s:VGroup height="741" paddingLeft="13" paddingTop="10" width="100%">
 					
 					<s:HGroup width="100%">
 						<s:Label text="identifiant:" width="145"/>

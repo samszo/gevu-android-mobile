@@ -29,6 +29,8 @@
 		<![CDATA[
 			import gevu.popup;
 			
+			import mx.managers.PopUpManager;
+			
 			import spark.events.TextOperationEvent;
 			[Bindable] private var selected_id:int;
 			[Bindable] private var activite:String;
@@ -88,6 +90,9 @@
 			
 			protected function locaux_query_resultHandler(event:SQLEvent):void
 			{
+				
+				PopUpManager.addPopUp(popmsg,this,false);
+				PopUpManager.centerPopUp(popmsg);
 				var locaux_data:Array = this.locaux_query.data;	
 				this.ref=locaux_data[0].ref;
 				this.activite=locaux_data[0].activite;

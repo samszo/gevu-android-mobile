@@ -21,6 +21,8 @@
 		<![CDATA[
 			import gevu.popup;
 			
+			import mx.managers.PopUpManager;
+			
 			import spark.events.TextOperationEvent;
 			[Bindable] private var selected_id:int;
 			[Bindable] private var ref:String;
@@ -38,6 +40,9 @@
 			}
 			protected function groupes_query_resultHandler(event:SQLEvent):void
 			{
+				
+				PopUpManager.addPopUp(popmsg,this,false);
+				PopUpManager.centerPopUp(popmsg);
 				var ref:Array=get_ref.data;
 				this.ref=ref[0].ref;
 				this.reponse=ref[0].reponse_1;

@@ -41,9 +41,11 @@
 			import mx.core.ScrollPolicy;
 			import mx.events.FlexEvent;
 			import mx.events.PropertyChangeEvent;
+			import mx.managers.PopUpManager;
 			
 			import views.Upload;
-			
+			[Bindable] private var lat:Number;
+			[Bindable] private var lng:Number;
 			private var popmsg:popup = new popup();
 			private var	delpopup:delPopup = new delPopup();
 		    
@@ -85,12 +87,15 @@
 			protected function delete_clickHandler(event:MouseEvent):void
 			{
 				if(mytree.treeItem == null) {
+					PopUpManager.addPopUp(popmsg,this,true);
+					PopUpManager.centerPopUp(popmsg);
 					popmsg.setMsg("Veuillez séléctioner un lieu");
 					popmsg.open(this,false);
 					
 				}
 				else {
-					
+					PopUpManager.addPopUp(delpopup,this,true);
+					PopUpManager.centerPopUp(delpopup);
 					delpopup.fnct=mytree.delete_lieu;
 					delpopup.open(this,false);
 				}
@@ -99,6 +104,8 @@
 			protected function add_clickHandler(event:MouseEvent):void
 			{
 				if(mytree.treeItem == null) {
+					PopUpManager.addPopUp(popmsg,this,true);
+					PopUpManager.centerPopUp(popmsg);
 					popmsg.setMsg("Veuillez séléctioner un lieu");
 					popmsg.open(this,false);
 				}
@@ -106,6 +113,9 @@
 				{	
 					if(this.nom_lieu.text == "" ) 
 					{
+					
+						PopUpManager.addPopUp(popmsg,this,true);
+						PopUpManager.centerPopUp(popmsg);
 						popmsg.setMsg("Veuillez insérer le nom");
 						popmsg.open(this,false);	
 					}
@@ -162,7 +172,8 @@
 			
 			protected function deleteImage_clickHandler(event:MouseEvent):void
 			{
-				
+				PopUpManager.addPopUp(delpopup,this,true);
+				PopUpManager.centerPopUp(delpopup);
 				delpopup.fnct=this.myGalary.deleteImage;
 				delpopup.open(this,false);
 			}
@@ -171,9 +182,10 @@
 			{
 			 this.viewstack.selectedIndex=2;
 			 this.back.visible=true;
-			 this.lat.text=this.mytree.getLat() as String
-			 this.lng.text=this.mytree.getLng() as String;	
+			 this.lat=this.mytree.getLat();
+			 this.lng=this.mytree.getLng();	
 			}
+			
 			
 		]]>
 	</fx:Script>
@@ -219,11 +231,11 @@
 			<s:VGroup paddingLeft="13" paddingTop="13">
 				<s:HGroup width="100%">
 				  <s:Label text="lat." width="55"/>
-				  <s:TextInput id="lat"   width="175"/>	
+				  <s:TextInput id="latField"   width="175" text="{this.lat}"/>	
 		        </s:HGroup>	
 				<s:HGroup>
-					<s:Label text="lng."  width="55"/>
-					<s:TextInput id="lng" width="175"/>
+					<s:Label text="lng."  width="55" />
+					<s:TextInput id="lngField" width="175" text="{this.lng}"/>
 				</s:HGroup>
 			</s:VGroup>
 			
