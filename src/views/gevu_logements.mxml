@@ -164,12 +164,13 @@
 			
 			protected function SaveModif_clickHandler(event:MouseEvent):void
 			{
+				/*
 				if(this.ref=="" || this.num_porte=="" || this.type=="")
 				{
 					popmsg.setMsg("Veuillez insérer tous les données");
 					popmsg.open(this,false);
 				}
-				else
+				else*/
 					this.update_log.execute();
 				
 			}

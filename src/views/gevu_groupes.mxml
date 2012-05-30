@@ -55,12 +55,13 @@
 			
 			protected function SaveModif_clickHandler(event:MouseEvent):void
 			  {
+			/*	
 			  if(this.ref=="" || this.rep.val=="0")
 			  { 
 				  popmsg.setMsg("Veuillez insérer tous les données");
 				  popmsg.open(this,false);
 			  }
-			  else 
+			  else*/ 
 				this.update_query.execute();
 				
 				}

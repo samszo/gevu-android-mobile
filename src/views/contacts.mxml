@@ -105,12 +105,12 @@
 			
 			[Bindable] public var id_lieu:int;
 			[Bindable] private var contact_info:ArrayCollection =new ArrayCollection;
-			[Bindable] private var nom:String = new String;
-			[Bindable] private var prenom:String = new String;
-			[Bindable] private var fixe:String =new String;
-			[Bindable] private var fax:String =new String;
-			[Bindable] private var mobile:String= new String;
-			[Bindable] private var mail:String = new String;
+			[Bindable] private var nom:String ="";
+			[Bindable] private var prenom:String="";
+			[Bindable] private var fixe:String ="";
+			[Bindable] private var fax:String ="";
+			[Bindable] private var mobile:String="";
+			[Bindable] private var mail:String ="";
 			[Bindable] private var deleting_id:String = new String;
 			[Bindable] private var updating_id:String = new String;
 			[Bindable] public var query_type:String;
@@ -138,17 +138,7 @@
 			
 			protected function save_contact_clickHandler(event:MouseEvent):void
 			{
-				if(this.nom_in.text=="" ||
-					this.prenom_in.text=="" ||
-					this.fixe_in.text=="" || 
-					this.mobile_in.text== "" ||
-					this.fax_in.text=="" ||
-					this.mail_in.text=="")
-				{
-					
-				}
-					
-				else{
+				
 					this.nom=this.nom_in.text;
 					this.prenom=this.prenom_in.text;
 					this.fixe=this.fixe_in.text;
@@ -156,7 +146,7 @@
 					this.fax=this.fax_in.text ; 
 					this.mail=this.mail_in.text;
 					this.add_query.execute();
-				} 
+				 
 			}
 			
 			

@@ -8,7 +8,7 @@
 			   xmlns:view="views.*"
 			   xmlns:f4cb="com.oreilly.f4cb.*"
 			   xmlns:galary="galary.*"
-			   >
+			   creationComplete="init(event)">
 	<fx:Style>
 		@namespace s "library://ns.adobe.com/flex/spark";
 		@namespace mx "library://ns.adobe.com/flex/mx";
@@ -44,34 +44,63 @@
 			import mx.managers.PopUpManager;
 			
 			import views.Upload;
+			import mx.events.FlexEvent;
 			[Bindable] private var lat:Number;
 			[Bindable] private var lng:Number;
+			
 			private var popmsg:popup = new popup();
 			private var	delpopup:delPopup = new delPopup();
-		    
+			private var closeTimer:Timer;
+			/*
+			  The exit algo:
+			  1- Fire off an event when a user leaves the application
+			  2- Set a timer to shut down the app
+			  3- If the user returns, kill that timer
+			*/
+			// Start of the exit code
+			protected function init(event:FlexEvent):void
+			{
+				NativeApplication.nativeApplication.addEventListener(Event.DEACTIVATE, onDeactivate);
+				NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE, onActivate);
+			}
+			protected function onDeactivate(event:Event):void
+			{
+				closeTimer = new Timer(30000,1);
+				closeTimer.addEventListener(TimerEvent.TIMER_COMPLETE,closeApp);
+				closeTimer.start();
+			}
+			protected function closeApp(event:Event):void{
+				NativeApplication.nativeApplication.exit();
+			}
+			protected function onActivate(event:Event):void
+			{
+				closeTimer = null;
+			}
+			// End of the exit code
+			
 			protected function galary_clickHandler(event:MouseEvent):void
 			{
 				this.Preview.source="";
 				this.previewPanel.visible=false;
 				this.view2.selectedIndex=2;
-				 if(this.myGalary!=null)
-					 this.myGalary.initGalary();
+				if(this.myGalary!=null)
+					this.myGalary.initGalary();
 				
 			}
 			private function PrepareAdd():void
 				
 			{
-			this.add.visible=true;
-			this.edit.visible=false;
-			this.back.visible=true;
-			this.nom_lieu.text="";
-		    viewstack.selectedIndex = 1
+				this.add.visible=true;
+				this.edit.visible=false;
+				this.back.visible=true;
+				this.nom_lieu.text="";
+				viewstack.selectedIndex = 1
 			}
 			
 			private function show_tree_clickHandler(event:MouseEvent):void
 			{
-			 this.back.visible=false;
-			 viewstack.selectedIndex = 0;
+				this.back.visible=false;
+				viewstack.selectedIndex = 0;
 			}
 			
 			private function PrepareEdit():void
@@ -113,7 +142,7 @@
 				{	
 					if(this.nom_lieu.text == "" ) 
 					{
-					
+						
 						PopUpManager.addPopUp(popmsg,this,true);
 						PopUpManager.centerPopUp(popmsg);
 						popmsg.setMsg("Veuillez insérer le nom");
@@ -162,12 +191,12 @@
 			
 			protected function photo_clickHandler(event:MouseEvent):void
 			{
-			  this.view2.selectedIndex=1;
-			  this.previewPanel.visible=false;
-			  if(this.photoPanel.imageView !=null)
-				 this.photoPanel.imageView.selectedIndex=0;
-			   
-				   
+				this.view2.selectedIndex=1;
+				this.previewPanel.visible=false;
+				if(this.photoPanel.imageView !=null)
+					this.photoPanel.imageView.selectedIndex=0;
+				
+				
 			}
 			
 			protected function deleteImage_clickHandler(event:MouseEvent):void
@@ -180,12 +209,18 @@
 			
 			protected function gps_clickHandler(event:MouseEvent):void
 			{
-			 this.viewstack.selectedIndex=2;
-			 this.back.visible=true;
-			 this.lat=this.mytree.getLat();
-			 this.lng=this.mytree.getLng();	
+				this.viewstack.selectedIndex=2;
+				this.back.visible=true;
+				this.lat=this.mytree.getLat();
+				this.lng=this.mytree.getLng();	
 			}
 			
+			
+			protected function exit_clickHandler(event:MouseEvent):void
+			{
+				
+				NativeApplication.nativeApplication.exit();	
+			}
 			
 		]]>
 	</fx:Script>
@@ -193,6 +228,7 @@
 		<s:HorizontalLayout/>
 	</s:layout>
 	<s:VGroup id="left_interface" paddingLeft="13" paddingTop="13">
+		<s:Image source="@Embed('assets/exit.gif')" click="exit_clickHandler(event)"/>
 		<s:HGroup gap="20">
 			<s:Image id="back" visible="false" source="@Embed('assets/back.gif')" click="show_tree_clickHandler(event)"
 					 width="25" height="25"/>
@@ -206,18 +242,18 @@
 					 width="25" height="25" />
 			
 			<s:Image id="gps" source="@Embed('assets/gps.gif')" click="gps_clickHandler(event)"
-			width="25" height="25" />
+					 width="25" height="25" />
 		</s:HGroup>
 		
 		<f4cb:CustomViewStack id="viewstack" width="300" height="300"
-					skinClass="com.oreilly.f4cb.CustomBorderSkin">
+							  skinClass="com.oreilly.f4cb.CustomBorderSkin">
 			
 			<gevu:arbre  id="mytree" width="300" height="300"/>
 			<s:VGroup paddingLeft="13" paddingTop="13">
-						
+				
 				<s:Label id="lab" text="Veuillez-écriver le nom: " fontSize="15"/>
 				
-					<s:TextInput id="nom_lieu" width="150"  height="30"/>
+				<s:TextInput id="nom_lieu" width="150"  height="30"/>
 				<s:HGroup>
 					<s:Button id="add"  label="Enregistrer" click="add_clickHandler(event)" 
 							  fontSize="10" width="75" height="25"
@@ -230,9 +266,9 @@
 			
 			<s:VGroup paddingLeft="13" paddingTop="13">
 				<s:HGroup width="100%">
-				  <s:Label text="lat." width="55"/>
-				  <s:TextInput id="latField"   width="175" text="{this.lat}"/>	
-		        </s:HGroup>	
+					<s:Label text="lat." width="55"/>
+					<s:TextInput id="latField"   width="175" text="{this.lat}"/>	
+				</s:HGroup>	
 				<s:HGroup>
 					<s:Label text="lng."  width="55" />
 					<s:TextInput id="lngField" width="175" text="{this.lng}"/>
@@ -246,20 +282,21 @@
 		
 	</s:VGroup>
 	<f4cb:CustomViewStack id="view2" width="100%" height="100%">
-	 
-	<s:Scroller width="100%" height="100%">
-		<s:VGroup id="main_interface" paddingLeft="13" paddingTop="13">
-		</s:VGroup>
-	 </s:Scroller>
-	
-	<view:Upload id="photoPanel"/>
-	
-	<s:VGroup>	
-	  <s:HGroup id="previewPanel" paddingLeft="110" paddingTop="15" visible="false">	
-	    <s:Image id="Preview"  left="40" top="15"/>
-		<s:Image id="deleteImage" source="@Embed('assets/delete.png')" click="deleteImage_clickHandler(event)"/> 
-	  </s:HGroup>	 
-	 <galary:galary id="myGalary" /> 
-   </s:VGroup>	
-  </f4cb:CustomViewStack>	
+		
+		<s:Scroller width="100%" height="100%">
+			<s:VGroup id="main_interface" paddingLeft="13" paddingTop="13">
+			</s:VGroup>
+		</s:Scroller>
+		
+		<view:Upload id="photoPanel"/>
+		
+		<s:VGroup>	
+			<s:HGroup id="previewPanel" paddingLeft="110" paddingTop="15" visible="false">
+				<s:Image id="deleteImage" source="@Embed('assets/delete.png')" click="deleteImage_clickHandler(event)"
+						 width="25" height="25"/>  
+				<s:Image id="Preview"  left="40" top="15"/> 
+			</s:HGroup>	 
+			<galary:galary id="myGalary" /> 
+		</s:VGroup>	
+	</f4cb:CustomViewStack>	
 </s:Application>

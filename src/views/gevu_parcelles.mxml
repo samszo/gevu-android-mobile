@@ -76,14 +76,14 @@
 			}
 			
 			protected function saveModif_clickHandler(event:MouseEvent):void
-			{
+			{/*
 				if(this.ref=="" || this.cloture=="0" || this.ref_cadastre==""
 					|| this.contact_proprietaire=="")
 				{
 					popmsg.setMsg("Veuillez insérer tous les données");
 					popmsg.open(this,false);	
 				}
-				else
+				else*/
 					this.update_parcelle.execute();	
 			}
 			
