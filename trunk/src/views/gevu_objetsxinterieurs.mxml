@@ -11,10 +11,10 @@
 			}
 		]]>
 	</fx:Script>
-	<s:Panel title="Objet interieur"
-			 width="100%" height="100%">
-		<s:VGroup>
-			<s:HGroup width="50%">
+	<s:Panel x="0" y="0" width="926" height="290" title="Objet interieur">
+		<s:VGroup width="378" height="243" gap="20" paddingBottom="13" paddingLeft="13"
+				  paddingTop="13">
+			<s:HGroup>
 				<s:Label text="ref" />
 				<s:TextInput id="F2" width="165" />
 			</s:HGroup>
@@ -22,9 +22,9 @@
 				<s:Label text="fonctions" />
 				<s:TextInput id="F3" width="50%" />
 			</s:HGroup>
-			<s:HGroup width="100%">
+			<s:HGroup>
 				<s:Label text="Type d'objet" />
-				<s:ComboBox id="cbType" width="100%" height="100%" labelField="lib" prompt="Choisissez" />				
+				<s:ComboBox id="cbType" labelField="lib" prompt="Choisissez" />				
 			</s:HGroup>
 			<!--
 			<mx:HBox width="100%">
@@ -37,7 +37,7 @@
 			<mx:NumericStepper id="F5" width="100%" stepSize="1" value="{NodeData.reponse_2}" change="editModif('reponse_2', F5.value)" minimum="-6" maximum="10" />
 			</mx:HBox>
 			-->
-			<s:HGroup width="100%" >
+			<s:HGroup>
 				<s:Button id="saveModif" label="Enregistrer" />
 				<s:Button id="ajoutDiag" label="Ajouter des diagnostics" />			
 			</s:HGroup>

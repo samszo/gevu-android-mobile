@@ -12,33 +12,31 @@
 		]]>
 	</fx:Script>
 
-<s:Panel  title="Espace extérieur"
-		   width="100%" height="100%" 
-		   >
-		<s:VGroup>
+<s:Panel x="0" y="0" width="926" height="395" title="Espace extérieur">
+		<s:VGroup paddingLeft="13" paddingTop="13" paddingBottom="13" gap="20">
 			<s:HGroup width="100%">
 				<s:Label text="Identifiant : " />
-				<s:TextInput id="F2" width="100%" />
+				<s:TextInput id="F2" width="50%" />
 			</s:HGroup>
 
-			<s:HGroup width="100%">
+			<s:HGroup>
 				<s:Label text="fonction" />
-				<s:TextInput id="F3" />
+				<s:TextInput id="F3" width="50%"/>
 			</s:HGroup>
 
-			<s:HGroup width="100%">
+			<s:HGroup>
 				<s:Label text="Type social d'espace : " />
 				<s:RadioButton groupName="type" id="reponse_1" label="Lieu de Travail" color="0x323232"  /> 
 				<s:RadioButton groupName="type" id="reponse_2" label="Public" color="0x323232"  />
 				<s:RadioButton groupName="type" id="reponse_3" label="Mixte" color="0x323232"  />
 			</s:HGroup>
 
-			<s:HGroup width="100%">
+			<s:HGroup>
 				<s:Label text="Type d'espace spécifique" />
-				<s:ComboBox id="cbType" width="100%" height="100%" labelField="lib" prompt="Choisissez"  />				
+				<s:ComboBox id="cbType" labelField="lib" prompt="Choisissez"  />				
 			</s:HGroup>
 
-			<s:HGroup width="100%" >
+			<s:HGroup>
 				<s:Button id="saveModif" label="Enregistrer" />
 				<s:Button id="ajoutDiag" label="Ajouter des diagnostics" />			
 			</s:HGroup>
