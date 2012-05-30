@@ -5,7 +5,8 @@
 		xmlns:view="views.*"
 		xmlns:sqlite="com.peterelst.air.sqlite.*" 
 		creationComplete="this.query_execution()"
-		xmlns:f4cb="com.oreilly.f4cb.*">
+		xmlns:f4cb="com.oreilly.f4cb.*"
+		>
 	
 	<fx:Declarations>
 		
@@ -266,18 +267,18 @@
 			
 		]]>
 	</fx:Script>
-	<s:Panel left="0" right="245" top="0" bottom="602" title="Contacts">
-		<s:VGroup id="viewContact" >
-			<s:HGroup>
+	<s:Panel x="0" y="0" width="1001" height="552" title="Contacts">
+		<s:VGroup id="viewContact">
+			<s:HGroup paddingTop="13" paddingBottom="13" gap="5" paddingLeft="13">
 				<s:Button   label="Ajouter un contact" click="add_form_clickHandler(event)"/>
 				<s:Button   label="Supprimer un contact" click="delete_clickHandler(event)"/>
 			</s:HGroup>	
 		</s:VGroup>
 		
-		<f4cb:CustomViewStack id="Conviewstack" y="51" width="600" height="300"
+		<f4cb:CustomViewStack id="Conviewstack" x="10" y="77" width="978" height="429"
 							  skinClass="com.oreilly.f4cb.CustomBorderSkin">
 		
-		<s:DataGrid id="dgContact"  width="700" height="300"
+		<s:DataGrid id="dgContact"  width="100%" height="100%"
 					dataProvider="{this.contact_info}" editable="true"
 					gridItemEditorSessionSave="dgContact_gridItemEditorSessionSaveHandler(event)">
 			<s:columns>
@@ -294,7 +295,7 @@
 		</s:DataGrid>
 		
 		
-		<s:VGroup id="viewContactUnique"  width="588" height="250" paddingBottom="6"
+		<s:VGroup id="viewContactUnique"   paddingBottom="6"
 				  paddingLeft="6" paddingRight="6" paddingTop="6">
 			
 			<s:VGroup id="add_contact_form">
