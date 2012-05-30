@@ -339,11 +339,11 @@
 					</s:HGroup>		
 					<s:HGroup width="100%">
 						<s:VGroup>
-							<s:Label text="Superficie de la parcelle : "/>
+							<s:Label text="Superficie de la parcelle: "/>
 							<s:NumericStepper id="F12" maximum="1000" stepSize="1" change="N_S_changeHandler('F12',event)" />
 						</s:VGroup>
 						<s:VGroup>
-							<s:Label text="Superficie du bâtiment" />
+							<s:Label text="Superficie du bâtiment:" />
 							<s:NumericStepper id="F13" maximum="1000" stepSize="1" change="N_S_changeHandler('F13',event)"/>
 						</s:VGroup>
 					</s:HGroup>

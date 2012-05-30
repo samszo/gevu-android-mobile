@@ -31,7 +31,7 @@
 	<s:TitleWindow  title="Attention" width="200">
 		<s:VGroup paddingTop="10" paddingLeft="13" paddingBottom="13" paddingRight="13">
 			<s:Label id="msg" />
-			<s:Button label="OK" click="close()" />	
+			<s:Button label="OK" click="close()"/>	
 		</s:VGroup>
 	</s:TitleWindow>
 	

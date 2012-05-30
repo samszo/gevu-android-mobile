@@ -30,9 +30,10 @@
 			
 		]]>
 	</fx:Script>
-	<s:Panel x="0" y="5" width="600" height="522" title="Antenne">	
+	<s:Panel x="0" y="0" width="1024" height="986" title="Antenne">	
 		<s:TextInput id="F2" x="169" y="7"/>
 		<s:Label x="9" y="22" text="Identifiant du local :"/>
-		<view:contacts id="ctc" x="0" y="51" id_lieu="{this.selected_id}" query_type="antenne"/>		
+		<view:contacts id="ctc" left="10" right="635" top="51" bottom="-247"
+					   id_lieu="{this.selected_id}" query_type="antenne"/>		
 	</s:Panel>
 </s:View>
