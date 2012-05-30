@@ -199,28 +199,25 @@
 			
 		]]>
 	</fx:Script>
-	<s:Panel   title="Logement"
-			   width="100%" height="100%" 
-			   >
-		<s:VGroup paddingLeft="13" paddingTop="13">
-			
-			<s:HGroup width="100%">
+	<s:Panel  x="0" y="0" title="Logement" width="926">
+		<s:VGroup height="340" gap="20" paddingLeft="13" paddingTop="13">
+			<s:HGroup>
 				<s:Label text="Identifiant du logement :" />
 				<s:TextInput id="F2" width="100" change="ref_changeHandler(event)" text="{this.ref}"/>
 			</s:HGroup>
 			<s:HGroup>
-				<s:Label text="N° de porte :" />
+				<s:Label text="N° de porte:" />
 				<s:TextInput id="F3" width="100" change="N_changeHandler(event)" text="{this.num_porte}"/>
 			</s:HGroup>
-			<s:Label text="Type de logement : " />
-			<s:HGroup width="100%">
+			<s:Label text="Type de logement: " />
+			<s:HGroup gap="15">
 				<s:RadioButton groupName="type" id="reponse_T1" label="T1" color="0x323232"  change="editModif('type', RadioButton(event.target).label)"/> 
 				<s:RadioButton groupName="type" id="reponse_T2" label="T2" color="0x323232"  change="editModif('type', RadioButton(event.target).label)"/>
 				<s:RadioButton groupName="type" id="reponse_T3" label="T3" color="0x323232"  change="editModif('type', RadioButton(event.target).label)"/>
 				<s:RadioButton groupName="type" id="reponse_T4" label="T4" color="0x323232"  change="editModif('type', RadioButton(event.target).label)"/>
 				<s:RadioButton groupName="type" id="reponse_T5" label="T5" color="0x323232"  change="editModif('type', RadioButton(event.target).label)"/>
 			</s:HGroup>
-			<s:HGroup>
+			<s:HGroup gap="15">
 				<s:RadioButton groupName="type" id="reponse_T6" label="T6" color="0x323232"   change="editModif('type', RadioButton(event.target).label)" />
 				<s:RadioButton groupName="type" id="reponse_T7" label="T7" color="0x323232"   change="editModif('type', RadioButton(event.target).label)"/>
 				<s:RadioButton groupName="type" id="reponse_T8" label="T8" color="0x323232"   change="editModif('type', RadioButton(event.target).label)"/>

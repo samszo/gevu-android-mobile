@@ -133,10 +133,11 @@
 			
 		]]>
 	</fx:Script>
-	<s:Panel x="4" y="1" width="600" height="986" title="Niveau">
-		<s:Scroller x="0" y="0" width="100%" height="100%">
+	<s:Panel x="0" y="0" width="927" height="531" title="Niveau">
+		<s:Scroller x="0" y="0" width="927" height="514">
 			<s:Group>
-				<s:VGroup paddingLeft="13" paddingTop="13">
+				<s:VGroup x="0"  width="367" height="458" gap="20" paddingBottom="13"
+						  paddingLeft="13" paddingTop="13">
 					<view:repType2 id="rep_1" x="0" y="325" lblQ="Le niveau est desservi par un ascenseur (hors RdC) ?"
 								   Q="reponse_3" val="{this.reponse_1}" fnct="{this.editModif1}"/>
 					<view:repType2 id="rep_2" x="0" y="215" lblQ="Le niveau offre des prestations spécifiques (hors RdC) ?"

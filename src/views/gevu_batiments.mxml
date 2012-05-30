@@ -320,90 +320,105 @@
 			
 		]]>
 	</fx:Script>
-	<s:Panel title="Batiment" x="0" y="0" >
-		<s:Scroller height="600">
+	<s:Panel x="2" y="4" width="926" height="1138" title="Batiment">
+		<s:Scroller id="bat_scro" left="0" right="10" top="0" bottom="-6">
 			<s:Group> 
-				<s:VGroup paddingLeft="13" paddingTop="13">
-					<s:HGroup width="100%">
+				<s:VGroup paddingLeft="13" paddingTop="13" gap="15">
+					<!-- <view:contacts title="Contact gardien" id="ctcGar" id_contact="{this.id_contact}"/>--> 
+					<s:VGroup>
 						<s:Label text="Identifiant du bâtiment : " />
-					</s:HGroup>
-					<s:TextInput id="F02" change="ref_changeHandler(event)"/>
-					<s:HGroup >		
-						<!-- <view:contacts title="Contact gardien" id="ctcGar" id_contact="{this.id_contact}"/>--> 
-						<s:VGroup>
-							<s:Label text="Horaires du gardien : " />
-							<s:TextArea id="F10" change="h_gar_changeHandler(event)"/>				
-							<s:Label text="Horaires du bâtiment : " />
-							<s:TextArea id="F11" change="h_bat_changeHandler(event)" />				
-						</s:VGroup>
-					</s:HGroup>		
-					<s:HGroup width="100%">
-						<s:VGroup>
-							<s:Label text="Superficie de la parcelle: "/>
-							<s:NumericStepper id="F12" maximum="1000" stepSize="1" change="N_S_changeHandler('F12',event)" />
-						</s:VGroup>
-						<s:VGroup>
-							<s:Label text="Superficie du bâtiment:" />
-							<s:NumericStepper id="F13" maximum="1000" stepSize="1" change="N_S_changeHandler('F13',event)"/>
-						</s:VGroup>
-					</s:HGroup>
-					<s:HGroup>
-						<s:VGroup>
-							<s:Label text="Date d'achèvement : " />
-							<DateChoose:SparkDateComponent id="date_ach" skinClass="com.blogspot.visualscripts.SparkDateFieldSkin"
-														   change="{this.date_achevement=date_ach.selectedDate}"	   />
-							
-							<s:Label text="Date du dépot de permis" />
-							<DateChoose:SparkDateComponent id="date_depo" skinClass="com.blogspot.visualscripts.SparkDateFieldSkin"
-														   change="{this.date_depot=date_depo.selectedDate}"/>
-							
-							<s:Label text="Date de la dernière réhabilitation" />
-							<DateChoose:SparkDateComponent id="date_reha" skinClass="com.blogspot.visualscripts.SparkDateFieldSkin"
-														   change="{this.date_rehab=date_reha.selectedDate}"/>
-						</s:VGroup>
-					</s:HGroup>
+						<s:TextInput id="F02" change="ref_changeHandler(event)"/>
+						<s:Label text="Horaires du gardien : " />
+						<s:TextArea id="F10" change="h_gar_changeHandler(event)"/>				
+						<s:Label text="Horaires du bâtiment : " />
+						<s:TextArea id="F11" change="h_bat_changeHandler(event)" />	
+					</s:VGroup>
+					
+					
 					<view:repType2 id="rep_1" lblQ="Le bâtiment est-il uniquement un lieu de travail ?" Q="reponse_1"  fnct="{this.editModif1}" val="{this.reponse1}"/>
 					<view:repType2 id="rep_2" lblQ="Si le bâtiment est un lieu de travail, compte-t-il plus de 20 salariés ?" Q="reponse_2"  fnct="{this.editModif2}" val="{this.reponse2}" />
 					<view:repType2 id="rep_3" lblQ="S'agit-il d'un bâtiment de grande hauteur ?" Q="reponse_3" fnct="{this.editModif3}" val="{this.reponse3}"/>
 					<view:repType2 id="rep_4" lblQ="Le bâtiment est t-il en ZPPAUP ?" Q="reponse_4" fnct="{this.editModif4}" val="{this.reponse4}"/>
 					<view:repType2 id="rep_5" lblQ="Le bâtiment est-il inscrit au Monument Historique ?" Q="reponse_5" fnct="{this.editModif5}" val="{this.reponse5}"/>
 					<view:repType2 id="rep_6" lblQ="Le bâtiment est-il classé au Monument Historique ?" Q="reponse_6" fnct="{this.editModif6}" val="{this.reponse6}"/>
-					<s:HGroup width="100%">
-						<s:VGroup>
-							<s:Label text="Nombre de niveaux avec RDC : "/>
-							<s:NumericStepper id="F23"  maximum="1000" stepSize="1" change="N_S_changeHandler('F23',event)"/>
-						</s:VGroup>
-						<s:VGroup>
-							<s:Label text="Nombre de niveaux au dessus du RDC : "/>
-							<s:NumericStepper id="F24" maximum="1000"  stepSize="1" change="N_S_changeHandler('F24',event)" />
-						</s:VGroup>
-						<s:VGroup>
-							<s:Label text="Nombre de niveaux en dessous du RDC : "/>
-							<s:NumericStepper id="F25" maximum="1000" stepSize="1" change="N_S_changeHandler('F25',event)" />
-						</s:VGroup>
-					</s:HGroup>		
-					
-					<s:HGroup>
-						<s:VGroup>
-							<s:Label text="Nombre d'entrée(s) principale(s) : "/>
-							<s:NumericStepper id="F26" maximum="1000" stepSize="1" change="N_S_changeHandler('F26',event)"/>
-						</s:VGroup>
-						<s:VGroup>
-							<s:Label text="Nombre d'ascenseur(s) : "/>
-							<s:NumericStepper id="F27" maximum="1000" stepSize="1" change="N_S_changeHandler('F27',event)"/>
-						</s:VGroup>
-						<s:VGroup>
-							<s:Label text="Nombre d'escalier(s) : "/>
-							<s:NumericStepper id="F28" maximum="1000" stepSize="1" change="N_S_changeHandler('F28',event)"/>
-						</s:VGroup>
-					</s:HGroup>		
 					
 					<view:repType2 id="rep_13" lblQ="Présence d'aire(s) de stationnement(s), à l'intérieur du bâtiment ?" Q="reponse_13" fnct="{this.editModif13}" val="{this.reponse13}"/>
 					<view:repType2 id="rep_14" lblQ="Présence d'aire(s) de stationnement(s), à l'extérieur du bâtiment ?" Q="reponse_14" fnct="{this.editModif14}" val="{this.reponse14}"/>
 					<s:Button id="SaveModif" label="Enregistrer les modifications" click="SaveModif_clickHandler(event)"/>
 					
 				</s:VGroup>
+				
+				<s:VGroup x="438" width="550" height="559" paddingTop="13" gap="25">
+					
+					<s:HGroup>	
+						<s:Label  text="Superficie de la parcelle: "/>
+						<s:NumericStepper id="F12"  change="N_S_changeHandler('F12',event)"
+										  maximum="1000" stepSize="1"/>
+					</s:HGroup>
+					<s:HGroup>	
+						<s:Label  text="Superficie du bâtiment:"/>
+						<s:NumericStepper id="F13" x="616" y="65" change="N_S_changeHandler('F13',event)"
+										  maximum="1000" stepSize="1"/>
+					</s:HGroup>	
+					
+					
+					<s:HGroup>
+						<s:Label text="Nombre de niveaux avec RDC : "/>
+						<s:NumericStepper id="F23"  maximum="1000" stepSize="0.1" change="N_S_changeHandler('F23',event)"/>
+					</s:HGroup>
+					
+					<s:HGroup>
+						<s:Label text="Nombre de niveaux au dessus du RDC : "/>
+						<s:NumericStepper id="F24" maximum="1000"  stepSize="0.1" change="N_S_changeHandler('F24',event)" />
+					</s:HGroup>	
+					
+					
+					<s:HGroup>
+						<s:Label text="Nombre de niveaux en dessous du RDC : "/>
+						<s:NumericStepper id="F25" maximum="1000" stepSize="0.1" change="N_S_changeHandler('F25',event)" />
+					</s:HGroup>
+					
+					<s:HGroup>
+						<s:Label text="Nombre d'entrée(s) principale(s) : "/>
+						<s:NumericStepper id="F26" maximum="1000" stepSize="1" change="N_S_changeHandler('F26',event)"/>
+					</s:HGroup>
+					
+					<s:HGroup>
+						<s:Label text="Nombre d'ascenseur(s) : "/>
+						<s:NumericStepper id="F27" maximum="1000" stepSize="1" change="N_S_changeHandler('F27',event)"/>
+					</s:HGroup>
+					<s:HGroup>
+						<s:Label text="Nombre d'escalier(s) : "/>
+						<s:NumericStepper id="F28" maximum="1000" stepSize="1" change="N_S_changeHandler('F28',event)"/>
+					</s:HGroup>
+					
+					
+					<s:HGroup>
+						<s:Label  text="Date d'achèvement : "/>
+						<DateChoose:SparkDateComponent id="date_ach" x="438" y="155"
+													   change="{this.date_achevement=date_ach.selectedDate}"
+													   skinClass="com.blogspot.visualscripts.SparkDateFieldSkin"/>
+					</s:HGroup>
+					
+					<s:HGroup>
+						<s:Label  text="Date du dépot de permis"/>
+						<DateChoose:SparkDateComponent id="date_depo" x="438" y="298"
+													   change="{this.date_depot=date_depo.selectedDate}"
+													   skinClass="com.blogspot.visualscripts.SparkDateFieldSkin"/>
+					</s:HGroup>
+					<s:HGroup>
+						<s:Label  text="Date de la dernière réhabilitation"/>
+						<DateChoose:SparkDateComponent id="date_reha" x="438" y="352"
+													   change="{this.date_rehab=date_reha.selectedDate}"
+													   skinClass="com.blogspot.visualscripts.SparkDateFieldSkin"/>
+						
+					</s:HGroup>
+					
+				</s:VGroup>	
+				
+				
+				
 			</s:Group>	
-		</s:Scroller>	
+		</s:Scroller>		
 	</s:Panel>
 </s:View>
