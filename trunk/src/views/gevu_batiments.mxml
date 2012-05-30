@@ -294,6 +294,7 @@
 			
 			protected function SaveModif_clickHandler(event:MouseEvent):void
 			{
+				/*
 				if(this.F02.text=="" ||
 					this.F10.text=="" ||
 					this.F11.text=="" ||
@@ -313,9 +314,9 @@
 					popmsg.open(this,false);
 					
 				}
-				else {
+				else {*/
 					this.update_batiment.execute();
-				}
+				//}
 			}
 			
 		]]>
@@ -353,43 +354,43 @@
 					<s:HGroup>	
 						<s:Label  text="Superficie de la parcelle: "/>
 						<s:NumericStepper id="F12"  change="N_S_changeHandler('F12',event)"
-										  maximum="1000" stepSize="1"/>
+										   stepSize="0.01"/>
 					</s:HGroup>
 					<s:HGroup>	
 						<s:Label  text="Superficie du bâtiment:"/>
 						<s:NumericStepper id="F13" x="616" y="65" change="N_S_changeHandler('F13',event)"
-										  maximum="1000" stepSize="1"/>
+										   stepSize="0.01"/>
 					</s:HGroup>	
 					
 					
 					<s:HGroup>
 						<s:Label text="Nombre de niveaux avec RDC : "/>
-						<s:NumericStepper id="F23"  maximum="1000" stepSize="0.1" change="N_S_changeHandler('F23',event)"/>
+						<s:NumericStepper id="F23"   stepSize="0.01" change="N_S_changeHandler('F23',event)"/>
 					</s:HGroup>
 					
 					<s:HGroup>
 						<s:Label text="Nombre de niveaux au dessus du RDC : "/>
-						<s:NumericStepper id="F24" maximum="1000"  stepSize="0.1" change="N_S_changeHandler('F24',event)" />
+						<s:NumericStepper id="F24"   stepSize="0.01" change="N_S_changeHandler('F24',event)" />
 					</s:HGroup>	
 					
 					
 					<s:HGroup>
 						<s:Label text="Nombre de niveaux en dessous du RDC : "/>
-						<s:NumericStepper id="F25" maximum="1000" stepSize="0.1" change="N_S_changeHandler('F25',event)" />
+						<s:NumericStepper id="F25"  stepSize="0.01" change="N_S_changeHandler('F25',event)" />
 					</s:HGroup>
 					
 					<s:HGroup>
 						<s:Label text="Nombre d'entrée(s) principale(s) : "/>
-						<s:NumericStepper id="F26" maximum="1000" stepSize="1" change="N_S_changeHandler('F26',event)"/>
+						<s:NumericStepper id="F26"  stepSize="0.01" change="N_S_changeHandler('F26',event)"/>
 					</s:HGroup>
 					
 					<s:HGroup>
 						<s:Label text="Nombre d'ascenseur(s) : "/>
-						<s:NumericStepper id="F27" maximum="1000" stepSize="1" change="N_S_changeHandler('F27',event)"/>
+						<s:NumericStepper id="F27"  stepSize="0.01" change="N_S_changeHandler('F27',event)"/>
 					</s:HGroup>
 					<s:HGroup>
 						<s:Label text="Nombre d'escalier(s) : "/>
-						<s:NumericStepper id="F28" maximum="1000" stepSize="1" change="N_S_changeHandler('F28',event)"/>
+						<s:NumericStepper id="F28"  stepSize="0.01" change="N_S_changeHandler('F28',event)"/>
 					</s:HGroup>
 					
 					
