@@ -28,10 +28,13 @@
 	</fx:Script>
 	
 	
-	<s:TitleWindow  title="Attention" width="200">
-		<s:VGroup paddingTop="10" paddingLeft="13" paddingBottom="13" paddingRight="13">
-			<s:Label id="msg" />
-			<s:Button label="OK" click="close()"/>	
+	<s:TitleWindow  title="Attention" width="250" >
+		<s:VGroup paddingTop="10" paddingLeft="20" paddingBottom="13" paddingRight="13"
+				  width="100%">
+			<s:Label id="msg"/>
+		   <s:HGroup paddingLeft="80">	
+			 <s:Button label="OK" click="close()" />
+		  </s:HGroup>	  
 		</s:VGroup>
 	</s:TitleWindow>
 	

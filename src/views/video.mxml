@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="video"
+		creationComplete="viewnavigator1_creationCompleteHandler(event)">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import be.boulevart.events.FLVRecorderEvent;
+			import be.boulevart.video.FLVRecorder;
+			
+			import mx.core.UIComponent;
+			import mx.events.FlexEvent;
+			import mx.managers.ISystemManager;
+			
+			import org.osmf.elements.DurationElement;
+			
+			private var file:File;
+			private var recorder:FLVRecorder=FLVRecorder.getInstance()
+			private var fps:uint = 10;
+			private var timer:Timer;
+			[Bindable] private var tofH:int = 400;
+		    [Bindable] private var tofW:int = 400;
+			
+			
+			protected function viewnavigator1_creationCompleteHandler(event:FlexEvent):void
+			{
+				
+				//2. Define the target FLV-file’s properties, the file instance to your flv-file, width & height, framerate and the systemManager instance, that’s a Flash internal declared variable and the optional duration in seconds:
+				file=File.desktopDirectory.resolvePath("recording.flv");
+				recorder.setTarget(file,tofH,tofW,fps,systemManager);
+				
+				var camera : Camera = Camera.getCamera();
+				
+				if (camera)
+				{
+					var ui      : UIComponent   = new UIComponent();
+					var video   : Video     = new Video(tofH,tofW);
+					
+					camera.setMode(tofH,tofW,fps);
+					video.attachCamera(camera);
+					ui.addChild(video);
+					cameraGroup.addElement(ui);
+				}
+				if(timer==null)
+				{		
+				 timer = new Timer(1000/fps);
+				 timer.addEventListener(TimerEvent.TIMER, captureScreen);
+				 timer.addEventListener(TimerEvent.TIMER_COMPLETE, stopRecording);
+				}
+				
+			}
+			
+			protected function stopRecording(event:Event):void
+			{
+				timer.stop();
+				//when saving is done
+				recorder.addEventListener(FLVRecorderEvent.FLV_CREATED, fileMade);
+				//when saving starts
+				recorder.addEventListener(FLVRecorderEvent.FLV_START_CREATION, startCreatingFLV);
+				
+				recorder.stopRecording();
+				
+			}
+			
+			private function startCreatingFLV(e:FLVRecorderEvent):void{
+				recorder.addEventListener(FLVRecorderEvent.PROGRESS,onFLVCreationProgress)
+			}
+			
+			private function onFLVCreationProgress(e:FLVRecorderEvent):void{
+				//e.progress: percent complete (0 to 1)
+				//pbSaving: ProgressBar component in Flex
+				trace("saving progress ", e.progress,1);
+			}
+			
+			protected function captureScreen(event:TimerEvent):void
+			{
+				trace("captured screen");
+				recorder.captureComponent(movieGroup)     //DisplayObject, takes a screenshot from that component
+				
+			}
+			
+			protected function startRecording(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				timer.start();
+			}
+			
+			protected function fileMade(event:Event):void
+			{
+				trace("file made");
+			}
+		]]>
+	</fx:Script>
+	
+<s:VGroup>
+		<s:HGroup>
+			<s:Button label="start" click="startRecording(event)"/>
+			<s:Button label="stop" click="stopRecording(event)"/>
+			<s:Label id="progress" text="waiting..."/>
+		</s:HGroup>
+		<s:Group id="movieGroup" width="50%" height="50%">
+			<s:Group id="cameraGroup" width="100%" height="100%"/>
+			<s:Image  source="image.jpg"  width="{this.tofW}" height="{this.tofH}" visible="false"/>
+		</s:Group>
+	</s:VGroup>
+</s:View>
+

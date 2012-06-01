@@ -214,6 +214,11 @@
 						</intent-filter>
 					</activity>
 				</application>
+				<application>
+                     <activity android:name="com.inoel.ane.speech.extensions.SpeechHandler">
+                 </activity>
+                </application>
+				
 			</manifest>
 		]]>
 		</manifestAdditions> 
