@@ -7,8 +7,9 @@
 			   xmlns:gevu="gevu.*"
 			   xmlns:view="views.*"
 			   xmlns:f4cb="com.oreilly.f4cb.*"
-			   xmlns:galary="galary.*"
-			   creationComplete="init(event)">
+			   xmlns:gallery="gallery.*"
+			   creationComplete="init(event)"
+			   >
 	<fx:Style>
 		@namespace s "library://ns.adobe.com/flex/spark";
 		@namespace mx "library://ns.adobe.com/flex/mx";
@@ -43,7 +44,7 @@
 			import mx.events.PropertyChangeEvent;
 			import mx.managers.PopUpManager;
 			
-			import views.Upload;
+			import views.Images;
 			import mx.events.FlexEvent;
 			[Bindable] private var lat:Number;
 			[Bindable] private var lng:Number;
@@ -193,6 +194,7 @@
 			{
 				this.view2.selectedIndex=1;
 				this.previewPanel.visible=false;
+				
 				if(this.photoPanel.imageView !=null)
 					this.photoPanel.imageView.selectedIndex=0;
 				
@@ -222,14 +224,25 @@
 				NativeApplication.nativeApplication.exit();	
 			}
 			
+			protected function video_clickHandler(event:MouseEvent):void
+			{
+			  view2.selectedIndex=3;	
+			}
+			
 		]]>
 	</fx:Script>
 	<s:layout>
 		<s:HorizontalLayout/>
 	</s:layout>
 	<s:VGroup id="left_interface" paddingLeft="13" paddingTop="13">
+		
+	  <s:HGroup gap="20">   
 		<s:Image source="@Embed('assets/exit.gif')" click="exit_clickHandler(event)"/>
-		<s:HGroup gap="20">
+		<s:Image id="gps" source="@Embed('assets/gps.gif')" click="gps_clickHandler(event)"
+					width="25" height="25" />  
+	  </s:HGroup>	   
+		
+	  <s:HGroup gap="20">
 			<s:Image id="back" visible="false" source="@Embed('assets/back.gif')" click="show_tree_clickHandler(event)"
 					 width="25" height="25"/>
 			<s:Button id="add_button" click="PrepareAdd()" />
@@ -238,12 +251,13 @@
 					  click="delete_clickHandler(event)"/>
 			<s:Image id="photo" source="@Embed('assets/cam.jpg')" click="photo_clickHandler(event)"
 					 width="25" height="25"/>
+		    <s:Image id="video" source="@Embed('assets/video.png')" click="video_clickHandler(event)"
+				   width="25" height="25"/>
 			<s:Image id="galary" source="@Embed('assets/galary.gif')" click="galary_clickHandler(event)"
 					 width="25" height="25" />
 			
-			<s:Image id="gps" source="@Embed('assets/gps.gif')" click="gps_clickHandler(event)"
-					 width="25" height="25" />
-		</s:HGroup>
+			
+	  </s:HGroup>
 		
 		<f4cb:CustomViewStack id="viewstack" width="300" height="300"
 							  skinClass="com.oreilly.f4cb.CustomBorderSkin">
@@ -288,15 +302,17 @@
 			</s:VGroup>
 		</s:Scroller>
 		
-		<view:Upload id="photoPanel"/>
-		
+	 <view:Images id="photoPanel"/>
+	 	
 		<s:VGroup>	
 			<s:HGroup id="previewPanel" paddingLeft="110" paddingTop="15" visible="false">
 				<s:Image id="deleteImage" source="@Embed('assets/delete.png')" click="deleteImage_clickHandler(event)"
 						 width="25" height="25"/>  
 				<s:Image id="Preview"  left="40" top="15"/> 
 			</s:HGroup>	 
-			<galary:galary id="myGalary" /> 
-		</s:VGroup>	
+			<gallery:gallery id="myGalary" /> 
+		</s:VGroup>
+		
+		<view:video id="videoPanel"/>	
 	</f4cb:CustomViewStack>	
 </s:Application>

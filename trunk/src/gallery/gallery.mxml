@@ -5,7 +5,7 @@
 		>
 	<fx:Script>
 		<![CDATA[
-		import galary.ImageRenderer;
+		import gallery.ImageRenderer;
 		
 		import mx.core.FlexGlobals;
 		
@@ -15,6 +15,7 @@
 		
 		public function deleteImage():void{
 		var image:File= File.applicationStorageDirectory.resolvePath(url);
+		if(image.exists)
 		image.deleteFile();
 		FlexGlobals.topLevelApplication.Preview.source="";
 		FlexGlobals.topLevelApplication.previewPanel.visible=false;
@@ -62,9 +63,9 @@
 		
 		<s:List id="lst3"
 				dataProvider="{sampleData}"
-				itemRenderer="galary.ImageRenderer"
+				itemRenderer="gallery.ImageRenderer"
 				borderVisible="true"
-				skinClass="galary.BetterListSkin"
+				skinClass="gallery.BetterListSkin"
 				width="700"
 				click="lst3_clickHandler(event)">
 			<s:layout>
