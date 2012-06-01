@@ -334,11 +334,11 @@
 			<s:NumberFormatter id="formatter" decimalSeparator=","/> 
 		</fx:Declarations>
 	
-	<s:Panel x="0" y="0" width="977" height="1043" title="Batiment">
+	<s:Panel x="0" y="0" width="100%" height="100%" title="Batiment">
 		<s:Scroller id="bat_scro" width="100%" height="100%">
 			<s:Group> 
-				<s:HGroup width="954" height="904" gap="40" paddingLeft="13" paddingTop="13">	
-					<s:VGroup width="100%" height="885" gap="15" paddingLeft="13" paddingTop="13">
+				<s:HGroup width="100%" height="100%"  gap="40" paddingLeft="13" paddingTop="13">	
+					<s:VGroup width="100%" height="100%" gap="15" paddingLeft="13" paddingTop="13">
 						<!-- <view:contacts title="Contact gardien" id="ctcGar" id_contact="{this.id_contact}"/>--> 
 						<s:Label text="Identifiant du bâtiment : " />
 						<s:TextInput id="F02" change="ref_changeHandler(event)"/>
