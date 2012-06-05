@@ -158,7 +158,7 @@
 						<s:Label text="Superficie de la parcelle extérieure (m²) :"/>
 						
 						<s:NumericStepper id="F3"  stepSize="1" value="{this.superficie}"
-										  maximum="1000"
+										  maximum="1000000"
 										  change="superficie_changeHandler(event)" width="75"/>
 						
 					</s:HGroup>
