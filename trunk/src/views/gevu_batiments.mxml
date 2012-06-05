@@ -365,43 +365,47 @@
 						<s:HGroup>	
 							<s:Label  text="Superficie de la parcelle: "/>
 							<s:NumericStepper id="F12"  change="N_S_changeHandler('F12',event)"
-											  stepSize="0.01"/>
+											  stepSize="1"
+											  maximum="1000000"/>
 						</s:HGroup>
 						<s:HGroup>	
 							<s:Label  text="Superficie du bâtiment:"/>
 							<s:NumericStepper id="F13" x="616" y="65" change="N_S_changeHandler('F13',event)"
-											  stepSize="0.01"/>
+											  stepSize="1"
+											  maximum="1000000"/>
 						</s:HGroup>	
 						
 						
 						<s:HGroup>
 							<s:Label text="Nombre de niveaux avec RDC: "/>
-							<s:NumericStepper id="F23"   stepSize="0.01" change="N_S_changeHandler('F23',event)"/>
+							<s:NumericStepper id="F23"   stepSize="1" change="N_S_changeHandler('F23',event)"
+											  maximum="1000000"/>
 						</s:HGroup>
 						
 						<s:HGroup>
 							<s:Label text="Nombre de niveaux au dessus du RDC: "/>
-							<s:NumericStepper id="F24"   stepSize="0.01" change="N_S_changeHandler('F24',event)" />
+							<s:NumericStepper id="F24"   stepSize="1" change="N_S_changeHandler('F24',event)"
+											  maximum="1000000"/>
 						</s:HGroup>	
 						
 						
 						<s:HGroup>
 							<s:Label text="Nombre de niveaux en dessous du RDC: "/>
-							<s:NumericStepper id="F25"  stepSize="0.01" change="N_S_changeHandler('F25',event)" />
+							<s:NumericStepper id="F25"  stepSize="1" maximum="1000000" change="N_S_changeHandler('F25',event)" />
 						</s:HGroup>
 						
 						<s:HGroup>
 							<s:Label text="Nombre d'entrée(s) principale(s): "/>
-							<s:NumericStepper id="F26"  stepSize="0.01" change="N_S_changeHandler('F26',event)"/>
+							<s:NumericStepper id="F26"  stepSize="1" maximum="1000000" change="N_S_changeHandler('F26',event)"/>
 						</s:HGroup>
 						
 						<s:HGroup>
 							<s:Label text="Nombre d'ascenseur(s): "/>
-							<s:NumericStepper id="F27"  stepSize="0.01" change="N_S_changeHandler('F27',event)"/>
+							<s:NumericStepper id="F27"  stepSize="1" maximum="1000000" change="N_S_changeHandler('F27',event)"/>
 						</s:HGroup>
 						<s:HGroup>
 							<s:Label text="Nombre d'escalier(s): "/>
-							<s:NumericStepper id="F28"  stepSize="0.01" change="N_S_changeHandler('F28',event)"/>
+							<s:NumericStepper id="F28"  stepSize="1" maximum="1000000" change="N_S_changeHandler('F28',event)"/>
 						</s:HGroup>
 						
 						
