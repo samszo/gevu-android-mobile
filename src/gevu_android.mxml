@@ -25,6 +25,7 @@
 		}
 	</fx:Style>
 	
+	
 	<fx:Script>
 		<![CDATA[
 			import flash.data.SQLConnection;
@@ -46,8 +47,8 @@
 			
 			import views.Images;
 			import mx.events.FlexEvent;
-			[Bindable] private var lat:Number;
-			[Bindable] private var lng:Number;
+			[Bindable] public var lat:Number;
+			[Bindable] public var lng:Number;
 			
 			private var popmsg:popup = new popup();
 			private var	delpopup:delPopup = new delPopup();
@@ -96,6 +97,12 @@
 				this.back.visible=true;
 				this.nom_lieu.text="";
 				viewstack.selectedIndex = 1
+			}
+			
+			protected function updateGeo_clickHandler(event:MouseEvent):void
+		
+			{	
+				this.mytree.updateGeo.execute();
 			}
 			
 			private function show_tree_clickHandler(event:MouseEvent):void
@@ -188,8 +195,6 @@
 				this.mytree.setStyle("horizontalScrollPolicy",ScrollPolicy.ON)	
 			}
 			
-			
-			
 			protected function photo_clickHandler(event:MouseEvent):void
 			{
 				this.view2.selectedIndex=1;
@@ -211,6 +216,10 @@
 			
 			protected function gps_clickHandler(event:MouseEvent):void
 			{
+				if(this.mytree.treeItem==null)
+					this.updateGeo.enabled=false;
+				else 
+					this.updateGeo.enabled=true;
 				this.viewstack.selectedIndex=2;
 				this.back.visible=true;
 				this.lat=this.mytree.getLat();
@@ -287,6 +296,7 @@
 					<s:Label text="lng."  width="55" />
 					<s:TextInput id="lngField" width="175" text="{this.lng}"/>
 				</s:HGroup>
+				<s:Button id="updateGeo" label="Mis à jour les données" click="updateGeo_clickHandler(event)"/>
 			</s:VGroup>
 			
 		</f4cb:CustomViewStack>

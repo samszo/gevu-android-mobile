@@ -359,9 +359,7 @@
 						<view:repType2 id="rep_14" lblQ="Présence d'aire(s) de stationnement(s), à l'extérieur du bâtiment ?" Q="reponse_14" fnct="{this.editModif14}" val="{this.reponse14}"/>
 						<s:Button id="SaveModif" label="Enregistrer les modifications" click="SaveModif_clickHandler(event)"/>
 						
-					</s:VGroup>
-					
-					
+					</s:VGroup>		
 					<s:VGroup width="489" height="559" gap="25" paddingTop="13">
 						
 						<s:HGroup>	

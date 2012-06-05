@@ -142,9 +142,22 @@
 				
 					this.nom=this.nom_in.text;
 					this.prenom=this.prenom_in.text;
-					this.fixe=this.fixe_in.text;
-					this.mobile=this.mobile_in.text; 
-					this.fax=this.fax_in.text ; 
+					
+					if(this.fixe_in.text=="") 
+						this.fixe='0';
+					else
+					    this.fixe=this.fixe_in.text;
+					
+					if(this.mobile_in.text=="")
+						this.mobile='0';
+					else
+					    this.mobile=this.mobile_in.text;
+					
+					if(this.fax_in.text=="")
+					  this.fax='0'; 
+					else
+					 this.fax=this.fax_in.text; 	
+					
 					this.mail=this.mail_in.text;
 					this.add_query.execute();
 				 
@@ -258,7 +271,7 @@
 			
 		]]>
 	</fx:Script>
-	<s:Panel x="0" y="0" width="1001" height="552" title="Contacts">
+	<s:Panel x="10" y="0" width="848" height="448" title="Contacts">
 		<s:VGroup id="viewContact">
 			<s:HGroup paddingTop="13" paddingBottom="13" gap="5" paddingLeft="13">
 				<s:Button   label="Ajouter un contact" click="add_form_clickHandler(event)"/>
@@ -266,7 +279,7 @@
 			</s:HGroup>	
 		</s:VGroup>
 		
-		<f4cb:CustomViewStack id="Conviewstack" x="10" y="77" width="978" height="429"
+		<f4cb:CustomViewStack id="Conviewstack" x="10" y="77" width="826" height="319"
 							  skinClass="com.oreilly.f4cb.CustomBorderSkin">
 		
 		<s:DataGrid id="dgContact"  width="100%" height="100%"
