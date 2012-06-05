@@ -5,13 +5,17 @@
 		>
 	<fx:Script>
 		<![CDATA[
-		import gallery.ImageRenderer;
-		
-		import mx.core.FlexGlobals;
-		
-		import spark.components.Image;
-		private var url:String;	
+			import gallery.ImageRenderer;
 			
+			import gevu.popup;
+			
+			import mx.core.FlexGlobals;
+			import mx.managers.PopUpManager;
+			
+			import spark.components.Image;
+		private var url:String;	
+		private var uploadedFile:File;
+		private var popmsg:popup = new popup();	
 		
 		public function deleteImage():void{
 		var image:File= File.applicationStorageDirectory.resolvePath(url);
@@ -49,6 +53,69 @@
 					
 			}
 			
+			protected function uploadGallery_clickHandler(event:MouseEvent):void
+			{
+				if (CameraRoll.supportsBrowseForImage)
+				{
+					trace("camera roll is supported");
+					var roll:CameraRoll = new CameraRoll();
+					roll.browseForImage();
+					roll.addEventListener(MediaEvent.SELECT,selectCompleteHandler);
+				}
+				else
+				{
+					trace("camera roll not supported");
+				}
+			}
+			
+			//when the selection is complete upload it
+			protected function selectCompleteHandler(event:MediaEvent):void
+			{
+				trace("event.data.file.url; = "+event.data.file.url);
+				uploadedFile = event.data.file;
+				var filename:String=uploadedFile.name;
+				var nameParts:Array = filename.split(".");
+				var extension:String = nameParts[1];
+				if(nameParts[1]=="jpg"
+					||
+					nameParts[1]=="jpeg"
+					||
+					nameParts[1]=="gif"
+					||
+					nameParts[1]=="png"
+				)
+				{
+				uploadedFile.addEventListener(Event.COMPLETE,uploadCompleteHandler);
+				uploadedFile.addEventListener(Event.OPEN,openUploadHandler);
+				uploadedFile.copyTo(File.applicationStorageDirectory.resolvePath("galary/"+FlexGlobals.topLevelApplication.nom_lieu.text),true)
+				}
+				else {
+					PopUpManager.addPopUp(popmsg,this,true);
+					PopUpManager.centerPopUp(popmsg);
+					popmsg.setMsg("Le format de fichier que vous avez" +
+						"choisi n'est pas supporté!");
+					popmsg.open(this,false);
+						
+				}
+				
+			}
+			
+			protected function uploadCompleteHandler(event:Event):void
+			{
+				PopUpManager.addPopUp(popmsg,this,true);
+				PopUpManager.centerPopUp(popmsg);
+				popmsg.setMsg("Le document est bien était chargé!");
+				popmsg.open(this,false);
+				initGalary();
+				trace("upload complete");
+			}
+			
+			protected function openUploadHandler(event:Event):void
+			{
+				trace("uploading");
+				
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -60,7 +127,7 @@
 	</fx:Declarations>
 	
 	
-		
+	<s:VGroup paddingLeft="13">
 		<s:List id="lst3"
 				dataProvider="{sampleData}"
 				itemRenderer="gallery.ImageRenderer"
@@ -72,5 +139,9 @@
 				<s:HorizontalLayout gap="12"/>
 			</s:layout>
 		</s:List>
-	
+		
+		<s:Button id="galleryPhotoButton" label="charger à partir de votre galerie"
+				  click="uploadGallery_clickHandler(event)"/>	
+	</s:VGroup>	
+		
 </s:View>

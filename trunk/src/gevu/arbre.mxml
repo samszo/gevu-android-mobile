@@ -74,7 +74,15 @@
 					  {this.lat},
 					  {this.lng},
 					  0,0,'','','hybird',0,strftime('%J','{this.toSqlDate(myDate)}'))"
-					  error="query_errorHandler(event)"/>					 
+					  error="query_errorHandler(event)"/>		
+		
+		<sqlite:Query id="updateGeo" connection="{db.connection}"
+					  sql="update gevu_geos set lat={this.lat},
+					  lng={this.lng}
+					  where id_lieu={this.selected_id}"
+					  error="query_errorHandler(event)"
+					  result="updateGeo_resultHandler(event)"/>
+					  
 					  
 		<sqlite:Query id="get_lieu_info_add" connection="{db.connection}"
 					  sql="select * from gevu_lieux where id_lieu={this.selected_id}"
@@ -233,6 +241,15 @@
 			public function getLng():Number{
 				return this.lng;
 			}
+			
+			public function setLat(lat:Number):void{
+			 this.lat=lat;	
+			}
+			
+			public function setLng(lng:Number):void{
+				this.lng=lng;	
+			}
+			
 			public function lpad(original:Object, length:int, pad:String):String
 			{
 				var padded:String = original == null ? "" : original.toString();
@@ -544,7 +561,7 @@
 				FlexGlobals.topLevelApplication.arbre.addElement(instance);
 				}
 			
-			private function get_new_geo():void {
+			public function get_new_geo():void {
 				var geo:Geolocation;
 				if(Geolocation.isSupported){
 				  geo = new Geolocation();
@@ -612,6 +629,12 @@
 				this.expandItem(this.treeItem);
 				FlexGlobals.topLevelApplication.viewstack.selectedIndex = 0;
 				 	
+			}
+			
+			protected function updateGeo_resultHandler(event:SQLEvent):void
+			{
+				var o:Object=event;
+				
 			}
 			
 		]]>	

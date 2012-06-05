@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		title="Photo Upload">
+	
+	<fx:Script>
+		<![CDATA[
+			private var urlRequest:URLRequest = new URLRequest("http://www._____.com/upload.php");
+			
+			
+			
+			
+			//select a picture from the camera roll (gallery)
+			
+		]]>
+	</fx:Script>
+	
+	<s:VGroup x="21" y="23" width="200" height="200">
+		<s:Label id="statusText" fontSize="24" text="Choose a photo..."/>
+		<s:Button id="galleryPhotoButton" label="Upload from Gallery"
+				  click="uploadGallery_clickHandler(event)"/>
+	</s:VGroup>
+</s:View>

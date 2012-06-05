@@ -12,7 +12,7 @@
 		]]>
 	</fx:Script>
 
-<s:Panel x="0" y="0" width="926" height="395" title="Espace extérieur">
+<s:Panel x="0" y="0" width="926" height="333" title="Espace extérieur">
 		<s:VGroup paddingLeft="13" paddingTop="13" paddingBottom="13" gap="20">
 			<s:HGroup width="100%">
 				<s:Label text="Identifiant : " />
