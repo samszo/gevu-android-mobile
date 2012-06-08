@@ -8,6 +8,7 @@
 			   xmlns:view="views.*"
 			   xmlns:f4cb="com.oreilly.f4cb.*"
 			   xmlns:gallery="gallery.*"
+			   backgroundColor="black"
 			   creationComplete="init(event)"
 			   >
 	<fx:Style>
@@ -46,7 +47,6 @@
 			import mx.managers.PopUpManager;
 			
 			import views.Images;
-			import mx.events.FlexEvent;
 			[Bindable] public var lat:Number;
 			[Bindable] public var lng:Number;
 			
@@ -111,6 +111,9 @@
 				viewstack.selectedIndex = 0;
 			}
 			
+			public function getID():int{
+				return this.mytree.getID();
+			}
 			private function PrepareEdit():void
 				
 			{
@@ -229,14 +232,9 @@
 			
 			protected function exit_clickHandler(event:MouseEvent):void
 			{
-				
-				NativeApplication.nativeApplication.exit();	
+			  NativeApplication.nativeApplication.exit();	
 			}
 			
-			protected function video_clickHandler(event:MouseEvent):void
-			{
-			  view2.selectedIndex=3;	
-			}
 			
 		]]>
 	</fx:Script>
@@ -246,24 +244,23 @@
 	<s:VGroup id="left_interface" paddingLeft="13" paddingTop="13">
 		
 	  <s:HGroup gap="20">   
-		<s:Image source="@Embed('assets/exit.gif')" click="exit_clickHandler(event)"/>
+		<s:Image source="@Embed('assets/exit.jpg')" click="exit_clickHandler(event)"/>
 		<s:Image id="gps" source="@Embed('assets/gps.gif')" click="gps_clickHandler(event)"
-					width="25" height="25" />  
+					width="25" height="25" /> 
+		<s:Button id="add_button" click="PrepareAdd()" />
+		<s:Button id="edit_button" click="PrepareEdit()"/>
+		
 	  </s:HGroup>	   
 		
 	  <s:HGroup gap="20">
-			<s:Image id="back" visible="false" source="@Embed('assets/back.gif')" click="show_tree_clickHandler(event)"
+			<s:Image id="back" visible="false" source="@Embed('assets/back.png')" click="show_tree_clickHandler(event)"
 					 width="25" height="25"/>
-			<s:Button id="add_button" click="PrepareAdd()" />
-			<s:Button id="edit_button" click="PrepareEdit()"/>
-			<s:Button id="delete_button" label="Suprimmer ce lieu"
-					  click="delete_clickHandler(event)"/>
-			<s:Image id="photo" source="@Embed('assets/cam.jpg')" click="photo_clickHandler(event)"
+			<s:Image id="photo" source="@Embed('assets/cam.png')" click="photo_clickHandler(event)"
 					 width="25" height="25"/>
-		    <s:Image id="video" source="@Embed('assets/video.png')" click="video_clickHandler(event)"
-				   width="25" height="25"/>
 			<s:Image id="galary" source="@Embed('assets/galary.gif')" click="galary_clickHandler(event)"
 					 width="25" height="25" />
+		    <s:Button id="delete_button" label="Suprimmer ce lieu"
+					 click="delete_clickHandler(event)"/>
 			
 			
 	  </s:HGroup>
@@ -305,7 +302,7 @@
 		</s:VGroup>
 		
 	</s:VGroup>
-	<f4cb:CustomViewStack id="view2" width="100%" height="100%">
+	<f4cb:CustomViewStack id="view2" width="1023" height="730">
 		
 		<s:Scroller width="100%" height="100%">
 			<s:VGroup id="main_interface" paddingLeft="13" paddingTop="13">
@@ -321,8 +318,6 @@
 				<s:Image id="Preview"  left="40" top="15"/> 
 			</s:HGroup>	 
 			<gallery:gallery id="myGalary" /> 
-		</s:VGroup>
-		
-		<view:video id="videoPanel"/>	
+		</s:VGroup>	
 	</f4cb:CustomViewStack>	
 </s:Application>

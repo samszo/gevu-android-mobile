@@ -117,16 +117,16 @@
 			
 		]]>
 	</fx:Script>
-	<s:Panel width="926" height="223" title="Local d'activité">
+	<s:Panel width="926" height="686"  backgroundColor="black" title="Local d'activité">
 		<s:VGroup width="458" height="166" paddingLeft="13" paddingTop="13" gap="20">
 			<s:HGroup>
-				<s:Label text="Identifiant du local :" />
+				<s:Label text="Identifiant du local :" color="white"/>
 				<s:TextInput id="F2" width="50%" change="ref_changeHandler(event)" text="{this.ref}"/>
 			</s:HGroup>
 			<s:HGroup>
-				<s:Label text="Type d'activité : " />
-				<s:RadioButton groupName="type" id="reponse_1" label="Associative" color="0x323232" change="editModif('type', RadioButton(event.target).label)"/> 
-				<s:RadioButton groupName="type" id="reponse_2" label="Commerciale" color="0x323232" change="editModif('type', RadioButton(event.target).label)"/>
+				<s:Label text="Type d'activité : " color="white"/>
+				<s:RadioButton groupName="type" id="reponse_1" label="Associative" color="white" change="editModif('type', RadioButton(event.target).label)"/> 
+				<s:RadioButton groupName="type" id="reponse_2" label="Commerciale" color="white" change="editModif('type', RadioButton(event.target).label)"/>
 			</s:HGroup>
 			<s:Button id="SaveModif" label="Enregistrer les modifications" click="SaveModif_clickHandler(event)"/>
 		</s:VGroup>

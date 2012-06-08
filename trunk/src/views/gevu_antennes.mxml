@@ -3,6 +3,7 @@
 		xmlns:s="library://ns.adobe.com/flex/spark"
 		xmlns:sqlite="com.peterelst.air.sqlite.*"
 		xmlns:view="views.*"
+		backgroundColor="black"
 		creationComplete="this.get_ref.execute();"
 		>
 	<fx:Declarations>
@@ -30,10 +31,10 @@
 			
 		]]>
 	</fx:Script>
-	<s:Panel x="0" y="0" width="905" height="558" title="Antenne">	
-		<s:TextInput id="F2" x="169" y="7"/>
-		<s:Label x="9" y="22" text="Identifiant du local :"/>
-		<view:contacts id="ctc" x="13" y="47" width="258" height="273" id_lieu="{this.selected_id}"
+	<s:Panel x="0" y="0" width="926" height="720" title="Antenne" backgroundColor="black">	
+		<s:TextInput id="F2" x="169" y="7" />
+		<s:Label x="9" y="22" text="Identifiant du local :" color="white"/>
+		<view:contacts id="ctc" x="10" y="67" width="829" height="273" id_lieu="{this.selected_id}"
 					   query_type="antenne"/>		
 	</s:Panel>
 </s:View>

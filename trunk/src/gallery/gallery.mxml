@@ -28,7 +28,7 @@
 		}
 			
 	public function initGalary():void{
-		 var dir:File=File.applicationStorageDirectory.resolvePath("galary/"+FlexGlobals.topLevelApplication.nom_lieu.text);
+		 var dir:File=File.applicationStorageDirectory.resolvePath("galary/"+FlexGlobals.topLevelApplication.getID());
 		if(dir.exists)
 		{
 		 var photos:Array=dir.getDirectoryListing();
@@ -37,7 +37,7 @@
 		 sampleData.removeAll();
 		  for (var i:int=0; i < photos.length;i++)
 		  {  
-			pic=File.applicationStorageDirectory.resolvePath("galary/"+FlexGlobals.topLevelApplication.nom_lieu.text+"/"+photos[i].name);
+			pic=File.applicationStorageDirectory.resolvePath("galary/"+FlexGlobals.topLevelApplication.getID()+"/"+photos[i].name);
 			path=pic.url;
 			sampleData.addItem({imageURL:path});
 		  }
@@ -87,7 +87,7 @@
 				{
 				uploadedFile.addEventListener(Event.COMPLETE,uploadCompleteHandler);
 				uploadedFile.addEventListener(Event.OPEN,openUploadHandler);
-				uploadedFile.copyTo(File.applicationStorageDirectory.resolvePath("galary/"+FlexGlobals.topLevelApplication.nom_lieu.text),true)
+				uploadedFile.copyTo(File.applicationStorageDirectory.resolvePath("galary/"+FlexGlobals.topLevelApplication.getID()),true)
 				}
 				else {
 					PopUpManager.addPopUp(popmsg,this,true);
