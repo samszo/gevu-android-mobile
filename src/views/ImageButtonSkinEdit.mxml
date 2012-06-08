@@ -28,7 +28,7 @@
 			}
 		]]>
 	</fx:Script>
-	<s:BitmapImage source="@Embed('assets/edit.gif')"/>
+	<s:BitmapImage source="@Embed('assets/edit.png')"/>
 	<!-- SkinParts
 	name=iconDisplay, type=spark.primitives.BitmapImage, required=false
 	name=labelDisplay, type=spark.core.IDisplayText, required=false

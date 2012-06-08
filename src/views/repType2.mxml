@@ -31,14 +31,15 @@
 		
 		]]>
 	</fx:Script>
-
-<s:VGroup>
-	<s:TextArea  text="{lblQ}" fontFamily="Times New Roman" fontSize="18" editable="false" />
+<s:Panel title="Question Multi-choix" backgroundColor="black">
+<s:VGroup paddingTop="13">
+	<s:TextArea  text="{lblQ}" fontFamily="Times New Roman" fontSize="18" editable="false" width="350"/>
 	<s:HGroup>		
-		<s:RadioButton groupName="reponse" id="reponse_1" label="oui" color="0x323232" click="changeModif('1')" /> 
-		<s:RadioButton groupName="reponse" id="reponse_2" label="non" color="0x323232" click="changeModif('2')"/>
-		<s:RadioButton groupName="reponse" id="reponse_124" label="n. a." color="0x323232" click="changeModif('124')"/>
-		<s:RadioButton groupName="reponse" id="reponse_141" label="sous réserve" color="0x323232" click="changeModif('141')" />
+		<s:RadioButton groupName="reponse" id="reponse_1" label="oui" color="white" click="changeModif('1')" /> 
+		<s:RadioButton groupName="reponse" id="reponse_2" label="non" color="white" click="changeModif('2')"/>
+		<s:RadioButton groupName="reponse" id="reponse_124" label="n. a." color="white" click="changeModif('124')"/>
+		<s:RadioButton groupName="reponse" id="reponse_141" label="sous réserve" color="white" click="changeModif('141')" />
 	</s:HGroup>
 </s:VGroup>
+</s:Panel>	
 </s:View>	

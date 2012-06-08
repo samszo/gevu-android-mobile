@@ -138,24 +138,24 @@
 			
 		]]>
 	</fx:Script>
-	<s:Panel  title="Parcelle" x="0" y="0" width="902" height="986">
+	<s:Panel  title="Parcelle" x="0" y="0" width="926" height="743"  backgroundColor="black">
 		<s:Scroller width="901" height="100%">
 			<s:Group>
 				<s:VGroup height="741" paddingLeft="13" paddingTop="10" gap="20">
 					
 					<s:HGroup>
-						<s:Label text="identifiant:" width="145"/>
+						<s:Label text="identifiant:" width="145" color="white"/>
 						<s:TextInput id="F2" width="100" text="{this.ref}" change="ref_changeHandler(event)"/>
 					</s:HGroup>
 					
 					<s:HGroup>
-						<s:Label text="Référence cadastre : " />
+						<s:Label text="Référence cadastre : " color="white"/>
 						<s:TextInput id="F21" width="100" text="{this.ref_cadastre}" change="ref_cadastre_changeHandler(event)"/>
 					</s:HGroup>
 					
 					<s:HGroup>
 					
-						<s:Label text="Superficie de la parcelle extérieure (m²) :"/>
+						<s:Label text="Superficie de la parcelle extérieure (m²) :" color="white"/>
 						
 						<s:NumericStepper id="F3"  stepSize="1" value="{this.superficie}"
 										  maximum="1000000"

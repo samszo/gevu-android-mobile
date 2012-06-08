@@ -250,6 +250,9 @@
 				this.lng=lng;	
 			}
 			
+			public function getID():int{
+				return this.selected_id;
+			}
 			public function lpad(original:Object, length:int, pad:String):String
 			{
 				var padded:String = original == null ? "" : original.toString();

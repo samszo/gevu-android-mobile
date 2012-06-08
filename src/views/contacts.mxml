@@ -4,8 +4,8 @@
 		xmlns:mx="library://ns.adobe.com/flex/mx"
 		xmlns:view="views.*"
 		xmlns:sqlite="com.peterelst.air.sqlite.*" 
-		creationComplete="this.query_execution()"
 		xmlns:f4cb="com.oreilly.f4cb.*"
+		creationComplete="this.query_execution()"
 		>
 	
 	<fx:Declarations>
@@ -271,9 +271,9 @@
 			
 		]]>
 	</fx:Script>
-	<s:Panel x="10" y="0" width="848" height="448" title="Contacts">
+	<s:Panel x="-4" y="-2" width="848" height="448" title="Contacts" backgroundColor="black">
 		<s:VGroup id="viewContact">
-			<s:HGroup paddingTop="13" paddingBottom="13" gap="5" paddingLeft="13">
+			<s:HGroup paddingTop="13" paddingBottom="13" gap="5">
 				<s:Button   label="Ajouter un contact" click="add_form_clickHandler(event)"/>
 				<s:Button   label="Supprimer un contact" click="delete_clickHandler(event)"/>
 			</s:HGroup>	

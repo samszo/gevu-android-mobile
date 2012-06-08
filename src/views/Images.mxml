@@ -29,7 +29,7 @@
 				FileName=FileName.replace(trim,"");
 				var dir:File=File.applicationStorageDirectory.resolvePath("galary");
 				if(dir.exists==false) dir.createDirectory();
-				var fl:File= File.applicationStorageDirectory.resolvePath("galary/"+FlexGlobals.topLevelApplication.nom_lieu.text+"/"+FileName+ ".jpg");
+				var fl:File= File.applicationStorageDirectory.resolvePath("galary/"+FlexGlobals.topLevelApplication.getID()+"/"+FileName+ ".jpg");
 				//Use a FileStream to save the bytearray as bytes to the new file
 				var fs:FileStream = new FileStream();
 				try{

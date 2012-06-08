@@ -21,27 +21,27 @@
 		]]>
 	</fx:Script>
 
-<s:Panel x="0" y="0" width="926" height="328" title="Objet extérieur">
+<s:Panel x="0" y="0" width="926" height="686"  backgroundColor="black" title="Objet extérieur">
 	<s:VGroup width="557" height="285" paddingBottom="13" paddingLeft="13" paddingTop="13" gap="20">
 		<s:HGroup>
-			<s:Label text="ref" />
-			<s:TextInput id="F2" width="50%"  />
+			<s:Label text="ref:" color="white" width="70"/>
+			<s:TextInput id="F2" width="200"  />
 		</s:HGroup>
 		
 		<s:HGroup>
-			<s:Label text="fonctions" />
-			<s:TextInput id="F3" width="50%"  />
+			<s:Label text="fonctions:" color="white"/>
+			<s:TextInput id="F3" width="200"  />
 		</s:HGroup>
 
 		<s:HGroup>
-			<s:Label  text="Type social d'objet : " />
-			<s:RadioButton groupName="type" id="reponse_1" label="Lieu de Travail" color="0x323232"  /> 
-			<s:RadioButton groupName="type" id="reponse_2" label="Public" color="0x323232"  />
-			<s:RadioButton groupName="type" id="reponse_3" label="Mixte" color="0x323232"  />
+			<s:Label  text="Type social d'objet : " color="white"/>
+			<s:RadioButton groupName="type" id="reponse_1" label="Lieu de Travail" color="white"  /> 
+			<s:RadioButton groupName="type" id="reponse_2" label="Public" color="white"  />
+			<s:RadioButton groupName="type" id="reponse_3" label="Mixte" color="white"  />
 		</s:HGroup>
 
 		<s:HGroup>
-			<s:Label text="Type spécifique d'objet" />
+			<s:Label text="Type spécifique d'objet" color="white"/>
 			<s:ComboBox id="cbType" width="50%"  labelField="lib" prompt="Choisissez" />				
 		</s:HGroup>
 		<s:HGroup>

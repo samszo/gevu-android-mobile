@@ -16,11 +16,11 @@
 			
 		]]>
 	</fx:Script>
-	
+<s:Panel title="Geo. Info." backgroundColor="black">	
 	<s:VGroup>
 		
 		<s:HGroup width="100%">
-			<s:Label text="adresse" />
+			<s:Label text="adresse" color="white"/>
 			<s:Scroller>
 			<s:Group>	
 			  <s:TextArea id="F01"  text="{this.adresse}" width="240"/>
@@ -28,12 +28,13 @@
 			</s:Scroller>	
 		</s:HGroup>
 		<s:HGroup width="100%">
-			<s:Label text="lat." width="55"/>
+			<s:Label text="lat." width="55" color="white"/>
 			<s:TextInput id="F02"  text="{this.lat}" width="175"/>	
 		</s:HGroup>	
 		<s:HGroup>
-			<s:Label text="lng." width="55"/>
+			<s:Label text="lng." width="55" color="white"/>
 			<s:TextInput id="F03" text="{this.lng}" width="175"/>
 		</s:HGroup>
 	</s:VGroup>
+</s:Panel>
 </s:View>

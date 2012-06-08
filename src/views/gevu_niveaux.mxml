@@ -134,8 +134,8 @@
 			
 		]]>
 	</fx:Script>
-	<s:Panel x="0" y="0" width="927" height="531" title="Niveau">
-		<s:Scroller x="0" y="0" width="927" height="514">
+	<s:Panel x="0" y="0" width="926" height="686"  backgroundColor="black" title="Niveau">
+		<s:Scroller x="0" y="0" width="927" height="597">
 			<s:Group>
 				<s:VGroup x="0"  width="367" height="458" gap="20" paddingBottom="13"
 						  paddingLeft="13" paddingTop="13">
@@ -147,7 +147,7 @@
 								   lblQ="Le niveau peut accueillir plus de 50 pers. (100 dans les établissements d’enseignement) ?"
 								   Q="reponse_1" val="{this.reponse_3}" fnct="{this.editModif3}"/>
 					<s:HGroup>
-						<s:Label x="5" y="54" text="ref"/>
+						<s:Label x="5" y="54" text="ref" color="white"/>
 						<s:TextInput id="F2" text="{this.ref}" x="31" y="49" width="279" height="34"
 									 change="ref_changeHandler(event)"/>
 					</s:HGroup>
