@@ -37,6 +37,7 @@
          */
         override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
         {
+			
             if (getStyle("borderVisible") == true)
             {
                 border.visible = true;
@@ -100,7 +101,8 @@
     
   
     <!--- The Scroller component to add scroll bars to the list. -->
-    <s:Scroller  id="scroller" width="100%" height="100%">
+    
+	<s:Scroller id="scroller" width="100%" height="100%">
 		
 		<s:Group >
 			<s:DataGroup id="dataGroup" 
@@ -108,6 +110,6 @@
 						 itemRenderer="spark.skins.spark.DefaultItemRenderer">
 			</s:DataGroup>
 		</s:Group>
-       
-    </s:Scroller>
+	</s:Scroller>   
+   
 </s:SparkSkin>

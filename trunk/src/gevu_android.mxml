@@ -11,8 +11,9 @@
 			   backgroundColor="black"
 			   creationComplete="init(event)"
 			   >
+	
 	<fx:Style>
-		@namespace s "library://ns.adobe.com/flex/spark";
+		@namespace s  "library://ns.adobe.com/flex/spark";
 		@namespace mx "library://ns.adobe.com/flex/mx";
 		
 		s|Button#add_button {
@@ -302,6 +303,8 @@
 		</s:VGroup>
 		
 	</s:VGroup>
+	
+	
 	<f4cb:CustomViewStack id="view2" width="1023" height="730">
 		
 		<s:Scroller width="100%" height="100%">
@@ -310,14 +313,31 @@
 		</s:Scroller>
 		
 	 <view:Images id="photoPanel"/>
-	 	
+		
+			
 		<s:VGroup>	
-			<s:HGroup id="previewPanel" paddingLeft="110" paddingTop="15" visible="false">
+			<s:HGroup id="previewPanel" paddingLeft="150" paddingTop="15" visible="false">
 				<s:Image id="deleteImage" source="@Embed('assets/delete.png')" click="deleteImage_clickHandler(event)"
 						 width="25" height="25"/>  
 				<s:Image id="Preview"  left="40" top="15"/> 
+			</s:HGroup>
+	
+			<gallery:gallery id="myGalary" />
+		</s:VGroup>
+	
+		
+		<s:VGroup>	
+			<s:HGroup id="previewPanel2" paddingLeft="110" paddingTop="15">
+				<s:Image id="deleteImage2" source="@Embed('assets/delete.png')" 
+						 click="deleteImage_clickHandler(event)"
+						 width="25" height="25"/>  
+				<s:VideoPlayer id="Preview2"
+					source="assets/A.flv"
+					width="350" height="250"
+					loop="true"/> 
 			</s:HGroup>	 
-			<gallery:gallery id="myGalary" /> 
-		</s:VGroup>	
+			<gallery:gallery id="myGalary2" /> 
+		</s:VGroup>
+		
 	</f4cb:CustomViewStack>	
 </s:Application>

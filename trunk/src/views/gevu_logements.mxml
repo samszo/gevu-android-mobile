@@ -203,11 +203,11 @@
 	<s:Panel  x="0" y="0" title="Logement" width="926" height="686"  backgroundColor="black">
 		<s:VGroup height="340" gap="20" paddingLeft="13" paddingTop="13">
 			<s:HGroup>
-				<s:Label text="Identifiant du logement :" color="white"/>
+				<s:Label text="Identifiant du logement :" color="white" height="100%" verticalAlign="middle"/>
 				<s:TextInput id="F2" width="100" change="ref_changeHandler(event)" text="{this.ref}"/>
 			</s:HGroup>
 			<s:HGroup>
-				<s:Label text="N° de porte:" color="white" width="165"/>
+				<s:Label text="N° de porte:" color="white" width="165" height="100%" verticalAlign="middle"/>
 				<s:TextInput id="F3" width="100" change="N_changeHandler(event)" text="{this.num_porte}"/>
 			</s:HGroup>
 			<s:Label text="Type de logement: " color="white"/>

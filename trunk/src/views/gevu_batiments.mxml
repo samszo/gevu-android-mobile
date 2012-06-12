@@ -363,7 +363,8 @@
 					<s:VGroup width="489" height="559" gap="25" paddingTop="13">
 						
 						<s:HGroup width="321">	
-							<s:Label  text="Superficie de la parcelle:" color="white"/>
+							<s:Label width="172" height="100%" verticalAlign="middle" color="white" text="Superficie de la parcelle:"
+									 />
 						<s:VGroup paddingLeft="120">
 							<s:NumericStepper id="F12"  change="N_S_changeHandler('F12',event)"
 											  stepSize="1"
@@ -373,7 +374,7 @@
 						</s:HGroup>
 						
 						<s:HGroup>	
-							<s:Label  text="Superficie du bâtiment:" color="white"/>
+							<s:Label  text="Superficie du bâtiment:" color="white" height="100%" verticalAlign="middle"/>
 							<s:VGroup paddingLeft="130">
 								<s:NumericStepper id="F13"  change="N_S_changeHandler('F13',event)"
 												  stepSize="1"
@@ -383,7 +384,7 @@
 						
 						
 						<s:HGroup>
-							<s:Label text="Nombre de niveaux avec RDC: " color="white"/>
+							<s:Label text="Nombre de niveaux avec RDC: " color="white" height="100%" verticalAlign="middle"/>
 							<s:VGroup paddingLeft="75">
 								<s:NumericStepper id="F23"  change="N_S_changeHandler('F23',event)"
 												  stepSize="1"
@@ -392,7 +393,7 @@
 						</s:HGroup>
 						
 						<s:HGroup>
-							<s:Label text="Nombre de niveaux au dessus du RDC: " color="white"/>
+							<s:Label text="Nombre de niveaux au dessus du RDC: " color="white" height="100%" verticalAlign="middle"/>
 							<s:VGroup paddingLeft="18">
 								<s:NumericStepper id="F24"  change="N_S_changeHandler('F24',event)"
 												  stepSize="1"
@@ -402,7 +403,7 @@
 						
 						
 						<s:HGroup>
-							<s:Label text="Nombre de niveaux en dessous du RDC: " color="white"/>
+							<s:Label text="Nombre de niveaux en dessous du RDC: " color="white" height="100%" verticalAlign="middle"/>
 							<s:VGroup paddingLeft="10">
 								<s:NumericStepper id="F25"  change="N_S_changeHandler('F25',event)"
 												  stepSize="1"
@@ -411,7 +412,7 @@
 						</s:HGroup>
 						
 						<s:HGroup>
-							<s:Label text="Nombre d'entrée(s) principale(s): " color="white"/>
+							<s:Label text="Nombre d'entrée(s) principale(s): " color="white" height="100%" verticalAlign="middle"/>
 							<s:VGroup paddingLeft="65">
 								<s:NumericStepper id="F26"  change="N_S_changeHandler('F26',event)"
 												  stepSize="1"
@@ -420,7 +421,7 @@
 						</s:HGroup>
 						
 						<s:HGroup>
-							<s:Label text="Nombre d'ascenseur(s): " color="white"/>
+							<s:Label text="Nombre d'ascenseur(s): " color="white" height="100%" verticalAlign="middle"/>
 							<s:VGroup paddingLeft="127">
 								<s:NumericStepper id="F27"  change="N_S_changeHandler('F27',event)"
 												  stepSize="1"
@@ -428,7 +429,7 @@
 							</s:VGroup>
 						</s:HGroup>
 						<s:HGroup>
-							<s:Label text="Nombre d'escalier(s) : " color="white"/>
+							<s:Label text="Nombre d'escalier(s) : " color="white" height="100%" verticalAlign="middle"/>
 							<s:VGroup paddingLeft="143">
 								
 								<s:NumericStepper id="F28"  change="N_S_changeHandler('F28',event)"
@@ -439,7 +440,7 @@
 						
 						
 						<s:HGroup>
-							<s:Label  text="Date d'achèvement: " color="white"/>
+							<s:Label  text="Date d'achèvement: " color="white" height="100%" verticalAlign="middle"/>
 							<s:VGroup width="273" paddingLeft="150">
 								<DateChoose:SparkDateComponent id="date_ach"
 															   change="{this.date_achevement=date_ach.selectedDate}"
@@ -449,7 +450,7 @@
 						</s:HGroup>
 						
 						<s:HGroup>
-							<s:Label  text="Date du dépot de permis: " color="white"/>
+							<s:Label  text="Date du dépot de permis: " color="white" height="100%" verticalAlign="middle"/>
 							<s:VGroup paddingLeft="110">
 								<DateChoose:SparkDateComponent id="date_depo" x="438" y="298"
 															   change="{this.date_depot=date_depo.selectedDate}"
@@ -458,7 +459,7 @@
 							
 						</s:HGroup>
 						<s:HGroup>
-							<s:Label  text="Date de la dernière réhabilitation: " color="white"/>
+							<s:Label  text="Date de la dernière réhabilitation: " color="white" height="100%" verticalAlign="middle"/>
 							<s:VGroup paddingLeft="57">
 								<DateChoose:SparkDateComponent id="date_reha" x="438" y="352"
 															   change="{this.date_rehab=date_reha.selectedDate}"

@@ -144,18 +144,19 @@
 				<s:VGroup height="741" paddingLeft="13" paddingTop="10" gap="20">
 					
 					<s:HGroup>
-						<s:Label text="identifiant:" width="145" color="white"/>
+						<s:Label text="identifiant:" width="284" color="white" height="100%" verticalAlign="middle"/>
 						<s:TextInput id="F2" width="100" text="{this.ref}" change="ref_changeHandler(event)"/>
 					</s:HGroup>
 					
 					<s:HGroup>
-						<s:Label text="Référence cadastre : " color="white"/>
+						<s:Label width="284" color="white" text="Référence cadastre: " height="100%" verticalAlign="middle"/>
 						<s:TextInput id="F21" width="100" text="{this.ref_cadastre}" change="ref_cadastre_changeHandler(event)"/>
 					</s:HGroup>
 					
 					<s:HGroup>
 					
-						<s:Label text="Superficie de la parcelle extérieure (m²) :" color="white"/>
+						<s:Label width="289" color="white"
+								 text="Superficie de la parcelle extérieure (m²):" height="100%" verticalAlign="middle"/>
 						
 						<s:NumericStepper id="F3"  stepSize="1" value="{this.superficie}"
 										  maximum="1000000"

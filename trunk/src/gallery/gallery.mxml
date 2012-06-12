@@ -2,9 +2,11 @@
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" title="galary"
 		minWidth="600" minHeight="600"
-		>
+		creationComplete="init_list()" >
 	<fx:Script>
 		<![CDATA[
+			import flashx.textLayout.container.ScrollPolicy;
+			
 			import gallery.ImageRenderer;
 			
 			import gevu.popup;
@@ -13,10 +15,16 @@
 			import mx.managers.PopUpManager;
 			
 			import spark.components.Image;
+			
+			
 		private var url:String;	
 		private var uploadedFile:File;
 		private var popmsg:popup = new popup();	
 		
+		public function init_list():void{
+			this.lst3.scroller.setStyle("verticalscrollpolicy",ScrollPolicy.OFF);
+		}
+			
 		public function deleteImage():void{
 		var image:File= File.applicationStorageDirectory.resolvePath(url);
 		if(image.exists)
@@ -47,10 +55,36 @@
 			
 			protected function lst3_clickHandler(event:MouseEvent):void
 			{
-				this.url = event.currentTarget.selectedItem.imageURL;
-				FlexGlobals.topLevelApplication.Preview.source=url;
-				FlexGlobals.topLevelApplication.previewPanel.visible=true;
-					
+				url=event.currentTarget.selectedItem.imageURL;
+				var nameParts:Array = url.split(".");
+				var extension:String = nameParts[1];
+				
+				if(nameParts[1]=="jpg"
+					||
+					nameParts[1]=="jpeg"
+					||
+					nameParts[1]=="gif"
+					||
+					nameParts[1]=="png"
+					)
+				{
+					FlexGlobals.topLevelApplication.Preview.source=url;
+					FlexGlobals.topLevelApplication.view2.selectedIndex=2;
+					FlexGlobals.topLevelApplication.previewPanel.visible=true;
+				
+				}
+				
+				if(nameParts[1]=="flv"
+					||
+				   nameParts[1]=="f4v")
+				{
+					FlexGlobals.topLevelApplication.Preview2.source=url;
+					FlexGlobals.topLevelApplication.view2.selectedIndex=3;
+				}
+				
+				
+				
+			
 			}
 			
 			protected function uploadGallery_clickHandler(event:MouseEvent):void
@@ -83,20 +117,24 @@
 					nameParts[1]=="gif"
 					||
 					nameParts[1]=="png"
+					||
+					nameParts[1]=="flv"
+					||
+					nameParts[1]=="f4v"
 				)
 				{
 				uploadedFile.addEventListener(Event.COMPLETE,uploadCompleteHandler);
 				uploadedFile.addEventListener(Event.OPEN,openUploadHandler);
 				uploadedFile.copyTo(File.applicationStorageDirectory.resolvePath("galary/"+FlexGlobals.topLevelApplication.getID()),true)
 				}
-				else {
+				else 
+				  {
 					PopUpManager.addPopUp(popmsg,this,true);
 					PopUpManager.centerPopUp(popmsg);
 					popmsg.setMsg("Le format de fichier que vous avez" +
 						"choisi n'est pas supporté!");
 					popmsg.open(this,false);
-						
-				}
+					}
 				
 			}
 			
@@ -126,22 +164,27 @@
 		</s:ArrayList>
 	</fx:Declarations>
 	
-	
-	<s:VGroup paddingLeft="13">
+
+<s:Panel width="961" backgroundColor="Black">
+	<s:VGroup width="949" height="234" paddingLeft="13" gap="13">
+		<s:HGroup paddingTop="13">
+			<s:Image source="@Embed('assets/AddRecord.png')" click="uploadGallery_clickHandler(event)"
+					 width="25" height="25"/>
+		</s:HGroup>
+		
 		<s:List id="lst3"
 				dataProvider="{sampleData}"
 				itemRenderer="gallery.ImageRenderer"
 				borderVisible="true"
 				skinClass="gallery.BetterListSkin"
-				width="700"
+				width="900"
 				click="lst3_clickHandler(event)">
 			<s:layout>
 				<s:HorizontalLayout gap="12"/>
 			</s:layout>
 		</s:List>
 		
-		<s:Button id="galleryPhotoButton" label="charger à partir de votre galerie"
-				  click="uploadGallery_clickHandler(event)"/>	
+			
 	</s:VGroup>	
-		
+</s:Panel>		
 </s:View>

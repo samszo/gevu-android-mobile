@@ -104,7 +104,7 @@
 	<s:Panel x="0" y="0" width="926" height="686"  backgroundColor="black" title="Parties Communes">
 		<s:VGroup  gap="20" paddingLeft="13" paddingTop="13">
 			 <s:HGroup>
-				 <s:Label  text="Identifiant de la parties commune :" color="white"/>
+				 <s:Label  text="Identifiant de la parties commune :" color="white" height="100%" verticalAlign="middle"/>
 				 <s:TextInput id="F2"  text="{this.ref}" change="ref_changeHandler(event)" width="50%"/>
 				 
 			</s:HGroup>
