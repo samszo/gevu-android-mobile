@@ -15,24 +15,24 @@
 <s:Panel x="0" y="0" width="926" height="686"  backgroundColor="black" title="Espace extérieur">
 		<s:VGroup paddingLeft="13" paddingTop="13" paddingBottom="13" gap="20">
 			<s:HGroup width="100%">
-				<s:Label text="Identifiant: " color="white"/>
+				<s:Label text="Identifiant: " color="white" height="100%" verticalAlign="middle"/>
 				<s:TextInput id="F2" width="200" />
 			</s:HGroup>
 
 			<s:HGroup>
-				<s:Label text="Fonction: " color="white"/>
+				<s:Label text="Fonction: " color="white" height="100%" verticalAlign="middle"/>
 				<s:TextInput id="F3" width="200"/>
 			</s:HGroup>
 
 			<s:HGroup>
-				<s:Label text="Type social d'espace : " color="white"/>
+				<s:Label text="Type social d'espace : " color="white" height="100%" verticalAlign="middle"/>
 				<s:RadioButton groupName="type" id="reponse_1" label="Lieu de Travail" color="white" /> 
 				<s:RadioButton groupName="type" id="reponse_2" label="Public" color="white" />
 				<s:RadioButton groupName="type" id="reponse_3" label="Mixte" color="white"/>
 			</s:HGroup>
 
 			<s:HGroup>
-				<s:Label text="Type d'espace spécifique" color="white"/>
+				<s:Label text="Type d'espace spécifique" color="white" height="100%" verticalAlign="middle"/>
 				<s:ComboBox id="cbType" labelField="lib" prompt="Choisissez"  />				
 			</s:HGroup>
 

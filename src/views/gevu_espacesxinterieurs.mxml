@@ -12,18 +12,18 @@
 		]]>
 	</fx:Script>
 
-<s:Panel x="10" y="10" width="926" height="686"  backgroundColor="black" name="EspaInt" title="Espace intérieur">	
+<s:Panel x="0" y="0" width="926" height="686"  backgroundColor="black" name="EspaInt" title="Espace intérieur">	
 	<s:VGroup width="389" height="249" gap="20" paddingBottom="13" paddingLeft="13" paddingTop="13">
 		<s:HGroup>
-			<s:Label text="ref" color="white"/>
+			<s:Label width="109" height="100%" color="white" text="ref:" verticalAlign="middle"/>
 			<s:TextInput id="F2" width="100" />
 		</s:HGroup>
 		<s:HGroup>
-			<s:Label text="fonction" color="white"/>
+			<s:Label width="107" height="100%" color="white" text="fonction:" verticalAlign="middle"/>
 			<s:TextInput id="F3" width="100" />
 		</s:HGroup>
 		<s:HGroup  id="lblType" >
-			<s:Label text="Type d'espace : " color="white"/>
+			<s:Label text="Type d'espace: " color="white" height="100%" verticalAlign="middle"/>
 			<s:ComboBox id="cbType" labelField="lib" prompt="Choisissez" />				
 		</s:HGroup>
 		<s:HGroup>

@@ -16,6 +16,7 @@
 			[Bindable] private var DateNow:Date;
 			[Bindable] private var FileName:String;
 			private var trim:RegExp = /[~+%&\\;:"',<>?#\s]/g
+				
 			private function takePicture(event:MouseEvent):void {	
 				var bmd:BitmapData = new BitmapData(tofH,tofW);
 				bmd.draw(myVid);				
@@ -42,6 +43,7 @@
 				}catch(e:Error){
 					trace(e.message);
 				}
+	
 				imageView.selectedIndex=1;
 			}
 			
@@ -109,18 +111,28 @@
 			{
 			
 			}*/
+			
+			protected function prends_photo_clickHandler(event:MouseEvent):void
+			{
+			 FlexGlobals.topLevelApplication.photo.dispatchEvent(new MouseEvent(MouseEvent.CLICK, true, false));	
+			}
+			
 		]]>
 	</fx:Script>
 	
-	<s:VGroup x="0" y="0" width="500" height="500">
-		<s:HGroup>
-			<f4cb:CustomViewStack id="imageView" width="500" height="500">
+	<s:VGroup x="0" y="0" width="500" height="522">
+		<s:HGroup width="396">
+			<f4cb:CustomViewStack id="imageView" width="410" height="466">
 				
 				<s:VGroup>
 					<s:VideoDisplay id="myVid"  width="{tofW}" height="{tofH}" creationComplete="initCamera()"/>
 					<s:Button label="Enregistrer" click="takePicture(event)"/>	
-				</s:VGroup>			
-				<s:Image id="imagen" />
+				</s:VGroup>
+				<s:VGroup>
+					<s:Image id="imagen" />
+					<s:Button id="prends" label="Prends une photo"  click="prends_photo_clickHandler(event)"/>
+				</s:VGroup>
+				
 			</f4cb:CustomViewStack>	
 		</s:HGroup>	
 	</s:VGroup>

@@ -31,7 +31,7 @@
 		
 		]]>
 	</fx:Script>
-<s:Panel title="Question Multi-choix" backgroundColor="black">
+<s:Panel title="Question choix-multiple" backgroundColor="black">
 <s:VGroup paddingTop="13">
 	<s:TextArea  text="{lblQ}" fontFamily="Times New Roman" fontSize="18" editable="false" width="350"/>
 	<s:HGroup>		

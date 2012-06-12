@@ -31,10 +31,15 @@
 			
 		]]>
 	</fx:Script>
-	<s:Panel x="0" y="0" width="926" height="720" title="Antenne" backgroundColor="black">	
-		<s:TextInput id="F2" x="169" y="7" />
-		<s:Label x="9" y="22" text="Identifiant du local :" color="white"/>
+	<s:Panel x="0" y="0" width="926" height="720" title="Antenne" backgroundColor="black">
+	<s:VGroup paddingLeft="13" gap="15">
+	 <s:HGroup paddingTop="13">
+		<s:Label width="100%" height="35" text="Identifiant du local :" color="white"  verticalAlign="middle"/>
+		<s:TextInput id="F2"/>
+		
+		</s:HGroup>
 		<view:contacts id="ctc" x="10" y="67" width="829" height="273" id_lieu="{this.selected_id}"
-					   query_type="antenne"/>		
+					   query_type="antenne"/>
+	</s:VGroup>	
 	</s:Panel>
 </s:View>

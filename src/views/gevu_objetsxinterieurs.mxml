@@ -15,15 +15,15 @@
 		<s:VGroup width="378" height="243" gap="20" paddingBottom="13" paddingLeft="13"
 				  paddingTop="13">
 			<s:HGroup>
-				<s:Label text="ref" color="white"/>
+				<s:Label width="81" color="white" text="ref:" height="100%" verticalAlign="middle"/>
 				<s:TextInput id="F2" width="165" />
 			</s:HGroup>
 			<s:HGroup>
-				<s:Label text="fonctions" color="white"/>
+				<s:Label width="82" color="white" text="fonctions:" height="100%" verticalAlign="middle"/>
 				<s:TextInput id="F3" width="50%" />
 			</s:HGroup>
 			<s:HGroup>
-				<s:Label text="Type d'objet" color="white"/>
+				<s:Label text="Type d'objet:" color="white"/>
 				<s:ComboBox id="cbType" labelField="lib" prompt="Choisissez" />				
 			</s:HGroup>
 			<!--

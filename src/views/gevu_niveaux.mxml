@@ -147,7 +147,7 @@
 								   lblQ="Le niveau peut accueillir plus de 50 pers. (100 dans les établissements d’enseignement) ?"
 								   Q="reponse_1" val="{this.reponse_3}" fnct="{this.editModif3}"/>
 					<s:HGroup>
-						<s:Label x="5" y="54" text="ref" color="white"/>
+						<s:Label x="5" y="54" text="ref:" color="white" height="100%" verticalAlign="middle"/>
 						<s:TextInput id="F2" text="{this.ref}" x="31" y="49" width="279" height="34"
 									 change="ref_changeHandler(event)"/>
 					</s:HGroup>
