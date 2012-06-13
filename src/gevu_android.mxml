@@ -318,8 +318,8 @@
 		<s:VGroup>	
 			<s:HGroup id="previewPanel" paddingLeft="150" paddingTop="15" visible="false">
 				<s:Image id="deleteImage" source="@Embed('assets/delete.png')" click="deleteImage_clickHandler(event)"
-						 width="25" height="25"/>  
-				<s:Image id="Preview"  left="40" top="15"/> 
+						 width="25" height="100%" verticalAlign="middle"/>  
+				<s:Image id="Preview"  left="40" top="15" width="600"/> 
 			</s:HGroup>
 	
 			<gallery:gallery id="myGalary" />

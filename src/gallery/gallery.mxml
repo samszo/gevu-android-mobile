@@ -1,30 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" title="galary"
+		xmlns:sqlite="com.peterelst.air.sqlite.*"
 		minWidth="600" minHeight="600"
 		creationComplete="init_list()" >
+	
+	<fx:Declarations>
+		<sqlite:SQLite id="db" file="gevu_mobile.db"/>
+		<sqlite:Query id="addImage" connection="{db.connection}"
+					  sql="insert into gevu_docs(id_instant,url,titre,branche,tronc,
+					  content_type,path_source,maj)
+					  values(0,'{this.url}','{this.FileName}',0,'nan','media','{this.url}',
+					  '{this.toSqlDate(myDate)}')"
+					  result="addImage_resultHandler(event)"
+					  error="addImage_errorHandler(event)"/>	  
+	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
-			import flashx.textLayout.container.ScrollPolicy;
+		import flashx.textLayout.container.ScrollPolicy;
+		
+		import gallery.ImageRenderer;
+		
+		import gevu.popup;
+		
+		import mx.core.FlexGlobals;
+		import mx.managers.PopUpManager;
+		
+		import spark.components.Image;
 			
-			import gallery.ImageRenderer;
-			
-			import gevu.popup;
-			
-			import mx.core.FlexGlobals;
-			import mx.managers.PopUpManager;
-			
-			import spark.components.Image;
-			
-			
-		private var url:String;	
+		[Bindable] private var myDate:Date = new Date();
+	    [Bindable] private var FileName:String;
+		[Bindable] private var url:String;	
 		private var uploadedFile:File;
+			
 		private var popmsg:popup = new popup();	
 		
 		public function init_list():void{
 			this.lst3.scroller.setStyle("verticalscrollpolicy",ScrollPolicy.OFF);
 		}
 			
+		protected function addImage_resultHandler(event:SQLEvent):void
+		{
+		var o:Object=event;	
+		}
+			
+		protected function addImage_errorHandler(event:SQLErrorEvent):void
+		{
+		var o:Object=event;	
+		}
+	
 		public function deleteImage():void{
 		var image:File= File.applicationStorageDirectory.resolvePath(url);
 		if(image.exists)
@@ -34,7 +58,27 @@
 		
 		initGalary();
 		}
+		
 			
+			
+			public function lpad(original:Object, length:int, pad:String):String
+			{
+				var padded:String = original == null ? "" : original.toString();
+				while (padded.length < length) padded = pad + padded;
+				return padded;
+			}
+			
+			public function toSqlDate(dateVal:Date):String
+			{
+				return dateVal == null ? null : dateVal.fullYear
+					+ "-" + lpad(dateVal.month + 1,2,'0')  // month is zero-based
+					+ "-" + lpad(dateVal.date,2,'0')
+					+ " " + lpad(dateVal.hours,2,'0')
+					+ ":" + lpad(dateVal.minutes,2,'0')
+					+ ":" + lpad(dateVal.seconds,2,'0')
+					;
+			}
+					
 	public function initGalary():void{
 		 var dir:File=File.applicationStorageDirectory.resolvePath("galary/"+FlexGlobals.topLevelApplication.getID());
 		if(dir.exists)
@@ -74,9 +118,8 @@
 				
 				}
 				
-				if(nameParts[1]=="flv"
-					||
-				   nameParts[1]=="f4v")
+				if(nameParts[1]=="mp4")
+					
 				{
 					FlexGlobals.topLevelApplication.Preview2.source=url;
 					FlexGlobals.topLevelApplication.view2.selectedIndex=3;
@@ -107,8 +150,8 @@
 			{
 				trace("event.data.file.url; = "+event.data.file.url);
 				uploadedFile = event.data.file;
-				var filename:String=uploadedFile.name;
-				var nameParts:Array = filename.split(".");
+				FileName=uploadedFile.name;
+				var nameParts:Array = FileName.split(".");
 				var extension:String = nameParts[1];
 				if(nameParts[1]=="jpg"
 					||
@@ -118,14 +161,15 @@
 					||
 					nameParts[1]=="png"
 					||
-					nameParts[1]=="flv"
-					||
-					nameParts[1]=="f4v"
+					nameParts[1]=="mp4"
+					
 				)
 				{
 				uploadedFile.addEventListener(Event.COMPLETE,uploadCompleteHandler);
 				uploadedFile.addEventListener(Event.OPEN,openUploadHandler);
-				uploadedFile.copyTo(File.applicationStorageDirectory.resolvePath("galary/"+FlexGlobals.topLevelApplication.getID()),true)
+				uploadedFile.copyTo(File.applicationStorageDirectory.resolvePath("galary/"+FlexGlobals.topLevelApplication.getID()),true);
+				url=File.applicationStorageDirectory.resolvePath("galary/"+FlexGlobals.topLevelApplication.getID()+"/"+FileName).url;
+				this.addImage.execute();
 				}
 				else 
 				  {

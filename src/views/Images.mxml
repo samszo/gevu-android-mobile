@@ -2,19 +2,34 @@
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" 
 		xmlns:mx="library://ns.adobe.com/flex/mx" 
+		xmlns:sqlite="com.peterelst.air.sqlite.*"
 		title="Photo Upload" xmlns:f4cb="com.oreilly.f4cb.*">
 	
+	
+	<fx:Declarations>
+		<sqlite:SQLite id="db" file="gevu_mobile.db"/>
+		<sqlite:Query id="addImage" connection="{db.connection}"
+			sql="insert into gevu_docs(id_instant,url,titre,branche,tronc,
+			content_type,path_source,maj)
+			values(0,'{this.url}','{this.FileName}',0,'nan','media','{this.url}',
+			'{this.toSqlDate(myDate)}')"
+			result="addImage_resultHandler(event)"
+			error="addImage_errorHandler(event)"/>	  
+	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
 			import flash.media.Camera;
 			
 			import mx.core.FlexGlobals;
 			import mx.graphics.codec.JPEGEncoder;
+			import mx.utils.object_proxy;
 			[Bindable] private var tofH:int = 400;
 			[Bindable] private var tofW:int = 400;
 			[Bindable] private var path:String;
 			[Bindable] private var DateNow:Date;
 			[Bindable] private var FileName:String;
+			[Bindable] private var url:String;
+			[Bindable] private var myDate:Date = new Date();
 			private var trim:RegExp = /[~+%&\\;:"',<>?#\s]/g
 				
 			private function takePicture(event:MouseEvent):void {	
@@ -31,6 +46,7 @@
 				var dir:File=File.applicationStorageDirectory.resolvePath("galary");
 				if(dir.exists==false) dir.createDirectory();
 				var fl:File= File.applicationStorageDirectory.resolvePath("galary/"+FlexGlobals.topLevelApplication.getID()+"/"+FileName+ ".jpg");
+				url= fl.url;
 				//Use a FileStream to save the bytearray as bytes to the new file
 				var fs:FileStream = new FileStream();
 				try{
@@ -43,7 +59,7 @@
 				}catch(e:Error){
 					trace(e.message);
 				}
-	
+	            this.addImage.execute();
 				imageView.selectedIndex=1;
 			}
 			
@@ -116,6 +132,35 @@
 			{
 			 FlexGlobals.topLevelApplication.photo.dispatchEvent(new MouseEvent(MouseEvent.CLICK, true, false));	
 			}
+			
+			protected function addImage_resultHandler(event:SQLEvent):void
+			{
+			 var o:Object=event;	
+			}
+			
+			protected function addImage_errorHandler(event:SQLErrorEvent):void
+			{
+				var o:Object=event;	
+			}
+			
+			public function lpad(original:Object, length:int, pad:String):String
+			{
+				var padded:String = original == null ? "" : original.toString();
+				while (padded.length < length) padded = pad + padded;
+				return padded;
+			}
+			
+			public function toSqlDate(dateVal:Date):String
+			{
+				return dateVal == null ? null : dateVal.fullYear
+					+ "-" + lpad(dateVal.month + 1,2,'0')  // month is zero-based
+					+ "-" + lpad(dateVal.date,2,'0')
+					+ " " + lpad(dateVal.hours,2,'0')
+					+ ":" + lpad(dateVal.minutes,2,'0')
+					+ ":" + lpad(dateVal.seconds,2,'0')
+					;
+			}
+			
 			
 		]]>
 	</fx:Script>
