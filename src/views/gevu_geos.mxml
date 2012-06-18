@@ -17,7 +17,7 @@
 		]]>
 	</fx:Script>
 <s:Panel title="Geo. Info." backgroundColor="black">	
-	<s:VGroup>
+	<s:VGroup paddingTop="13" paddingRight="13" paddingLeft="13" paddingBottom="13">
 		
 		<s:HGroup width="100%">
 			<s:Label text="adresse:" color="white" height="100%" verticalAlign="middle"/>
