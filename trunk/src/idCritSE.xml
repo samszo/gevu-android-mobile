@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- New document created with EditiX at Tue Jun 12 17:12:04 CEST 2012 -->
+
+<node idCtrl="-1" lib="contrôles" isBranch="true">
+	<node idCtrl="61" lib="Groupe" isBranch="true">
+		<node idCtrl="45" lib="Bâtiment" isBranch="true">
+			<node idCtrl="46" lib="Niveau" isBranch="true">
+				<node idCtrl="70" lib="Parties communes" isBranch="true">
+					<node idCtrl="50" lib="Espace intérieur" isBranch="true">
+						<node idCtrl="71" lib="Hall d'entrée" isBranch="true">
+							<node idCtrl="8" lib="Entrée" isBranch="false"/>
+							<node idCtrl="25" lib="Sols Murs Plafonds" isBranch="false"/>
+							<node idCtrl="9" lib="Equipement" isBranch="false"/>
+							<node idCtrl="5" lib="Commandes" isBranch="false"/>
+							<node idCtrl="7" lib="Eclairage" isBranch="false"/>
+						</node>
+						<node idCtrl="72" lib="Couloir" isBranch="true">
+							<node idCtrl="7" lib="Eclairage" isBranch="false"/>
+							<node idCtrl="5" lib="Commandes" isBranch="false"/>
+							<node idCtrl="25" lib="Sols Murs Plafonds" isBranch="false"/>
+						</node>
+						<node idCtrl="73" lib="Local Poubelle" isBranch="true">
+							<node idCtrl="73" lib="Local Poubelle" isBranch="false"/>
+							<node idCtrl="9" lib="Equipement" isBranch="false"/>
+							<node idCtrl="5" lib="Commandes" isBranch="false"/>
+							<node idCtrl="7" lib="Eclairage" isBranch="false"/>
+						</node>
+						<node idCtrl="74" lib="Local vélo" isBranch="true">
+							<node idCtrl="25" lib="Sols Murs Plafonds" isBranch="false"/>
+							<node idCtrl="5" lib="Commandes" isBranch="false"/>
+							<node idCtrl="9" lib="Equipement" isBranch="false"/>
+							<node idCtrl="7" lib="Eclairage" isBranch="false"/>
+						</node>
+						<node idCtrl="75" lib="Cave" isBranch="true">
+							<node idCtrl="7" lib="Eclairage" isBranch="false"/>
+							<node idCtrl="9" lib="Equipement" isBranch="false"/>
+							<node idCtrl="5" lib="Commandes" isBranch="false"/>
+							<node idCtrl="25" lib="Sols Murs Plafonds" isBranch="false"/>
+						</node>
+						<node idCtrl="76" lib="Conciergerie" isBranch="true">
+							<node idCtrl="7" lib="Eclairage" isBranch="false"/>
+							<node idCtrl="9" lib="Equipement" isBranch="false"/>
+							<node idCtrl="5" lib="Commandes" isBranch="false"/>
+							<node idCtrl="25" lib="Sols Murs Plafonds" isBranch="false"/>
+						</node>
+						<node idCtrl="48" lib="Parking" isBranch="true">
+							<node idCtrl="7" lib="Eclairage" isBranch="false"/>
+							<node idCtrl="9" lib="Equipement" isBranch="false"/>
+							<node idCtrl="5" lib="Commandes" isBranch="false"/>
+							<node idCtrl="25" lib="Sols Murs Plafonds" isBranch="false"/>
+							<node idCtrl="2" lib="Aire de stationnement" isBranch="false"/>
+						</node>
+						<node idCtrl="78" lib="Box stationnement" isBranch="true">
+							<node idCtrl="7" lib="Eclairage" isBranch="false"/>
+						</node>
+						<node idCtrl="17" lib="Place GIC" isBranch="true">
+							<node idCtrl="17" lib="Place GIC" isBranch="false"/>
+						</node>
+						<node idCtrl="15" lib="Palier ascenseur" isBranch="true">
+							<node idCtrl="7" lib="Eclairage" isBranch="false"/>
+							<node idCtrl="9" lib="Equipement" isBranch="false"/>
+							<node idCtrl="5" lib="Commandes" isBranch="false"/>
+							<node idCtrl="15" lib="Palier ascenseur" isBranch="false"/>
+							<node idCtrl="25" lib="Sols Murs Plafonds" isBranch="false"/>
+						</node>
+					</node>
+					<node idCtrl="58" lib="Objet intérieur" isBranch="true">
+						<node idCtrl="18" lib="Porte" isBranch="true">
+							<node idCtrl="18" lib="Porte" isBranch="false"/>
+							<node idCtrl="14" lib="Face des portes" isBranch="false"/>
+						</node>
+						<node idCtrl="11" lib="Escalier" isBranch="true">
+							<node idCtrl="11" lib="Escalier" isBranch="false"/>
+						</node>
+					</node>
+				</node>
+				<node idCtrl="62" lib="Logement" isBranch="true">
+					<node idCtrl="69" lib="Etage" isBranch="true">
+						<node idCtrl="50" lib="Espace intérieur" isBranch="true">
+							<node idCtrl="42" lib="Terrasse" isBranch="true">
+								<node idCtrl="42" lib="Terrasse" isBranch="false"/>
+							</node>
+							<node idCtrl="36" lib="WC" isBranch="true">
+								<node idCtrl="39" lib="Unite de vie" isBranch="false"/>
+								<node idCtrl="36" lib="WC" isBranch="false"/>
+								<node idCtrl="25" lib="Sols Murs Plafonds" isBranch="false"/>
+							</node>
+							<node idCtrl="43" lib="Salle de bain " isBranch="true">
+								<node idCtrl="39" lib="Unite de vie" isBranch="false"/>
+								<node idCtrl="25" lib="Sols Murs Plafonds" isBranch="false"/>
+								<node idCtrl="43" lib="Salle de bain " isBranch="false"/>
+							</node>
+							<node idCtrl="40" lib="Cuisine" isBranch="true">
+								<node idCtrl="39" lib="Unite de vie" isBranch="false"/>
+								<node idCtrl="25" lib="Sols Murs Plafonds" isBranch="false"/>
+								<node idCtrl="40" lib="Cuisine" isBranch="false"/>
+							</node>
+							<node idCtrl="41" lib="Chambre" isBranch="true">
+								<node idCtrl="39" lib="Unite de vie" isBranch="false"/>
+								<node idCtrl="41" lib="Chambre" isBranch="false"/>
+								<node idCtrl="25" lib="Sols Murs Plafonds" isBranch="false"/>
+							</node>
+							<node idCtrl="8" lib="Entrée" isBranch="true">
+								<node idCtrl="39" lib="Unite de vie" isBranch="false"/>
+								<node idCtrl="25" lib="Sols Murs Plafonds" isBranch="false"/>
+							</node>
+							<node idCtrl="72" lib="Couloir" isBranch="true">
+								<node idCtrl="39" lib="Unite de vie" isBranch="false"/>
+								<node idCtrl="25" lib="Sols Murs Plafonds" isBranch="false"/>
+							</node>
+							<node idCtrl="83" lib="Séjour" isBranch="true">
+								<node idCtrl="39" lib="Unite de vie" isBranch="false"/>
+								<node idCtrl="25" lib="Sols Murs Plafonds" isBranch="false"/>
+							</node>
+						</node>
+						<node idCtrl="58" lib="Objet intérieur" isBranch="true">
+							<node idCtrl="18" lib="Porte" isBranch="true">
+								<node idCtrl="18" lib="Porte" isBranch="false"/>
+								<node idCtrl="14" lib="Face des portes" isBranch="false"/>
+							</node>
+							<node idCtrl="11" lib="Escalier" isBranch="true">
+								<node idCtrl="11" lib="Escalier" isBranch="false"/>
+							</node>
+						</node>
+					</node>
+				</node>
+				<node idCtrl="68" lib="Local d'activité" isBranch="true">
+					<node idCtrl="58" lib="Objet intérieur" isBranch="true">
+						<node idCtrl="18" lib="Porte" isBranch="true">
+							<node idCtrl="18" lib="Porte" isBranch="false"/>
+							<node idCtrl="14" lib="Face des portes" isBranch="false"/>
+						</node>
+						<node idCtrl="11" lib="Escalier" isBranch="true">
+							<node idCtrl="11" lib="Escalier" isBranch="false"/>
+						</node>
+					</node>
+					<node idCtrl="50" lib="Espace intérieur" isBranch="true">
+						<node idCtrl="42" lib="Terrasse" isBranch="false"/>
+						<node idCtrl="36" lib="WC" isBranch="false"/>
+						<node idCtrl="22" lib="Sanitaire" isBranch="false"/>
+						<node idCtrl="8" lib="Entrée" isBranch="false"/>
+						<node idCtrl="40" lib="Cuisine" isBranch="false"/>
+					</node>
+				</node>
+			</node>
+		</node>
+		<node idCtrl="51" lib="Parcelle extérieure" isBranch="true">
+			<node idCtrl="49" lib="Espace extérieur" isBranch="true">
+				<node idCtrl="4" lib="Cheminement exterieur" isBranch="true">
+					<node idCtrl="4" lib="Cheminement exterieur" isBranch="false"/>
+					<node idCtrl="16" lib="Pentes ressauts" isBranch="false"/>
+					<node idCtrl="24" lib="Sol extérieur" isBranch="false"/>
+				</node>
+				<node idCtrl="2" lib="Aire de stationnement" isBranch="true">
+					<node idCtrl="4" lib="Cheminement exterieur" isBranch="false"/>
+					<node idCtrl="2" lib="Aire de stationnement" isBranch="false"/>
+					<node idCtrl="24" lib="Sol extérieur" isBranch="false"/>
+					<node idCtrl="16" lib="Pentes ressauts" isBranch="false"/>
+				</node>
+				<node idCtrl="17" lib="Place GIC" isBranch="true">
+					<node idCtrl="17" lib="Place GIC" isBranch="false"/>
+				</node>
+				<node idCtrl="80" lib="Aire de jeux" isBranch="true">
+					<node idCtrl="4" lib="Cheminement exterieur" isBranch="false"/>
+					<node idCtrl="16" lib="Pentes ressauts" isBranch="false"/>
+					<node idCtrl="24" lib="Sol extérieur" isBranch="false"/>
+				</node>
+				<node idCtrl="81" lib="Jardin" isBranch="true">
+					<node idCtrl="4" lib="Cheminement exterieur" isBranch="false"/>
+					<node idCtrl="16" lib="Pentes ressauts" isBranch="false"/>
+					<node idCtrl="24" lib="Sol extérieur" isBranch="false"/>
+				</node>
+				<node idCtrl="82" lib="Patio" isBranch="true">
+					<node idCtrl="4" lib="Cheminement exterieur" isBranch="false"/>
+					<node idCtrl="16" lib="Pentes ressauts" isBranch="false"/>
+					<node idCtrl="24" lib="Sol extérieur" isBranch="false"/>
+				</node>
+			</node>
+			<node idCtrl="47" lib="Objet extérieur" isBranch="true">
+				<node idCtrl="18" lib="Porte" isBranch="true">
+					<node idCtrl="18" lib="Porte" isBranch="false"/>
+					<node idCtrl="14" lib="Face des portes" isBranch="false"/>
+				</node>
+				<node idCtrl="12" lib="Escalier extérieur" isBranch="true">
+					<node idCtrl="12" lib="Escalier extérieur" isBranch="false"/>
+				</node>
+			</node>
+		</node>
+	</node>
+</node>
