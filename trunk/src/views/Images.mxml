@@ -23,8 +23,8 @@
 			import mx.core.FlexGlobals;
 			import mx.graphics.codec.JPEGEncoder;
 			import mx.utils.object_proxy;
-			[Bindable] private var tofH:int = 400;
-			[Bindable] private var tofW:int = 400;
+			[Bindable] private var tofH:int = 360;
+			[Bindable] private var tofW:int = 300;
 			[Bindable] private var path:String;
 			[Bindable] private var DateNow:Date;
 			[Bindable] private var FileName:String;
@@ -60,6 +60,7 @@
 					trace(e.message);
 				}
 	            this.addImage.execute();
+				FlexGlobals.topLevelApplication.myGalary.initGalary();
 				imageView.selectedIndex=1;
 			}
 			
@@ -89,6 +90,7 @@
 					initCamera();
 				}
 			}
+			
 			/*
 			//select a picture from the camera roll (gallery)
 			protected function uploadGallery_clickHandler(event:MouseEvent):void
@@ -130,7 +132,7 @@
 			
 			protected function prends_photo_clickHandler(event:MouseEvent):void
 			{
-			 FlexGlobals.topLevelApplication.photo.dispatchEvent(new MouseEvent(MouseEvent.CLICK, true, false));	
+			 initCamera();	
 			}
 			
 			protected function addImage_resultHandler(event:SQLEvent):void
@@ -165,9 +167,7 @@
 		]]>
 	</fx:Script>
 	
-	<s:VGroup x="0" y="0" width="500" height="522">
-		<s:HGroup width="396">
-			<f4cb:CustomViewStack id="imageView" width="410" height="466">
+			<f4cb:CustomViewStack id="imageView" width="361" height="424">
 				
 				<s:VGroup>
 					<s:VideoDisplay id="myVid"  width="{tofW}" height="{tofH}" creationComplete="initCamera()"/>
@@ -175,10 +175,9 @@
 				</s:VGroup>
 				<s:VGroup>
 					<s:Image id="imagen" />
-					<s:Button id="prends" label="Prends une photo"  click="prends_photo_clickHandler(event)"/>
+     				<s:Button id="prends" label="Prends une photo"  click="prends_photo_clickHandler(event)"/>
 				</s:VGroup>
 				
 			</f4cb:CustomViewStack>	
-		</s:HGroup>	
-	</s:VGroup>
+		
 </s:View>

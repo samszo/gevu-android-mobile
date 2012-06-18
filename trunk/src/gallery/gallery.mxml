@@ -54,7 +54,7 @@
 		if(image.exists)
 		image.deleteFile();
 		FlexGlobals.topLevelApplication.Preview.source="";
-		FlexGlobals.topLevelApplication.previewPanel.visible=false;
+		FlexGlobals.topLevelApplication.galary.dispatchEvent(new MouseEvent(MouseEvent.CLICK, true, false));
 		
 		initGalary();
 		}
@@ -80,7 +80,7 @@
 			}
 					
 	public function initGalary():void{
-		 var dir:File=File.applicationStorageDirectory.resolvePath("galary/"+FlexGlobals.topLevelApplication.getID());
+		var dir:File=File.applicationStorageDirectory.resolvePath("galary/"+FlexGlobals.topLevelApplication.getID());
 		if(dir.exists)
 		{
 		 var photos:Array=dir.getDirectoryListing();
@@ -113,8 +113,9 @@
 					)
 				{
 					FlexGlobals.topLevelApplication.Preview.source=url;
-					FlexGlobals.topLevelApplication.view2.selectedIndex=2;
+					FlexGlobals.topLevelApplication.view2.selectedIndex=1;
 					FlexGlobals.topLevelApplication.previewPanel.visible=true;
+					FlexGlobals.topLevelApplication.leftSide.visible=true;
 				
 				}
 				
@@ -122,7 +123,7 @@
 					
 				{
 					FlexGlobals.topLevelApplication.Preview2.source=url;
-					FlexGlobals.topLevelApplication.view2.selectedIndex=3;
+					FlexGlobals.topLevelApplication.view2.selectedIndex=2;
 				}
 				
 				

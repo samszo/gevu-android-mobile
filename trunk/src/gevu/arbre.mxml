@@ -7,7 +7,7 @@
 		 width="100%" height="100%" itemIdentifyField="@idLieu" allowItemDisSelection="false"
 		 useVirtualLayout="false" dragEnabled="false" dropEnabled="false" labelField="@label"
 		 click="tree_clickHandler(event)"
-		 creationComplete="init_tree();get_new_geo()"
+		 creationComplete="init()"
 		 >
 	
 	<fx:Declarations>
@@ -171,11 +171,19 @@
 		
 		<!-- ********************************************************* -->
 		
+		<sqlite:Query id="GetScenarioParam" connection="{db.connection}"
+					  sql="SELECT params FROM gevu_scenario WHERE id_scenario=10"
+					  result="GetScenarioParam_resultHandler(event)"
+					  error="query_errorHandler(event)"/>
+		
 		<s:ArrayCollection id="testData" />
 		
+		<fx:XML id="xmlScene" source="idCritSE.xml"/>
+			
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
+			import com.adobe.serialization.json.JSON;
 			import com.sparkTree.TreeDataProvider;
 			import com.sparkTree.TreeEvent;
 			import com.sparkTree.TreeItem;
@@ -190,6 +198,8 @@
 			
 			import flashx.textLayout.formats.Float;
 			
+			import memorphic.xpath.XPathQuery;
+			
 			import mx.collections.IList;
 			import mx.core.FlexGlobals;
 			import mx.core.IVisualElement;
@@ -201,8 +211,8 @@
 			import spark.events.IndexChangeEvent;
 			import spark.events.ListEvent;
 			
-			import views.*;
-            
+			import views.*; 
+			
 			gevu_antennes;
 			gevu_batiments;
 			gevu_espacesxexterieurs;
@@ -224,15 +234,31 @@
 			[Bindable] private var nom_lieu:String;
 			[Bindable] public var new_nom_lieu: String; 
 			[Bindable] private var myDate:Date = new Date();
-			           public var treeItem:TreeItem;
-			           private var finished:Boolean=false;
-			           private var fetchingChildNode:TreeItem; 
 			[Bindable] public var geo_adresse:String;
 			[Bindable] public var geo_lat:Number ;
 			[Bindable] public var geo_lng:Number;
-			          private var last_id:int; 
 			[Bindable] private var lat:Number =0.0;
 			[Bindable] private var lng:Number =0.0;
+			
+			           private var arrScenar:Array;
+			           private var params:Array;
+			           public var treeItem:TreeItem;
+			           private var finished:Boolean=false;
+			           private var fetchingChildNode:TreeItem;			
+			           private var last_id:int;
+			
+			private function init():void {
+				init_tree();
+				get_new_geo();
+				GetScenarioParam.execute();
+				testXpath();
+			}
+			
+			private function testXpath():void{
+				var myQuery:XPathQuery = new XPathQuery("/node/node/node/node");
+				var result:XMLList =myQuery.exec(xmlScene);
+				trace (result);
+			}
 			
 			public function getLat():Number{
 				return this.lat;
@@ -284,6 +310,15 @@
                 this.dataProvider=TreeData;
 				this.tree_query.execute();
 			}
+			
+			//get control
+			private function getLieuCtl(idLieu:int,idScenar:int=10):Array{
+			var arrCtl:Array;
+			return arrCtl;
+			}
+			
+			
+			
 			/* 
 			 * This function is responsible for
              * Building the tree			
@@ -638,6 +673,13 @@
 			{
 				var o:Object=event;
 				
+			}
+			
+			protected function GetScenarioParam_resultHandler(event:SQLEvent):void
+			{
+			 arrScenar = this.GetScenarioParam.data;
+			 params= JSON.decode(arrScenar[0].params) as Array;;
+			 
 			}
 			
 		]]>	

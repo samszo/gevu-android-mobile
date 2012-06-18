@@ -84,8 +84,11 @@
 			protected function galary_clickHandler(event:MouseEvent):void
 			{
 				this.Preview.source="";
-				this.previewPanel.visible=false;
-				this.view2.selectedIndex=2;
+				if(this.photoPanel.myVid!=null)
+					this.photoPanel.initCamera();
+				this.view2.selectedIndex=1;
+				this.previewPanel.visible=true;
+				this.leftSide.visible=false;
 				if(this.myGalary!=null)
 					this.myGalary.initGalary();
 				
@@ -312,14 +315,16 @@
 			</s:VGroup>
 		</s:Scroller>
 		
-	 <view:Images id="photoPanel"/>
 		
 			
 		<s:VGroup>	
-			<s:HGroup id="previewPanel" paddingLeft="150" paddingTop="15" visible="false">
+			<s:HGroup id="previewPanel" paddingTop="15">
+				<view:Images id="photoPanel"/>
+			  <s:HGroup id="leftSide" visible="false">	
+				<s:Image id="Preview"  left="40" top="15" width="400"/>
 				<s:Image id="deleteImage" source="@Embed('assets/delete.png')" click="deleteImage_clickHandler(event)"
-						 width="25" height="100%" verticalAlign="middle"/>  
-				<s:Image id="Preview"  left="40" top="15" width="600"/> 
+						 width="25"/>
+			  </s:HGroup>	  
 			</s:HGroup>
 	
 			<gallery:gallery id="myGalary" />
