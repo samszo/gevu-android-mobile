@@ -16,14 +16,14 @@
 			
 		]]>
 	</fx:Script>
-<s:Panel title="Geo. Info." backgroundColor="black">	
+<s:Panel title="Geo. Info." backgroundColor="black" width="300">	
 	<s:VGroup paddingTop="13" paddingRight="13" paddingLeft="13" paddingBottom="13">
 		
 		<s:HGroup width="100%">
 			<s:Label text="adresse:" color="white" height="100%" verticalAlign="middle"/>
 			<s:Scroller>
 			<s:Group>	
-			  <s:TextArea id="F01"  text="{this.adresse}" width="240"/>
+			  <s:TextArea id="F01"  text="{this.adresse}" width="200"/>
 			</s:Group>	
 			</s:Scroller>	
 		</s:HGroup>

@@ -61,7 +61,7 @@
 				}
 	            this.addImage.execute();
 				FlexGlobals.topLevelApplication.myGalary.initGalary();
-				imageView.selectedIndex=1;
+				//imageView.selectedIndex=1;
 			}
 			
 			public  function initCamera():void {			

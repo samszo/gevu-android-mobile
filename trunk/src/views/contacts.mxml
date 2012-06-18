@@ -271,15 +271,15 @@
 			
 		]]>
 	</fx:Script>
-	<s:Panel x="-4" y="-2" width="848" height="448" title="Contacts" backgroundColor="black">
+	<s:Panel x="-4" y="-2" width="903" height="310" title="Contacts" backgroundColor="black">
 		<s:VGroup id="viewContact">
-			<s:HGroup paddingTop="13" paddingBottom="13" gap="5">
+			<s:HGroup paddingTop="13" paddingBottom="13" gap="5" paddingLeft="13">
 				<s:Button   label="Ajouter un contact" click="add_form_clickHandler(event)"/>
 				<s:Button   label="Supprimer un contact" click="delete_clickHandler(event)"/>
 			</s:HGroup>	
 		</s:VGroup>
 		
-		<f4cb:CustomViewStack id="Conviewstack" x="10" y="77" width="826" height="319"
+		<f4cb:CustomViewStack id="Conviewstack" x="22" y="77" width="865" height="171"
 							  skinClass="com.oreilly.f4cb.CustomBorderSkin">
 		
 		<s:DataGrid id="dgContact"  width="100%" height="100%"
