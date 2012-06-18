@@ -31,7 +31,10 @@
 		
 		]]>
 	</fx:Script>
-<s:Panel backgroundColor="black">
+<s:Group>
+		<s:Rect width="100%" height="100%">
+			<s:fill><s:SolidColor color="black" /></s:fill>
+		</s:Rect>
 <s:VGroup  paddingBottom="13" paddingLeft="13" paddingTop="13" paddingRight="13">
 	<s:Label  text="{lblQ}" fontFamily="Times New Roman" fontSize="18"  width="350" color="white"/>
 	<s:HGroup>		
@@ -41,5 +44,5 @@
 		<s:RadioButton groupName="reponse" id="reponse_141" label="sous réserve" color="white" click="changeModif('141')" />
 	</s:HGroup>
 </s:VGroup>
-</s:Panel>	
+</s:Group>	
 </s:View>	
