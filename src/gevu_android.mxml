@@ -202,17 +202,6 @@
 				this.mytree.setStyle("horizontalScrollPolicy",ScrollPolicy.ON)	
 			}
 			
-			protected function photo_clickHandler(event:MouseEvent):void
-			{
-				this.view2.selectedIndex=1;
-				this.previewPanel.visible=false;
-				
-				if(this.photoPanel.imageView !=null)
-					this.photoPanel.imageView.selectedIndex=0;
-				
-				
-			}
-			
 			protected function deleteImage_clickHandler(event:MouseEvent):void
 			{
 				PopUpManager.addPopUp(delpopup,this,true);
@@ -259,8 +248,6 @@
 	  <s:HGroup gap="20">
 			<s:Image id="back" visible="false" source="@Embed('assets/back.png')" click="show_tree_clickHandler(event)"
 					 width="25" height="25"/>
-			<s:Image id="photo" source="@Embed('assets/cam.png')" click="photo_clickHandler(event)"
-					 width="25" height="25"/>
 			<s:Image id="galary" source="@Embed('assets/galary.gif')" click="galary_clickHandler(event)"
 					 width="25" height="25" />
 		    <s:Button id="delete_button" label="Suprimmer ce lieu"
@@ -297,7 +284,7 @@
 					<s:Label text="lng."  width="55" />
 					<s:TextInput id="lngField" width="175" text="{this.lng}"/>
 				</s:HGroup>
-				<s:Button id="updateGeo" label="Mis à jour les données" click="updateGeo_clickHandler(event)"/>
+				<s:Button id="updateGeo" label="Mettre à jour les données" click="updateGeo_clickHandler(event)"/>
 			</s:VGroup>
 			
 		</f4cb:CustomViewStack>

@@ -537,9 +537,6 @@
 			}
 			
 			
-			
-			
-			
 			protected function get_lieu_info_add_resultHandler(event:SQLEvent):void
 			{
 				this.lieu_info=this.get_lieu_info_add.data;
@@ -672,6 +669,7 @@
 			protected function updateGeo_resultHandler(event:SQLEvent):void
 			{
 				var o:Object=event;
+				this.geo_query.execute();
 				
 			}
 			
