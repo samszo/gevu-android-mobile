@@ -250,6 +250,9 @@
 			private var finished:Boolean=false;
 			private var fetchingChildNode:TreeItem;			
 			private var last_id:int;
+			private var dbFile:File;
+			private var sqlConn:SQLConnection;
+			private var sqlState:SQLStatement;
 			
 			private function init():void {
 				init_tree();
@@ -314,12 +317,147 @@
 				this.tree_query.execute();
 			}
 			
+			
+			private function verifIsControle(id:String,obj:String,id_lieu:String):Array {
+			 var temp:Array;
+		
+			 sqlState.text=
+			 "SELECT " + id +
+				 " FROM gevu_lieux AS l "+
+				 "LEFT JOIN "+ obj + " AS a ON a.id_lieu = l.id_lieu where l.id_lieu ="+ id_lieu ;
+			 sqlState.addEventListener(SQLErrorEvent.ERROR,query_errorHandler);
+             sqlState.execute();
+			 temp=sqlState.getResult().data;
+			 
+			 return temp;
+			 
+			}
+			
+			
+			private function findByIdTypeControle(id_type_controle:int):Array {
+			  var temp:Array;	
+			  sqlState.text="SELECT zend_obj FROM `gevu_typesxcontroles` WHERE id_type_controle="+id_type_controle;
+			  sqlState.addEventListener(SQLErrorEvent.ERROR,query_errorHandler);
+			  sqlState.execute();
+			  temp=sqlState.getResult().data;	
+			 return temp;
+			}
+			
+		   private function getParentForTypeControle(obj:String,id_lieu:String):Array
+			{
+				var temp:Array;	
+				sqlState.text=
+				"select * from gevu_lieux as node, gevu_lieux as parent,"+ obj + 
+				" as t "
+				"where  (node.lft BETWEEN parent.lft AND parent.rgt) "+
+				"and (t.id_lieu = parent.id_lieu) "+
+				"and (node.id_lieu="+id_lieu;
+				sqlState.addEventListener(SQLErrorEvent.ERROR,query_errorHandler);
+				sqlState.execute();
+				temp=sqlState.getResult().data;
+				return temp
+			}
 			//get control
-			private function getLieuCtl(idLieu:int,idScenar:int=10):Array{
+			
+			
+		private function getIDtoVerifyTypeControle(x:String):String {
+			var temp:String;
+			 
+			switch(x)
+			{
+				case "gevu_antennes":
+				{
+					temp="id_antenne";
+					break;
+				}
+				
+				
+				case "gevu_groupes":
+				{
+					temp="id_groupe";
+					break;
+				}
+					
+				case "gevu_batiments":
+				{
+					temp="id_batiment";
+					break;
+				}
+					
+				case "gevu_parcelles":
+				{
+					temp="id_parcelle";
+					break;
+				}
+					
+				
+				case "gevu_niveaux":
+				{
+					temp="id_niveau";
+					break;
+				}
+				
+				case "gevu_logements":
+				{
+					temp="id_logement";
+					break;
+				}
+					
+				case "gevu_locaux":
+				{
+					temp="id_local";
+					break;
+				}
+					
+				case "gevu_partiescommunes":
+				{
+					temp="id_part_commu";
+					break;
+				}
+					
+				case "gevu_objetsxexterieurs":
+				{
+					temp="id_objet_ext";
+					break;
+				}
+					
+				case "gevu_objetsxinterieurs":
+				{
+					temp="id_objet_int"
+					break;
+				}
+					
+				case "gevu_espacesxexterieurs":
+				{
+					temp="id_espace_ext";
+					break;
+				}
+					
+				case "gevu_espacesxinterieurs":
+				{
+					temp="id_espace_int";
+					break;
+				}
+					
+				case "gevu_objetsxvoiries":
+				{
+					temp="id_objet_voirie";
+					break;
+				}
+				case "gevu_espaces":
+				{
+					temp="id_espace";
+					break;
+				}
+				
+			}
+			return temp;
+			}
+				
+				
+				
+		private function getLieuCtl(idLieu:int,idScenar:int=10):Array{
 			var arrCtl:Array;
-			var dbFile:File = File.applicationDirectory.resolvePath("gevu_mobile.db");
-			var sqlConn:SQLConnection = new SQLConnection();
-			var sqlState:SQLStatement = new SQLStatement();
 			var rTypeCtrl:Array = new Array();
 			var items:Array = new Array();
 			var rTypeCtrl1:Array = new Array();
@@ -332,15 +470,11 @@
 			var Path:String;
 			var niv:int;
 			var result:XMLList;
-			var ParentForTypeControle1:String =
-			"select * "+ 
-			"from gevu_lieux as node, gevu_lieux as parent,"; 
-			var ParentForTypeControle2:String =
-			" as t "+
-			"where  (node.lft BETWEEN parent.lft AND parent.rgt) "+
-			"and (t.id_lieu = parent.id_lieu) "+
-			"and (node.id_lieu=";
-
+			var id:String;
+			
+			dbFile =File.applicationDirectory.resolvePath("gevu_mobile.db");
+			sqlConn= new SQLConnection();
+			sqlState = new SQLStatement();
 			sqlConn.open(dbFile);
 			sqlState.sqlConnection=sqlConn;
 			
@@ -361,22 +495,18 @@
 				 {
 				  id_type_controle=etapes[k].id_type_controle;
 				  //récupère les informations du contrôle
-				  sqlState.text="SELECT zend_obj FROM `gevu_typesxcontroles` WHERE id_type_controle="+id_type_controle;
-				  sqlState.execute();
-				  rTypeCtrl=sqlState.getResult().data;
+				  
+				  rTypeCtrl= findByIdTypeControle(id_type_controle);
 				  //sort s'il n'y a pas d'objet lié
 				  if(rTypeCtrl[0].zend_obj==null) continue;
 				  //vérifie si le lieu a le controle
-				  sqlState.text= this.verifIsControleQuery + idLieu + " GROUP BY l.id_lieu ORDER BY l.id_lieu ;";
-				  sqlState.execute();
-				  items=sqlState.getResult().data;
-				  if(items==null) 
+				  id=getIDtoVerifyTypeControle(rTypeCtrl[0].zend_obj);  
+				  items=verifIsControle(id,rTypeCtrl[0].zend_obj,idLieu.toString());
+				  if(items[0].id!=null) 
 					  return new Array();
 				  
 				  //récupère le parent qui possède ce type de controle
-				  sqlState.text=ParentForTypeControle1+rTypeCtrl[0].zend_obj+ParentForTypeControle2+idLieu+")";
-				  sqlState.execute();
-				  arrLieuxParents=sqlState.getResult().data;
+				  arrLieuxParents=getParentForTypeControle(rTypeCtrl[0].zend_obj,idLieu.toString());
 				  if(arrLieuxParents)
 				  { 
 					//on récupère le détail de la scène
@@ -393,14 +523,10 @@
 					 result=myQuery.exec(xmlScene);
 						for (var m:int=0;m<result.length();m++)
 						{
-						  sqlState.text="SELECT zend_obj FROM `gevu_typesxcontroles` WHERE id_type_controle="+result[m].@idCtrl;
-						  sqlState.execute();
-						  rTC=sqlState.getResult().data;
+						  rTC=findByIdTypeControle(result[m].@idCtrl);
 						   if(rTC[0].zend_obj!=null) 
 						   {
-							   sqlState.text=ParentForTypeControle1+rTC[0].zend_obj+ParentForTypeControle2+idLieu+")";
-							   sqlState.execute();
-							   arrLP=sqlState.getResult().data;
+							   arrLP=getParentForTypeControle(rTC[0].zend_obj,idLieu.toString());
 							     if(arrLP)
 								 {
 								   //ajoute une condition dans la requête XML
@@ -413,16 +539,13 @@
 					result=myQuery1.exec(xmlScene);
 					  for (var t:int=0;t<result.length();t++) {
 						  //vérifie si le lieu à le controle
-						  sqlState.text="SELECT zend_obj FROM `gevu_typesxcontroles` WHERE id_type_controle="+result[t].@idCtrl;
-						  sqlState.execute();
-						  rTypeCtrl1=sqlState.getResult().data;
+						  rTypeCtrl1=findByIdTypeControle(result[t].@idCtrl);
 						  
-						  sqlState.text= this.verifIsControleQuery + idLieu + " GROUP BY l.id_lieu ORDER BY l.id_lieu ;";
-						  sqlState.execute();
-						  items1=sqlState.getResult().data;
+						  id=getIDtoVerifyTypeControle(rTypeCtrl1[0].zend_obj);  
+						  items1=verifIsControle(id,rTypeCtrl1[0].zend_obj,idLieu.toString());
 						  
 						  //si le lieu à déjà le contrôle on ne peut pas en ajouter
-						  if(items1==null) 
+						  if(items1[0].id!=null) 
 						   return new Array();
 						  else {
 							  arrCtl=rTypeCtrl1;
@@ -432,16 +555,14 @@
 				  else {
 					  //si on ne trouve aucun controle on peut ajouter le contrôle
 					  var arrType:Array = new Array();
-					  sqlState.text="SELECT zend_obj FROM `gevu_typesxcontroles` WHERE id_type_controle="+id_type_controle;
-					  sqlState.execute();
-					  arrType=sqlState.getResult().data;
+					  arrType=findByIdTypeControle(id_type_controle);
 					  arrCtl=arrType
 				  }//
 				}//on boucle sur les étapes de la scène
 			  }//etapes !=null	 
 			}//on boucle sur les scènes
 			
-			 
+			trace(arrCtl[0]); 
 			return arrCtl; 
 			
 		}//fin de methode
@@ -475,6 +596,7 @@
 			 this.treeItem= event.currentTarget.selectedItem as TreeItem;
 			 this.selected_id=this.treeItem.source.@idLieu;
 			 this.nom_lieu=this.treeItem.source.@label;
+			 if(this.selected_id!=1)
 			 getLieuCtl(this.selected_id,10);
 			 FlexGlobals.topLevelApplication.nom_lieu.text=this.nom_lieu;
 			 FlexGlobals.topLevelApplication.view2.selectedIndex=0;
