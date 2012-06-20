@@ -331,6 +331,7 @@
 			var id_type_controle:int;
 			var Path:String;
 			var niv:int;
+			var result:XMLList;
 			var ParentForTypeControle1:String =
 			"select * "+ 
 			"from gevu_lieux as node, gevu_lieux as parent,"; 
@@ -343,6 +344,12 @@
 			sqlConn.open(dbFile);
 			sqlState.sqlConnection=sqlConn;
 			
+			//select * from gevu_lieux where id_lieu={this.selected_id}"
+			
+			sqlState.text="select * from gevu_lieux where id_lieu="+idLieu;
+			sqlState.execute();
+			var lieuInfo:Array=sqlState.getResult().data;
+			this.selected_niv=lieuInfo[0].niv;
 			//on boucle sur les scènes
 			for (var i:int=0;i<this.params.length;i++)
 			{	
@@ -375,15 +382,15 @@
 					//on récupère le détail de la scène
 					//calcul le nombre de niveau entre le lieu et son parent
 					  
-				    //niv=this.selected_niv - arrLieuxParents[0].niv ; 
-					niv= 3 - arrLieuxParents[0].niv ;
+				    niv=this.selected_niv - arrLieuxParents[0].niv ; 
+					
 					Path= "/node";
 					//création de la requête Xpath
 					for (var j:int=0;j<niv;j++) {
 					 Path += "/node";	
 					 //vérifie si un des parents a déjà le contrôle
 					 var myQuery:XPathQuery = new XPathQuery(Path);
-					 var result:XMLList =myQuery.exec(xmlScene);
+					 result=myQuery.exec(xmlScene);
 						for (var m:int=0;m<result.length();m++)
 						{
 						  sqlState.text="SELECT zend_obj FROM `gevu_typesxcontroles` WHERE id_type_controle="+result[m].@idCtrl;
@@ -402,7 +409,8 @@
 						   }
 						}//Xpath query result
 					}//création de la requête Xpath
-					result=myQuery.exec(xmlScene);
+					var myQuery1:XPathQuery = new XPathQuery(Path);
+					result=myQuery1.exec(xmlScene);
 					  for (var t:int=0;t<result.length();t++) {
 						  //vérifie si le lieu à le controle
 						  sqlState.text="SELECT zend_obj FROM `gevu_typesxcontroles` WHERE id_type_controle="+result[t].@idCtrl;
@@ -433,8 +441,9 @@
 			  }//etapes !=null	 
 			}//on boucle sur les scènes
 			
-			
+			 
 			return arrCtl; 
+			
 		}//fin de methode
 			
 			
@@ -466,6 +475,7 @@
 			 this.treeItem= event.currentTarget.selectedItem as TreeItem;
 			 this.selected_id=this.treeItem.source.@idLieu;
 			 this.nom_lieu=this.treeItem.source.@label;
+			 getLieuCtl(this.selected_id,10);
 			 FlexGlobals.topLevelApplication.nom_lieu.text=this.nom_lieu;
 			 FlexGlobals.topLevelApplication.view2.selectedIndex=0;
 			 FlexGlobals.topLevelApplication.previewPanel.visible=false;
@@ -797,7 +807,7 @@
 			{
 			 arrScenar = this.GetScenarioParam.data;
 			 params= JSON.decode(arrScenar[0].params) as Array;
-			 getLieuCtl(4,10);
+			 
 			}
 			
 		]]>	
