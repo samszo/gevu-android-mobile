@@ -9,7 +9,7 @@
 			   xmlns:f4cb="com.oreilly.f4cb.*"
 			   xmlns:gallery="gallery.*"
 			   backgroundColor="black"
-			   creationComplete="init(event)"
+			   
 			   >
 	
 	<fx:Style>
@@ -237,6 +237,7 @@
 	<s:VGroup id="left_interface" paddingLeft="13" paddingTop="13">
 		
 	  <s:HGroup gap="20">   
+		
 		<s:Image source="@Embed('assets/exit.jpg')" click="exit_clickHandler(event)"/>
 		<s:Image id="gps" source="@Embed('assets/gps.gif')" click="gps_clickHandler(event)"
 					width="25" height="25" /> 
@@ -253,6 +254,7 @@
 		    <s:Button id="delete_button" label="Suprimmer ce lieu"
 					 click="delete_clickHandler(event)"/>
 			
+				
 			
 	  </s:HGroup>
 		
@@ -291,7 +293,8 @@
 		
 		<s:VGroup id="arbre">
 		</s:VGroup>
-		
+		<s:Label text="Control: " color="white"/>
+		<s:Label id="con" color="white"/>
 	</s:VGroup>
 	
 	
