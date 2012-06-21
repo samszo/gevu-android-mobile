@@ -182,6 +182,7 @@
 			import mx.events.CollectionEvent;
 			import mx.events.FlexEvent;
 			import mx.states.State;
+			import mx.utils.ObjectUtil;
 			
 			import spark.components.Application;
 			import spark.components.Button;
@@ -348,10 +349,10 @@
 				var temp:Array;	
 				sqlState.text=
 				"select * from gevu_lieux as node, gevu_lieux as parent,"+ obj + 
-				" as t "
+				" as t " +
 				"where  (node.lft BETWEEN parent.lft AND parent.rgt) "+
 				"and (t.id_lieu = parent.id_lieu) "+
-				"and (node.id_lieu="+id_lieu;
+				"and (node.id_lieu="+id_lieu+")";
 				sqlState.addEventListener(SQLErrorEvent.ERROR,query_errorHandler);
 				sqlState.execute();
 				temp=sqlState.getResult().data;
@@ -457,7 +458,7 @@
 				
 				
 		private function getLieuCtl(idLieu:int,idScenar:int=10):Array{
-			var arrCtl:Array;
+			var arrCtl:Array = new Array();
 			var rTypeCtrl:Array = new Array();
 			var items:Array = new Array();
 			var rTypeCtrl1:Array = new Array();
@@ -502,9 +503,14 @@
 				  //vérifie si le lieu a le controle
 				  id=getIDtoVerifyTypeControle(rTypeCtrl[0].zend_obj);  
 				  items=verifIsControle(id,rTypeCtrl[0].zend_obj,idLieu.toString());
-				  if(items[0].id!=null) 
-					  return new Array();
-				  
+				  //ObjectUtil.getClassInfo(items[0]).properties[0]
+				   
+				  if(items[0][id]!=null) 
+				  {
+					  
+					  sqlConn.close();
+					  return arrCtl; 			  
+				  }
 				  //récupère le parent qui possède ce type de controle
 				  arrLieuxParents=getParentForTypeControle(rTypeCtrl[0].zend_obj,idLieu.toString());
 				  if(arrLieuxParents)
@@ -545,10 +551,14 @@
 						  items1=verifIsControle(id,rTypeCtrl1[0].zend_obj,idLieu.toString());
 						  
 						  //si le lieu à déjà le contrôle on ne peut pas en ajouter
-						  if(items1[0].id!=null) 
+						  if(items1[0][id]!=null) 
+						    
+						  {
+						   sqlConn.close();
 						   return new Array();
+						  }
 						  else {
-							  arrCtl=rTypeCtrl1;
+							  arrCtl.push(rTypeCtrl1);
 						  }
 					  }//
 				  }//arrLieuxParents
@@ -556,13 +566,13 @@
 					  //si on ne trouve aucun controle on peut ajouter le contrôle
 					  var arrType:Array = new Array();
 					  arrType=findByIdTypeControle(id_type_controle);
-					  arrCtl=arrType
+					  arrCtl.push(arrType);
 				  }//
 				}//on boucle sur les étapes de la scène
 			  }//etapes !=null	 
 			}//on boucle sur les scènes
 			
-			trace(arrCtl[0]); 
+			sqlConn.close(); 
 			return arrCtl; 
 			
 		}//fin de methode
@@ -596,8 +606,21 @@
 			 this.treeItem= event.currentTarget.selectedItem as TreeItem;
 			 this.selected_id=this.treeItem.source.@idLieu;
 			 this.nom_lieu=this.treeItem.source.@label;
-			 if(this.selected_id!=1)
-			 getLieuCtl(this.selected_id,10);
+			 if(this.selected_id!=1) 
+			 {
+			 var cont:Array=getLieuCtl(this.selected_id,10);
+			 var s:String=" ";
+			  if (cont.length!=0)
+			  {  
+				 for(var i:int=0;i<cont.length;i++)
+				 {
+				  var temp:Array;
+				  temp=cont[i];
+				  s+=temp[0].zend_obj + " +\n"	; 
+				 }
+				 FlexGlobals.topLevelApplication.con.text=s;
+			  }
+			 }
 			 FlexGlobals.topLevelApplication.nom_lieu.text=this.nom_lieu;
 			 FlexGlobals.topLevelApplication.view2.selectedIndex=0;
 			 FlexGlobals.topLevelApplication.previewPanel.visible=false;
