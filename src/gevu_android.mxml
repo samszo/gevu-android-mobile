@@ -293,8 +293,6 @@
 		
 		<s:VGroup id="arbre">
 		</s:VGroup>
-		<s:Label text="Control: " color="white"/>
-		<s:Label id="con" color="white"/>
 	</s:VGroup>
 	
 	
