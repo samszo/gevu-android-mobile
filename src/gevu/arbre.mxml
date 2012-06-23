@@ -186,6 +186,7 @@
 			
 			import spark.components.Application;
 			import spark.components.Button;
+			import spark.components.View;
 			import spark.events.IndexChangeEvent;
 			import spark.events.ListEvent;
 			
@@ -513,7 +514,7 @@
 				  }
 				  //récupère le parent qui possède ce type de controle
 				  arrLieuxParents=getParentForTypeControle(rTypeCtrl[0].zend_obj,idLieu.toString());
-				  if(arrLieuxParents)
+				  if(arrLieuxParents !=null)
 				  { 
 					//on récupère le détail de la scène
 					//calcul le nombre de niveau entre le lieu et son parent
@@ -543,10 +544,10 @@
 					}//création de la requête Xpath
 					var myQuery1:XPathQuery = new XPathQuery(Path);
 					result=myQuery1.exec(xmlScene);
-					  for (var t:int=0;t<result.length();t++) {
-						  //vérifie si le lieu à le controle
+					  for (var t:int=0;t<result.length();t++) 
+					  {
+						  var jk:int =result[t].@idCtrl;
 						  rTypeCtrl1=findByIdTypeControle(result[t].@idCtrl);
-						  
 						  id=getIDtoVerifyTypeControle(rTypeCtrl1[0].zend_obj);  
 						  items1=verifIsControle(id,rTypeCtrl1[0].zend_obj,idLieu.toString());
 						  
@@ -609,25 +610,39 @@
 			 if(this.selected_id!=1) 
 			 {
 			 var cont:Array=getLieuCtl(this.selected_id,10);
-			 var s:String=" ";
+			 var btns:Array = new Array();
+			 var temp:Array;
+			 var v:View = new View();
+			 var numChild:int;
 			  if (cont.length!=0)
 			  {  
+				  numChild=FlexGlobals.topLevelApplication.main_interface.numChildren 
+				  if (numChild>0)
+				  {
+				  FlexGlobals.topLevelApplication.main_interface.removeAllElements();
+			  }
 				 for(var i:int=0;i<cont.length;i++)
 				 {
-				  var temp:Array;
+				  btns[i] = new Button();
 				  temp=cont[i];
-				  s+=temp[0].zend_obj + " +\n"	; 
-				 }
-				 FlexGlobals.topLevelApplication.con.text=s;
+				  btns[i].label=temp[0].zend_obj;
+				  FlexGlobals.topLevelApplication.main_interface.addElement(btns[i]); 
+				  }
+				 FlexGlobals.topLevelApplication.nom_lieu.text=this.nom_lieu;
+				 FlexGlobals.topLevelApplication.view2.selectedIndex=0;
+				 FlexGlobals.topLevelApplication.previewPanel.visible=false;
+				 
 			  }
+			  else {
+				  form_query.execute();
+				 
+			  }
+			  geo_query.execute();   
 			 }
-			 FlexGlobals.topLevelApplication.nom_lieu.text=this.nom_lieu;
-			 FlexGlobals.topLevelApplication.view2.selectedIndex=0;
-			 FlexGlobals.topLevelApplication.previewPanel.visible=false;
-			 if(this.selected_id != 1) {
-			 form_query.execute();
-			 geo_query.execute();
-			 }
+			 
+			 
+			 
+			  
 			 }
 			
 			protected function form_query_resultHandler(event:SQLEvent):void
@@ -644,8 +659,7 @@
 			 
 			 //removing all interfaces
 			  if (FlexGlobals.topLevelApplication.main_interface.numChildren>0)
-				  for (var j:int=0;j<FlexGlobals.topLevelApplication.main_interface.numChildren;j++)
-					  FlexGlobals.topLevelApplication.main_interface.removeElementAt(j);
+					  FlexGlobals.topLevelApplication.main_interface.removeAllElements();
 			  
 			  for (var k:int=0;k<ids.length;k++)
 			  {
@@ -839,7 +853,6 @@
 			
 			protected function insert_update_resultHandler(event:SQLEvent):void
 			{
-				
 			var o:Object=event;
 			}
 			
