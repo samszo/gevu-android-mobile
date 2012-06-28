@@ -46,11 +46,12 @@
 		<sqlite:Query id="add_geo" connection="{db.connection}"
 					  sql="insert into gevu_geos 
 					  (id_instant,id_lieu,lat,lng,zoom_min,zoom_max,adresse,kml,type_carte,id_donnee,maj)
-					  values (0,(SELECT last_insert_rowid() FROM gevu_lieux),
+					  values (0,{this.last_id},
 					  {this.lat},
 					  {this.lng},
 					  0,0,'','','hybird',0,strftime('%J','{this.toSqlDate(myDate)}'))"
-					  error="query_errorHandler(event)"/>		
+					  error="query_errorHandler(event)"
+					  result="insert_update_resultHandler(event)"/>		
 		
 		<sqlite:Query id="updateGeo" connection="{db.connection}"
 					  sql="update gevu_geos set lat={this.lat},
@@ -251,10 +252,11 @@
 			public var treeItem:TreeItem;
 			private var finished:Boolean=false;
 			private var fetchingChildNode:TreeItem;			
-			private var last_id:int;
 			private var dbFile:File;
 			private var sqlConn:SQLConnection;
 			private var sqlState:SQLStatement;
+			
+			[Bindable] private var last_id:int;
 			
 			private function init():void {
 				init_tree();
@@ -802,21 +804,45 @@
 			
 			
 			public function add_lieu():void{
-			
-			 
+				dbFile =File.applicationDirectory.resolvePath("gevu_mobile.db");
+				sqlConn= new SQLConnection();
+				sqlState = new SQLStatement();
+				sqlConn.open(dbFile);
+				sqlState.sqlConnection=sqlConn;
+				var temp:Array;
+			    var maxrgt:int;
 				if (this.selected_rgt != this.selected_lft +1)
 				{	
-					//this.db.connection.begin();
-					this.update_lft_has_child.execute();
-					this.update_rgt_has_child.execute();
-					this.insert_has_child.execute();
-					
-					
+				sqlState.text= "SELECT max(node.rgt)-1 as maxrgt " +
+				" FROM gevu_lieux AS node, gevu_lieux AS parent " +
+				" WHERE (node.lft BETWEEN parent.lft AND parent.rgt) " +
+				" AND parent.id_lieu="+ this.selected_id;
+				sqlState.execute();
+				temp=sqlState.getResult().data;
+				maxrgt=temp[0].maxrgt;
+				
+				//update
+				sqlState.text="update gevu_lieux set rgt = rgt + 2 WHERE rgt >"+ maxrgt;
+				sqlState.execute();
+				sqlState.text="update gevu_lieux SET lft = lft + 2 WHERE lft >"+maxrgt;
+				sqlState.execute();
+				
+				//insert
+				sqlState.text=
+			    "insert into gevu_lieux (id_rubrique,lib,id_parent,id_instant,lft,rgt,niv,maj,lieu_parent) "+ 
+				"values(0,'" + this.new_nom_lieu + "',0,0," +
+			    (maxrgt + 1) + "," +
+			    (maxrgt + 2) + "," +
+				(this.selected_niv + 1) + "," +
+				"strftime('%J','"+this.toSqlDate(myDate)+"') , " +
+				this.selected_id + ")";
+				this.sqlState.addEventListener(SQLEvent.RESULT,insert_lieu_resultHandler);
+				this.sqlState.execute();
 				}//parent
 					
 				else
 				{
-					//this.db.connection.begin();
+					
 					this.update_lft_no_child.execute();
 					this.update_rgt_no_child.execute();
 					this.insert_no_child.execute();
@@ -934,11 +960,11 @@
 			
 			protected function last_inserted_id_resultHandler(event:SQLEvent):void
 			{
-				this.add_geo.execute();
 				var data_id:Array= this.last_inserted_id.data; 
 				var temp :XML;
 				var x:XML; 
 				this.last_id=data_id[0].max;
+				this.add_geo.execute();
 				x = <node label={this.new_nom_lieu} idLieu={this.last_id} lieu_parent={this.selected_id}/>;
 				temp = this.dataProvider.getItemAt(0).source.descendants().(@idLieu == this.selected_id)[0];
 				if(this.treeItem.hasChildren()==true)
