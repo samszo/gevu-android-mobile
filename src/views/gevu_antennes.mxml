@@ -4,13 +4,14 @@
 		xmlns:sqlite="com.peterelst.air.sqlite.*"
 		xmlns:view="views.*"
 		backgroundColor="black"
-		creationComplete="this.get_ref.execute();"
+		
 		>
 	<fx:Declarations>
 		<sqlite:SQLite id="db" file="gevu_mobile.db"  />
 		<sqlite:Query id="get_ref" connection="{db.connection}" 
 					  sql="select ref from gevu_antennes where id_lieu={selected_id}"
-					  result="antennes_query_resultHandler(event)"/>
+					  result="antennes_query_resultHandler(event)"
+					  error="get_ref_errorHandler(event)"/>
   
 				  
 	</fx:Declarations>
@@ -21,12 +22,19 @@
 		
 			public function set_selected_id(x:int):void{
 			 this.selected_id=x;
+			 this.get_ref.execute();
 			}
 			
 			protected function antennes_query_resultHandler(event:SQLEvent):void
 			{
 				var ref:Array=get_ref.data;
 				this.F2.text=ref[0].ref;
+			}
+			
+			protected function get_ref_errorHandler(event:SQLErrorEvent):void
+			{
+				var o:Object=event;
+				
 			}
 			
 		]]>
