@@ -306,8 +306,8 @@
 		
 			
 		<s:VGroup>	
-			<s:HGroup id="previewPanel" paddingTop="15">
-				<view:Images id="photoPanel"/>
+			<s:HGroup id="previewPanel" paddingTop="15" paddingLeft="13">
+			 <view:Images id="photoPanel"/>
 			  <s:HGroup id="leftSide" visible="false">	
 				<s:Image id="Preview"  left="40" top="15" width="400"/>
 				<s:Image id="deleteImage" source="@Embed('assets/delete.png')" click="deleteImage_clickHandler(event)"
