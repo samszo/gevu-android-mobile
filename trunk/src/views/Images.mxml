@@ -171,7 +171,10 @@
 				
 				<s:VGroup>
 					<s:VideoDisplay id="myVid"  width="{tofW}" height="{tofH}" creationComplete="initCamera()"/>
-					<s:Button label="Enregistrer" click="takePicture(event)"/>	
+					<s:VGroup paddingLeft="13">
+						<s:Button label="Enregistrer" click="takePicture(event)"/>	
+					</s:VGroup>
+						
 				</s:VGroup>
 				<s:VGroup>
 					<s:Image id="imagen" />

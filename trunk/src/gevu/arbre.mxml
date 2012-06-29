@@ -668,27 +668,29 @@
 						break;
 					}		
 					
+					
+					case "gevu_logements":
+					{
+						sqlState.text=
+						"INSERT INTO gevu_logements (id_lieu,id_instant,ref,num_porte,type,maj) VALUES " +
+					    "("+this.selected_id+",0,' ',' ',' ',strftime('%J','"+this.toSqlDate(myDate)+"'))";	
+							sqlState.execute();
+						buildInterface(ids);
+						break;
+					}	
+						
+					
+					case "gevu_espaces":
+					{
+						sqlState.text=
+						"INSERT INTO gevu_locaux (id_lieu,id_instant,ref,activite,maj) VALUES " 
+						"("+this.selected_id+"0,' ',' ',strftime('%J','"+this.toSqlDate(myDate)+"'))";	
+							sqlState.execute();
+						buildInterface(ids);
+						break;
+					}	
+						
 					/*	
-					case "gevu_espaces":
-					{
-						sqlState.text=
-							
-							sqlState.execute();
-						buildInterface(ids);
-						break;
-					}	
-						
-						
-					case "gevu_espaces":
-					{
-						sqlState.text=
-							
-							sqlState.execute();
-						buildInterface(ids);
-						break;
-					}	
-						
-						
 					case "gevu_espaces":
 					{
 						sqlState.text=
