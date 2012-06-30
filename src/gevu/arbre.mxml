@@ -255,7 +255,7 @@
 			private var dbFile:File;
 			private var sqlConn:SQLConnection;
 			private var sqlState:SQLStatement;
-			private var ids:Array =new Array();
+			private var ids:Array;
 			
 			[Bindable] private var last_id:int;
 			
@@ -608,10 +608,10 @@
 			 sqlState.sqlConnection=sqlConn;
 			 sqlState.addEventListener(SQLEvent.RESULT,insert_update_resultHandler);
 			 sqlState.addEventListener(SQLErrorEvent.ERROR,query_errorHandler);
-		    for (var i:int=0;ids.length;i++) {
-				switch(ids[i])
+		     var str:String= event.currentTarget.label;
+				switch(str)
 				{
-					case "gevu_antennes":
+					case "antennes":
 					{
 						sqlState.text=
 							"INSERT INTO gevu_antennes (id_lieu,id_instant,ref) VALUES "+
@@ -621,7 +621,7 @@
 						break;
 					}
 					
-					case "gevu_groupes":
+					case "groupes":
 					{
 						sqlState.text=
 						 "INSERT INTO gevu_groupes (id_lieu,id_instant,ref,reponse_1) VALUES "+
@@ -633,7 +633,7 @@
 						
 						
 						
-					case "gevu_batiments":
+					case "batiments":
 					{
 						sqlState.text=
 							"INSERT INTO gevu_batiments (id_lieu,id_instant,ref,contact_proprietaire,contact_delegataire,contact_gardien,horaires_gardien,horaires_batiment,superficie_parcelle," +
@@ -646,7 +646,7 @@
 					}		
 						
 						
-					case "gevu_niveaux":
+					case "niveaux":
 					{
 						sqlState.text=
 						"INSERT INTO gevu_niveaux(id_lieu,id_instant,nom,ref,reponse_1,reponse_2,reponse_3,maj) VALUES "+
@@ -658,7 +658,7 @@
 						
 									
 					
-					case "gevu_partiescommunes":
+					case "partiescommunes":
 					{
 						sqlState.text=
 							"INSERT INTO  gevu_partiescommunes (id_lieu,id_instant,ref,maj) VALUES "+
@@ -669,7 +669,7 @@
 					}		
 					
 					
-					case "gevu_logements":
+					case "logements":
 					{
 						sqlState.text=
 						"INSERT INTO gevu_logements (id_lieu,id_instant,ref,num_porte,type,maj) VALUES " +
@@ -680,7 +680,7 @@
 					}	
 						
 					
-					case "gevu_espaces":
+					case "locaux":
 					{
 						sqlState.text=
 						"INSERT INTO gevu_locaux (id_lieu,id_instant,ref,activite,maj) VALUES " 
@@ -690,52 +690,66 @@
 						break;
 					}	
 						
-					/*	
-					case "gevu_espaces":
+					
+					case "espacesxinterieurs":
 					{
 						sqlState.text=
-							
-							sqlState.execute();
+						"INSERT INTO gevu_espacesxinterieurs (id_lieu,id_instant,nom,ref,fonction,id_type_specifique_int,id_donnee,maj) VALUES " + 
+						"("+this.selected_id+",0,' ',' ',' ',0,0,strftime('%J','"+this.toSqlDate(myDate)+"'))";	
+						sqlState.execute();
 						buildInterface(ids);
 						break;
 					}	
 						
 						
-					case "gevu_espaces":
+					case "objetsxinterieurs":
 					{
 						sqlState.text=
-							
+						"INSERT INTO gevu_objetsxinterieurs (id_lieu,id_instant,nom,ref,fonctions,reponse_1,reponse_2,id_type_objet,id_donnee,maj) VALUES " +
+						"(" +this.selected_id +",0,' ',' ',' ',' ',' ', ' ', 0,strftime('%J','"+this.toSqlDate(myDate)+"'))";	
+						sqlState.execute();
+						buildInterface(ids);
+						break;
+					}	
+					
+					
+					case "parcelles":
+					{
+						sqlState.text=
+							"INSERT INTO gevu_parcelles (id_lieu,id_instant,nom,ref,contact_proprietaire,superficie,cloture,id_donnee,maj,ref_cadastre) VALUES " + 
+							"("+this.selected_id+",0,' ',' ',' ',' ',' ',0,strftime('%J','"+this.toSqlDate(myDate)+"'),' ')";	
 							sqlState.execute();
 						buildInterface(ids);
 						break;
 					}	
 						
-					case "gevu_espaces":
+					
+					case "espacesxexterieurs":
 					{
 						sqlState.text=
-							
+						"INSERT INTO gevu_espacesxexterieurs (id_lieu,id_instant,nom,ref,fonction,id_type_espace,id_type_specifique_ext,maj) VALUES "+
+						"("+this.selected_id+",0,' ',' ',' ',' ',0,strftime('%J','"+this.toSqlDate(myDate)+"'))";	
+						sqlState.execute();
+						buildInterface(ids);
+						break;
+					}
+					
+					case "objetsxexterieurs":
+					{
+						sqlState.text=
+						"INSERT INTO gevu_objetsxexterieurs (id_lieu,id_instant,nom,ref,fonctions,id_type_objet,id_type_objet_ext,maj) VALUES "
+						"("+this.selected_id+",0,' ',' ',' ',' ',' ',strftime('%J','"+this.toSqlDate(myDate)+"'))";	
 							sqlState.execute();
 						buildInterface(ids);
 						break;
-					}	
-						
-					case "gevu_espaces":
-					{
-						sqlState.text=
-							
-							sqlState.execute();
-						buildInterface(ids);
-						break;
-					}	
-						*/
+					}
+					
 					default:
 					{
 						break;
 					}
 				}	 
-			 }
-			
-			
+			 
 			}
 			
 			
@@ -754,7 +768,7 @@
 			 var nameParts:Array ;
 			 var extension:String ;
 			 var str:String;
-			 
+			 ids = new Array();
 			  if (cont.length!=0)
 			  {  
 				  numChild=FlexGlobals.topLevelApplication.main_interface.numChildren 
