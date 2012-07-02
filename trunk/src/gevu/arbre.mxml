@@ -545,6 +545,11 @@
 					  {
 						  var jk:int =result[t].@idCtrl;
 						  rTypeCtrl1=findByIdTypeControle(result[t].@idCtrl);
+						  if(rTypeCtrl1[0].zend_obj==null)
+						  {
+							  sqlConn.close();
+							  return new Array(); 
+						  }
 						  id=getIDtoVerifyTypeControle(rTypeCtrl1[0].zend_obj);  
 						  items1=verifIsControle(id,rTypeCtrl1[0].zend_obj,idLieu.toString());
 						  
@@ -617,7 +622,7 @@
 							"INSERT INTO gevu_antennes (id_lieu,id_instant,ref) VALUES "+
 						    "(" + this.selected_id + ",0,' ')";
 						sqlState.execute();
-						buildInterface(ids);
+						buildInterface2(str);
 						break;
 					}
 					
@@ -625,9 +630,9 @@
 					{
 						sqlState.text=
 						 "INSERT INTO gevu_groupes (id_lieu,id_instant,ref,reponse_1) VALUES "+
-						 "("+ this.selected_id + ",0,' ',' ')";
+						 "("+ this.selected_id + ",0,' ','0')";
 						sqlState.execute();
-						buildInterface(ids);
+						buildInterface2(str);
 						break;
 					}	
 						
@@ -639,9 +644,9 @@
 							"INSERT INTO gevu_batiments (id_lieu,id_instant,ref,contact_proprietaire,contact_delegataire,contact_gardien,horaires_gardien,horaires_batiment,superficie_parcelle," +
 							"superficie_batiment,date_achevement,date_depot_permis,date_reha,reponse_1,reponse_2,reponse_3,reponse_4,reponse_5,reponse_6,reponse_7,reponse_8,reponse_9,reponse_10,reponse_11," +
 							"reponse_12,reponse_13,reponse_14,reponse_15,maj) VALUES " +
-							"("+this.selected_id+ ",0,' ',0,0,0,' ',' ',0,0,strftime('%J','"+this.toSqlDate(myDate)+"'),strftime('%J','"+this.toSqlDate(myDate)+"'),strftime('%J','"+this.toSqlDate(myDate)+"'),' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',strftime('%J','"+this.toSqlDate(myDate)+"'))";	
+							"("+this.selected_id+ ",0,' ',0,0,0,' ',' ',0,0,strftime('%J','"+this.toSqlDate(myDate)+"'),strftime('%J','"+this.toSqlDate(myDate)+"'),strftime('%J','"+this.toSqlDate(myDate)+"'),'0','0','0','0','0','0','0','0','0','0','0','0','0','0','0',strftime('%J','"+this.toSqlDate(myDate)+"'))";	
 						sqlState.execute();
-						buildInterface(ids);
+						buildInterface2(str);
 						break;
 					}		
 						
@@ -650,9 +655,9 @@
 					{
 						sqlState.text=
 						"INSERT INTO gevu_niveaux(id_lieu,id_instant,nom,ref,reponse_1,reponse_2,reponse_3,maj) VALUES "+
-						"("+this.selected_id+ ",0,' ',' ',0,0,0,strftime('%J','"+this.toSqlDate(myDate)+"'))";	
+						"("+this.selected_id+ ",0,' ',' ','0','0','0',strftime('%J','"+this.toSqlDate(myDate)+"'))";	
 						sqlState.execute();
-						buildInterface(ids);
+						buildInterface2(str);
 						break;
 					}			
 						
@@ -664,7 +669,7 @@
 							"INSERT INTO  gevu_partiescommunes (id_lieu,id_instant,ref,maj) VALUES "+
 							"("+ this.selected_id+",0,' ',strftime('%J','"+this.toSqlDate(myDate)+"'))";	
 						sqlState.execute();
-						buildInterface(ids);
+						buildInterface2(str);
 						break;
 					}		
 					
@@ -675,7 +680,7 @@
 						"INSERT INTO gevu_logements (id_lieu,id_instant,ref,num_porte,type,maj) VALUES " +
 					    "("+this.selected_id+",0,' ',' ',' ',strftime('%J','"+this.toSqlDate(myDate)+"'))";	
 							sqlState.execute();
-						buildInterface(ids);
+							buildInterface2(str);
 						break;
 					}	
 						
@@ -683,10 +688,10 @@
 					case "locaux":
 					{
 						sqlState.text=
-						"INSERT INTO gevu_locaux (id_lieu,id_instant,ref,activite,maj) VALUES " 
-						"("+this.selected_id+"0,' ',' ',strftime('%J','"+this.toSqlDate(myDate)+"'))";	
+						"INSERT INTO gevu_locaux (id_lieu,id_instant,ref,activite,maj) VALUES " +
+						"("+this.selected_id+",0,' ',' ',strftime('%J','"+this.toSqlDate(myDate)+"'))";	
 							sqlState.execute();
-						buildInterface(ids);
+							buildInterface2(str);
 						break;
 					}	
 						
@@ -697,7 +702,7 @@
 						"INSERT INTO gevu_espacesxinterieurs (id_lieu,id_instant,nom,ref,fonction,id_type_specifique_int,id_donnee,maj) VALUES " + 
 						"("+this.selected_id+",0,' ',' ',' ',0,0,strftime('%J','"+this.toSqlDate(myDate)+"'))";	
 						sqlState.execute();
-						buildInterface(ids);
+						buildInterface2(str);
 						break;
 					}	
 						
@@ -706,9 +711,9 @@
 					{
 						sqlState.text=
 						"INSERT INTO gevu_objetsxinterieurs (id_lieu,id_instant,nom,ref,fonctions,reponse_1,reponse_2,id_type_objet,id_donnee,maj) VALUES " +
-						"(" +this.selected_id +",0,' ',' ',' ',' ',' ', ' ', 0,strftime('%J','"+this.toSqlDate(myDate)+"'))";	
+						"(" +this.selected_id +",0,' ',' ',' ','0','0',' ',0,strftime('%J','"+this.toSqlDate(myDate)+"'))";	
 						sqlState.execute();
-						buildInterface(ids);
+						buildInterface2(str);
 						break;
 					}	
 					
@@ -717,9 +722,9 @@
 					{
 						sqlState.text=
 							"INSERT INTO gevu_parcelles (id_lieu,id_instant,nom,ref,contact_proprietaire,superficie,cloture,id_donnee,maj,ref_cadastre) VALUES " + 
-							"("+this.selected_id+",0,' ',' ',' ',' ',' ',0,strftime('%J','"+this.toSqlDate(myDate)+"'),' ')";	
+							"("+this.selected_id+",0,' ',' ',' ',' ','0',0,strftime('%J','"+this.toSqlDate(myDate)+"'),' ')";	
 							sqlState.execute();
-						buildInterface(ids);
+							buildInterface2(str);
 						break;
 					}	
 						
@@ -727,20 +732,20 @@
 					case "espacesxexterieurs":
 					{
 						sqlState.text=
-						"INSERT INTO gevu_espacesxexterieurs (id_lieu,id_instant,nom,ref,fonction,id_type_espace,id_type_specifique_ext,maj) VALUES "+
-						"("+this.selected_id+",0,' ',' ',' ',' ',0,strftime('%J','"+this.toSqlDate(myDate)+"'))";	
+						"INSERT INTO gevu_espacesxexterieurs (id_lieu,id_instant,nom,ref,fonction,id_type_espace,id_type_specifique_ext,id_donnee,maj) VALUES "+
+						"("+this.selected_id+",0,' ',' ',' ',' ',0,0,strftime('%J','"+this.toSqlDate(myDate)+"'))";	
 						sqlState.execute();
-						buildInterface(ids);
+						buildInterface2(str);
 						break;
 					}
 					
 					case "objetsxexterieurs":
 					{
 						sqlState.text=
-						"INSERT INTO gevu_objetsxexterieurs (id_lieu,id_instant,nom,ref,fonctions,id_type_objet,id_type_objet_ext,maj) VALUES "
+						"INSERT INTO gevu_objetsxexterieurs (id_lieu,id_instant,nom,ref,fonctions,id_type_objet,id_type_objet_ext,maj) VALUES "+
 						"("+this.selected_id+",0,' ',' ',' ',' ',' ',strftime('%J','"+this.toSqlDate(myDate)+"'))";	
 							sqlState.execute();
-						buildInterface(ids);
+							buildInterface2(str);
 						break;
 					}
 					
@@ -833,7 +838,6 @@
 					if(
 						className == 'views.gevu_antennes'  ||
 						className == 'views.gevu_batiments' ||
-						className == 'views.gevu_diagnostics' ||
 						className == 'views.gevu_docsxlieux' ||
 						className == 'views.gevu_espaces' ||
 						className == 'views.gevu_espacesxexterieurs' ||
@@ -858,6 +862,50 @@
 					}
 				}
 			}
+			
+			
+			private function buildInterface2(str:String):void{
+				var className:String;
+				var ClassReference:Class;
+				var instance:Object;
+				//these references are added for the compiler to 
+				// have a refernce and execute the getDefinitionByName()
+				//methode and if not, an : variable not found error will happen
+				
+				
+				//removing all interfaces
+				if (FlexGlobals.topLevelApplication.main_interface.numChildren>0)
+					FlexGlobals.topLevelApplication.main_interface.removeAllElements();
+				
+					className= "views.gevu_"+str
+					if(
+						className == 'views.gevu_antennes'  ||
+						className == 'views.gevu_batiments' ||
+						className == 'views.gevu_docsxlieux' ||
+						className == 'views.gevu_espaces' ||
+						className == 'views.gevu_espacesxexterieurs' ||
+						className == 'views.gevu_espacesxinterieurs' ||
+						className == 'views.gevu_etablissements' ||
+						className == 'views.gevu_niveaux' ||
+						className == 'views.gevu_objetsxexterieurs' ||
+						className == 'views.gevu_objetsxinterieurs' ||
+						className == 'views.gevu_objetsxvoiries' ||
+						className == 'views.gevu_observations' ||
+						className == 'views.gevu_parcelles' ||
+						className == 'views.gevu_problemes' ||
+						className == 'views.gevu_groupes' ||
+						className == 'views.gevu_logements' ||
+						className == 'views.gevu_locaux' ||
+						className == 'views.gevu_partiescommunes')
+					{
+						ClassReference = getDefinitionByName(className) as Class;
+						instance = new ClassReference();
+						instance.set_selected_id(selected_id);
+						FlexGlobals.topLevelApplication.main_interface.addElement(instance);
+					}
+				
+			}
+			
 			
 			public function getForms(info:ArrayCollection):Array{
 				var compo:Array = new Array;
@@ -1072,9 +1120,19 @@
 				var ClassReference:Class;
 				var instance:Object;
 				gevu_geos;
+			if(geo_data !=null)
+			{	
 				this.geo_adresse=geo_data[0].adresse;
 				this.geo_lat=geo_data[0].lat;
 				this.geo_lng=geo_data[0].lng;
+			}
+			else
+			{
+				this.geo_adresse=" "
+				this.geo_lat=0.0;
+				this.geo_lng=0.0;
+				
+			}
 				 if (FlexGlobals.topLevelApplication.arbre.numChildren==1)
 					 FlexGlobals.topLevelApplication.arbre.removeElementAt(0);
 				 
@@ -1084,6 +1142,7 @@
 				instance.lat=this.geo_lat
 				instance.lng=this.geo_lng;
 				FlexGlobals.topLevelApplication.arbre.addElement(instance);
+				
 				}
 			
 			public function get_new_geo():void {
