@@ -4,7 +4,7 @@
 		xmlns:sqlite="com.peterelst.air.sqlite.*"
 		xmlns:view="views.*"
 		backgroundColor="black"
-		
+		creationComplete="this.get_ref.execute()"
 		>
 	<fx:Declarations>
 		<sqlite:SQLite id="db" file="gevu_mobile.db"  />
@@ -22,7 +22,6 @@
 		
 			public function set_selected_id(x:int):void{
 			 this.selected_id=x;
-			 this.get_ref.execute();
 			}
 			
 			protected function antennes_query_resultHandler(event:SQLEvent):void

@@ -2,15 +2,6 @@
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" title="gevu_geos">
 	
-	<fx:Script>
-		<![CDATA[
-			protected function add_geo_clickHandler(event:MouseEvent):void
-			{
-				
-				
-			}
-		]]>
-	</fx:Script>
 	
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
@@ -19,11 +10,63 @@
 	<fx:Script>
 		<![CDATA[
 			import flashx.textLayout.formats.Float;
+			
+			import mx.core.FlexGlobals;
+			
+			import spark.events.TextOperationEvent;
+			
 			[Bindable] public var vis:Boolean;
 			[Bindable] public var adresse:String;
+			[Bindable] private var update_lat:String;
+			[Bindable] private var update_lng:String;
 			[Bindable] public var lat:Number;
 			[Bindable] public var lng:Number;
 			[Bindable] private var lieu_id:int;
+			
+			private var dbFile:File;
+			private var sqlConn:SQLConnection;
+			private var sqlState:SQLStatement;
+			private var id_lieu:int = FlexGlobals.topLevelApplication.getID();
+			protected function add_geo_clickHandler(event:MouseEvent):void
+			{
+				dbFile =File.applicationDirectory.resolvePath("gevu_mobile.db");
+				sqlConn= new SQLConnection();
+				sqlState = new SQLStatement();
+				sqlConn.open(dbFile);
+				sqlState.sqlConnection=sqlConn;
+				sqlState.addEventListener(SQLEvent.RESULT,insert_update_resultHandler);
+				sqlState.addEventListener(SQLErrorEvent.ERROR,query_errorHandler);
+				sqlState.text= "update gevu_geos set adresse='"+this.adresse+"',lat="+this.update_lat+",lng="+this.update_lng+ 
+					" where id_lieu=" +id_lieu;
+				sqlState.execute();
+				
+			}
+			
+			protected function query_errorHandler(event:SQLErrorEvent):void
+			{
+				var o:Object=event;
+			}
+			
+			protected function insert_update_resultHandler(event:SQLEvent):void
+			{
+				var o:Object=event;
+			}
+			
+			
+			protected function adresse_changeHandler(event:TextOperationEvent):void
+			{
+			 this.adresse=this.F01.text;	
+			}
+			
+			protected function lat_changeHandler(event:TextOperationEvent):void
+			{
+			 this.update_lat=this.F02.text;
+			}
+			
+			protected function lng_changeHandler(event:TextOperationEvent):void
+			{
+			 this.update_lng=this.F03.text;	
+			}
 			
 		]]>
 	</fx:Script>
@@ -34,17 +77,17 @@
 			<s:Label text="adresse:" color="white" height="100%" verticalAlign="middle"/>
 			<s:Scroller>
 			<s:Group>	
-			  <s:TextArea id="F01"  text="{this.adresse}" width="200"/>
+			  <s:TextArea id="F01"  text="{this.adresse}" width="200" change="adresse_changeHandler(event)"/>
 			</s:Group>	
 			</s:Scroller>	
 		</s:HGroup>
 		<s:HGroup width="100%">
 			<s:Label text="lat." width="55" color="white" height="100%" verticalAlign="middle"/>
-			<s:TextInput id="F02"  text="{this.lat}" width="205"/>	
+			<s:TextInput id="F02"  text="{this.lat}" width="205" change="lat_changeHandler(event)"/>	
 		</s:HGroup>	
 		<s:HGroup>
 			<s:Label text="lng." width="55" color="white" height="100%" verticalAlign="middle"/>
-			<s:TextInput id="F03" text="{this.lng}" width="206"/>
+			<s:TextInput id="F03" text="{this.lng}" width="206" change="lng_changeHandler(event)"/>
 		</s:HGroup>
 		<s:HGroup paddingLeft="60">
 			<s:Button label="Mettre à jour" click="add_geo_clickHandler(event)"/>	
