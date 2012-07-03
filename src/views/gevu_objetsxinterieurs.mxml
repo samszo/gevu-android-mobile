@@ -1,13 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" 
-		xmlns:view="views.*">
+		xmlns:view="views.*" xmlns:sqlite="com.peterelst.air.sqlite.*">
+	
+	<fx:Declarations>
+		<sqlite:SQLite id="db" file="gevu_mobile.db"/>
+		<sqlite:Query id="obj_int_query" connection="{db.connection}"
+					  sql="SELECT ref,fonctions FROM gevu_objetsxinterieurs WHERE id_lieu={this.selected_id}" 
+					  result="obj_int_resultHandler(event)"
+					  error="query_errorHandler(event)"/>
+	</fx:Declarations>
 	
 	<fx:Script>
 		<![CDATA[
+			import mx.core.FlexGlobals;
 			[Bindable] private var selected_id:int;
-			public function set_selected_id(x:int):void{
+			           private var cont:Array = new Array();
+			
+			public function set_selected_id(x:int):void
+			{
 				this.selected_id=x;
+				cont= FlexGlobals.topLevelApplication.mytree.getLieuCtl(x,10,"/node");
+				//this.cbType.dataProvider=cont;
+			}
+			
+			protected function query_errorHandler(event:SQLErrorEvent):void
+			{
+			 	
+			}
+			
+			
+			protected function obj_int_resultHandler(event:SQLEvent):void
+			{
+				var o:Object=event;
 			}
 		]]>
 	</fx:Script>
@@ -16,27 +41,16 @@
 				  paddingTop="13">
 			<s:HGroup>
 				<s:Label width="81" color="white" text="ref:" height="100%" verticalAlign="middle"/>
-				<s:TextInput id="F2" width="165" />
+				<s:TextInput  id="F2" text="{}" width="165" />
 			</s:HGroup>
 			<s:HGroup>
 				<s:Label width="82" color="white" text="fonctions:" height="100%" verticalAlign="middle"/>
-				<s:TextInput id="F3" width="50%" />
+				<s:TextInput id="F3" text="{}" width="50%" />
 			</s:HGroup>
 			<s:HGroup>
 				<s:Label text="Type d'objet:" color="white"/>
-				<s:ComboBox id="cbType" labelField="lib" prompt="Choisissez" />				
+				<s:ComboBox id="cbType" />				
 			</s:HGroup>
-			<!--
-			<mx:HBox width="100%">
-			<mx:Label text="La porte est ..." />
-			<mx:RadioButton groupName="reponse" id="F4_1" label="une porte principale" color="0x323232" click="editModif('reponse_2', F4_1.label)" /> 
-			<mx:RadioButton groupName="reponse" id="F4_2" label="une porte desservant uniquement une pièce de moins..." color="0x323232" click="editModif('reponse_2', F4_2.label)" /> 
-			</mx:HBox>
-			<mx:HBox width="100%">
-			<mx:Label text="L'escalier dessert le niveau ..." />
-			<mx:NumericStepper id="F5" width="100%" stepSize="1" value="{NodeData.reponse_2}" change="editModif('reponse_2', F5.value)" minimum="-6" maximum="10" />
-			</mx:HBox>
-			-->
 			<s:HGroup>
 				<s:Button id="saveModif" label="Enregistrer" />
 				<s:Button id="ajoutDiag" label="Ajouter des diagnostics" />			

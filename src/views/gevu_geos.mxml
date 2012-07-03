@@ -10,9 +10,9 @@
 	<fx:Script>
 		<![CDATA[
 			import flashx.textLayout.formats.Float;
-			
+			import gevu.popup;
+			import mx.managers.PopUpManager;
 			import mx.core.FlexGlobals;
-			
 			import spark.events.TextOperationEvent;
 			
 			[Bindable] public var vis:Boolean;
@@ -27,6 +27,8 @@
 			private var sqlConn:SQLConnection;
 			private var sqlState:SQLStatement;
 			private var id_lieu:int = FlexGlobals.topLevelApplication.getID();
+			private var popmsg:popup= new popup();
+			
 			protected function add_geo_clickHandler(event:MouseEvent):void
 			{
 				dbFile =File.applicationDirectory.resolvePath("gevu_mobile.db");
@@ -36,6 +38,9 @@
 				sqlState.sqlConnection=sqlConn;
 				sqlState.addEventListener(SQLEvent.RESULT,insert_update_resultHandler);
 				sqlState.addEventListener(SQLErrorEvent.ERROR,query_errorHandler);
+				 if(this.adresse==null) this.adresse=this.F01.text;
+				 if(this.update_lat==null) this.update_lat=this.F02.text;
+				 if(this.update_lng==null) this.update_lng=this.F03.text;
 				sqlState.text= "update gevu_geos set adresse='"+this.adresse+"',lat="+this.update_lat+",lng="+this.update_lng+ 
 					" where id_lieu=" +id_lieu;
 				sqlState.execute();
@@ -50,6 +55,10 @@
 			protected function insert_update_resultHandler(event:SQLEvent):void
 			{
 				var o:Object=event;
+				PopUpManager.addPopUp(popmsg,this,true);
+				PopUpManager.centerPopUp(popmsg);
+				popmsg.setMsg("La modification est complète");
+				popmsg.open(this,false);
 			}
 			
 			
