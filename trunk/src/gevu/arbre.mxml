@@ -455,7 +455,7 @@
 				
 				
 				
-		private function getLieuCtl(idLieu:int,idScenar:int=10):Array{
+		public function getLieuCtl(idLieu:int,idScenar:int=10,forTypeControle:String=null):Array{
 			var arrCtl:Array = new Array();
 			var rTypeCtrl:Array = new Array();
 			var items:Array = new Array();
@@ -539,6 +539,11 @@
 						   }
 						}//Xpath query result
 					}//création de la requête Xpath
+					
+					if(forTypeControle!=null)
+					{
+				    Path += forTypeControle;
+					}
 					var myQuery1:XPathQuery = new XPathQuery(Path);
 					result=myQuery1.exec(xmlScene);
 					  for (var t:int=0;t<result.length();t++) 

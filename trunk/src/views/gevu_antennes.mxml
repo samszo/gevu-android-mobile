@@ -3,6 +3,7 @@
 		xmlns:s="library://ns.adobe.com/flex/spark"
 		xmlns:sqlite="com.peterelst.air.sqlite.*"
 		xmlns:view="views.*"
+		xmlns:gevu="gevu.*"
 		backgroundColor="black"
 		creationComplete="this.get_ref.execute()"
 		>
@@ -12,22 +13,35 @@
 					  sql="select ref from gevu_antennes where id_lieu={selected_id}"
 					  result="antennes_query_resultHandler(event)"
 					  error="get_ref_errorHandler(event)"/>
+		
+		<sqlite:Query id="update_antenne" connection="{db.connection}" 
+					  sql="UPDATE gevu_antennes SET ref='{this.ref}' WHERE id_lieu={selected_id}"
+					  result="update_antenne_resultHandler(event)"
+					  error="update_antenne_errorHandler(event)"/>
+		                    
   
 				  
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
+			import gevu.popup;
+			import mx.managers.PopUpManager;
+			
+			import spark.events.TextOperationEvent;
 			[Bindable] private var selected_id:int;
 			[Bindable] private var id_contact:int;
-		
+			[Bindable] private var ref:String;
+			  
+			private var popmsg:popup= new popup();
+			
 			public function set_selected_id(x:int):void{
 			 this.selected_id=x;
 			}
 			
 			protected function antennes_query_resultHandler(event:SQLEvent):void
 			{
-				var ref:Array=get_ref.data;
-				this.F2.text=ref[0].ref;
+				var refdata:Array=get_ref.data;
+				this.ref=refdata[0].ref;
 			}
 			
 			protected function get_ref_errorHandler(event:SQLErrorEvent):void
@@ -36,17 +50,46 @@
 				
 			}
 			
+			protected function saveModif_clickHandler(event:MouseEvent):void
+			{
+			this.update_antenne.execute();	
+				
+			}
+			
+			protected function ref_changeHandler(event:TextOperationEvent):void
+			{
+				this.ref=this.F2.text;
+			}
+			
+			protected function update_antenne_resultHandler(event:SQLEvent):void
+			{
+				var o:Object=event;
+				PopUpManager.addPopUp(popmsg,this,true);
+				PopUpManager.centerPopUp(popmsg);
+				popmsg.setMsg("La modification est complète");
+				popmsg.open(this,false);
+				
+			}
+			
+			protected function update_antenne_errorHandler(event:SQLErrorEvent):void
+			{
+				var o:Object=event;
+			}
+			
 		]]>
 	</fx:Script>
 	<s:Panel x="0" y="0" width="926" height="720" title="Antenne" backgroundColor="black">
 	<s:VGroup paddingLeft="13" gap="15">
 	 <s:HGroup paddingTop="13">
 		<s:Label width="100%" height="35" text="Identifiant du local :" color="white"  verticalAlign="middle"/>
-		<s:TextInput id="F2"/>
+		<s:TextInput id="F2" text="{this.ref}" change="ref_changeHandler(event)"/>
 		
 		</s:HGroup>
 		<view:contacts id="ctc" x="10" y="67" width="829" height="273" id_lieu="{this.selected_id}"
 					   query_type="antenne"/>
-	</s:VGroup>	
-	</s:Panel>
+	 </s:VGroup>	
+		<s:Button id="saveModif" x="10" y="405" label="Enregistrer"
+				  click="saveModif_clickHandler(event)"/>
+		
+	 </s:Panel>
 </s:View>

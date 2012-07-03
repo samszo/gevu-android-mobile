@@ -5,9 +5,13 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import mx.core.FlexGlobals;
 			[Bindable] private var selected_id:int;
+			           private var cont:Array = new Array();
+			
 			public function set_selected_id(x:int):void{
 				this.selected_id=x;
+				cont= FlexGlobals.topLevelApplication.mytree.getLieuCtl(x,10,"/node");
 			}
 		]]>
 	</fx:Script>

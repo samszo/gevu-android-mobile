@@ -287,6 +287,8 @@
 			
 			protected function update_batiment_resultHandler(event:SQLEvent):void
 			{ 
+				PopUpManager.addPopUp(popmsg,this,true);
+				PopUpManager.centerPopUp(popmsg);
 				popmsg.setMsg("La modification est complète");
 				popmsg.open(this,false);
 				this.get_data.execute();
