@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="gevu_diagnostics"
+		xmlns:f4cb="com.oreilly.f4cb.*"
+		xmlns:view="views.*">
+	
+	<fx:Declarations>
+		
+	</fx:Declarations>
+	
+	<s:VGroup width="100%" height="100%">
+		     <s:HGroup verticalAlign="middle">
+			    <s:Image  source="@Embed('assets/eye.gif')" height="18" width="18"/>			
+			    <s:Image  source="@Embed('assets/AddRecord.png')" />			
+		     </s:HGroup>
+	
+		<f4cb:CustomViewStack id="vs" width="100%" height="100%"> 	
+		
+			<s:HGroup id="lecture" width="988" height="488">
+				<s:DataGrid id="adgCrit" width="476" height="293" color="0x323232">
+				  <s:columns>
+						<s:ArrayCollection>
+							<s:GridColumn dataField="exis" headerText="Diagnostics" />
+							<s:GridColumn dataField="commentaires" headerText="Commentaires" />
+							<s:GridColumn dataField="instant" headerText="Date"  />
+					    </s:ArrayCollection>
+						
+				  </s:columns>
+				</s:DataGrid>
+				
+				<s:DataGrid id="dgQuestions" width="505" height="296">
+					<s:columns>
+						<s:ArrayCollection>
+							<s:GridColumn dataField="id_diag" visible="false" />
+							<s:GridColumn dataField="ref"  />
+							<s:GridColumn dataField="criteres" />
+							<s:GridColumn dataField="reponse"  /> 
+						</s:ArrayCollection>	
+					</s:columns>
+				</s:DataGrid>
+				
+			</s:HGroup>
+
+		
+	<s:VGroup id="ajout" width="100%" height="100%">
+	  <s:HGroup verticalAlign="middle">
+		    	<s:Label text="Etapes : " />
+			    <s:Button styleName="leftArrowButton" id="btnPrevEtape" />
+			    <s:Label id="lblEtapeNum" text="0" />
+			    <s:Label text=" sur " />
+			    <s:Label id="lblEtapeTot" text="0" />
+			    <s:Button styleName="rightArrowButton" id="btnNextEtape" />
+				
+				<!-- <compo:hbControle id="hbCtl" />-->
+	    	    <s:Label text="Questions : " />
+			    <s:Button styleName="leftArrowButton" id="btnPrevQuestion"/>
+		        <s:Label id="lblQuestionNum" text="0" />
+    	        <s:Label id="lblQuestionInter" text="0" />
+	    	    <s:Label text=" sur " />
+			    <s:Label id="lblQuestionTot" text="0" />
+			    <s:Label id="lblQuestionAll" text="0" />
+				<s:Button styleName="rightArrowButton" id="btnNextQuestion" />
+		</s:HGroup>
+				 
+		    <view:repType2 id="ckReponse" />
+				
+		
+		        <s:HGroup width="100%">
+				  <s:Button id="btnSaveChoix" width="116" label="enregistrer"/>
+				  <s:Label text="Commentaires :" />
+				  <s:TextInput id="txtComment" />
+			    </s:HGroup>
+		
+ </s:VGroup>
+				
+		
+  </f4cb:CustomViewStack> 
+ 	
+</s:VGroup>
+		
+</s:View>
