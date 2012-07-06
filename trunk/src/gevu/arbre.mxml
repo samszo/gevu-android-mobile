@@ -455,7 +455,7 @@
 				
 				
 				
-		public function getLieuCtl(idLieu:int,idScenar:int=10,forTypeControle:String=null):Array{
+		public function getLieuCtl(idLieu:int,idScenar:int=10,forTypeControle:String=null,forTypeControle2:Boolean=false):Array{
 			var arrCtl:Array = new Array();
 			var rTypeCtrl:Array = new Array();
 			var items:Array = new Array();
@@ -552,8 +552,18 @@
 						  rTypeCtrl1=findByIdTypeControle(result[t].@idCtrl);
 						  if(rTypeCtrl1[0].zend_obj==null)
 						  {
-							  sqlConn.close();
-							  return new Array(); 
+							  var temp:Array=new Array();;
+							  var x:XML;
+							  for (var r:int;r<result.length();r++)
+							  {	  
+        					    x=result.descendants()[r];
+								trace(x.attribute("idCtrl"))
+								temp[r]=x.attribute("idCtrl");
+							  }		
+							 if (forTypeControle2==true)
+								 return temp; 
+							 else
+								 return new Array();
 						  }
 						  id=getIDtoVerifyTypeControle(rTypeCtrl1[0].zend_obj);  
 						  items1=verifIsControle(id,rTypeCtrl1[0].zend_obj,idLieu.toString());
@@ -600,6 +610,7 @@
 				{
 				idnoeud=nodes.getItemAt(i).lieu_parent;	
 				x=xmlist.descendants().(@idLieu==idnoeud)[0];
+			
 				if(x!=null)
 					x.appendChild(<node label={nodes.getItemAt(i).lib} idLieu={nodes.getItemAt(i).id_lieu} lieu_parent={idnoeud}/>);
 				else

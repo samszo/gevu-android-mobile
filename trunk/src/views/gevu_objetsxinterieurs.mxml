@@ -1,28 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" 
-		xmlns:view="views.*" xmlns:sqlite="com.peterelst.air.sqlite.*">
+		xmlns:view="views.*" 
+		xmlns:sqlite="com.peterelst.air.sqlite.*">
 	
 	<fx:Declarations>
 		<sqlite:SQLite id="db" file="gevu_mobile.db"/>
-		<sqlite:Query id="obj_int_query" connection="{db.connection}"
+		<sqlite:Query id="obj_in_que" connection="{db.connection}"
 					  sql="SELECT ref,fonctions FROM gevu_objetsxinterieurs WHERE id_lieu={this.selected_id}" 
 					  result="obj_int_resultHandler(event)"
+					  error="query_errorHandler(event)"/>
+		
+		<sqlite:Query id="update" connection="{db.connection}"
+					  sql="update gevu_objetsxinterieurs set ref='{this.ref}',fonction='{this.fonc}'
+					  WHERE id_lieu={this.selected_id}"
 					  error="query_errorHandler(event)"/>
 	</fx:Declarations>
 	
 	<fx:Script>
 		<![CDATA[
+			import mx.collections.ArrayList;
 			import mx.core.FlexGlobals;
 			[Bindable] private var selected_id:int;
-			           private var cont:Array = new Array();
+			[Bindable] private var cont:Array;
+			           private var dbFile:File;
+			           private var sqlConn:SQLConnection;
+			           private var sqlState:SQLStatement;
+			[Bindable] private var dp:ArrayList;
+			[Bindable] private var ref:String=" ";
+			[Bindable] private var fonc:String=" ";
 			
-			public function set_selected_id(x:int):void
+			protected function obj_ext_que_resultHandler(event:SQLEvent):void
 			{
-				this.selected_id=x;
-				cont= FlexGlobals.topLevelApplication.mytree.getLieuCtl(x,10,"/node");
-				//this.cbType.dataProvider=cont;
+				var temp:Array = this.obj_in_que.data;
+				this.F2.text= temp[0].ref
+				this.F3.text=	temp[0].fonctions;
 			}
+			
+			protected function obj_ext_que_errorHandler(event:SQLErrorEvent):void
+			{
+				var o:Object=event;	
+			}
+			
+			
+			protected function ajoutDiag_clickHandler(event:MouseEvent):void
+			{
+				var diag:gevu_diagnostics = new gevu_diagnostics();
+				diag.vs.selectedIndex=0;
+			}
+			
+			protected function saveModif_clickHandler(event:MouseEvent):void
+			{
+				if(this.F2.text !="") this.ref=this.F2.text; 
+				
+				if(this.F3.text !="") this.fonc=this.F3.text;
+				
+				this.update.execute();
+			}
+			
+			
+			
+			public function set_selected_id(x:int):void{
+				dbFile =File.applicationDirectory.resolvePath("gevu_mobile.db");
+				sqlConn= new SQLConnection();
+				sqlState = new SQLStatement();
+				sqlConn.open(dbFile);
+				sqlState.sqlConnection=sqlConn;
+				
+				
+				var temp:Array = new Array();
+				var libs:Array = new Array();
+				var y:int;
+				
+				this.selected_id=x;
+				
+				cont= FlexGlobals.topLevelApplication.mytree.getLieuCtl(x,10,"/node",true);
+				
+				for (var i:int=0;i<cont.length;i++)
+				{
+					y=cont[i];
+					sqlState.text="SELECT lib FROM gevu_typesxcontroles WHERE id_type_controle="+y;
+					sqlState.execute();
+					temp=sqlState.getResult().data;
+					libs[i]=temp[0].lib;
+				}
+				this.dp = new ArrayList(libs);
+				this.obj_in_que.execute();
+			}
+
+			
+			
+			
+			
+			
 			
 			protected function query_errorHandler(event:SQLErrorEvent):void
 			{
@@ -49,11 +119,11 @@
 			</s:HGroup>
 			<s:HGroup>
 				<s:Label text="Type d'objet:" color="white"/>
-				<s:ComboBox id="cbType" />				
+				<s:ComboBox id="cbType" dataProvider="{this.dp}"/>				
 			</s:HGroup>
 			<s:HGroup>
-				<s:Button id="saveModif" label="Enregistrer" />
-				<s:Button id="ajoutDiag" label="Ajouter des diagnostics" />			
+				<s:Button id="saveModif" label="Enregistrer"  click="saveModif_clickHandler(event)"/>
+				<s:Button id="ajoutDiag" label="Ajouter des diagnostics" click="ajoutDiag_clickHandler(event)"/>			
 			</s:HGroup>
 			
 		</s:VGroup>
