@@ -2,7 +2,9 @@
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" 
 		xmlns:view="views.*"
-		xmlns:sqlite="com.peterelst.air.sqlite.*">
+		xmlns:sqlite="com.peterelst.air.sqlite.*"
+		xmlns:flextras="http://www.flextras.com/mxml"
+		xmlns:dropDownLists="com.anjantek.controls.dropDownLists.*">
 	
 	<fx:Declarations>
 		<sqlite:SQLite id="db" file="gevu_mobile.db"/>
@@ -27,13 +29,16 @@
 			import mx.collections.ArrayList;
 			import mx.core.FlexGlobals;
 			
+			import spark.events.GridItemEditorEvent;
+			
 			[Bindable] private var selected_id:int;
 			           private var cont:Array = new Array();
 			           private var dbFile:File;
 			           private var sqlConn:SQLConnection;
 			           private var sqlState:SQLStatement;
 			
-			[Bindable] private var dp:ArrayList
+			[Bindable] private var arrCtrl:Array=new Array();       
+			[Bindable] private var dp:ArrayCollection = new ArrayCollection();
 			[Bindable] private var ref:String=" ";
 			[Bindable] private var fonc:String=" ";
 			
@@ -75,7 +80,7 @@
 				
 				
 				var temp:Array = new Array();
-				var libs:Array = new Array();
+				var type:String;
 				var y:int;
 				
 				this.selected_id=x;
@@ -88,11 +93,19 @@
 					sqlState.text="SELECT lib FROM gevu_typesxcontroles WHERE id_type_controle="+y;
 					sqlState.execute();
 					temp=sqlState.getResult().data;
-					libs[i]=temp[0].lib;
+					type=temp[0].lib;
+					this.dp.addItem({typeCtrl:type});
+					arrCtrl[type]=y;
 				}
-				this.dp = new ArrayList(libs);
 				this.esp_in_que.execute();
 			}
+			
+			protected function cbType_gridItemEditorSessionSaveHandler(event:GridItemEditorEvent):void
+			{
+				// TODO Auto-generated method stub
+				
+			}
+			
 		]]>
 	</fx:Script>
 
@@ -107,8 +120,14 @@
 			<s:TextInput id="F3" width="100" />
 		</s:HGroup>
 		<s:HGroup  id="lblType" >
-			<s:Label text="Type d'espace: " color="white" height="100%" verticalAlign="middle"/>
-			<s:ComboBox id="cbType" dataProvider="{this.dp}" prompt="Choisissez" />				
+			<s:DataGrid id="cbType" dataProvider="{this.dp}" editable="false" width="200"
+						gridItemEditorSessionSave="cbType_gridItemEditorSessionSaveHandler(event)">
+				<s:columns>
+					<s:ArrayCollection>
+						<s:GridColumn headerText="Type d'objet" dataField="typeCtrl" />
+					</s:ArrayCollection>
+				</s:columns>
+			</s:DataGrid>				
 		</s:HGroup>
 		<s:HGroup>
 			<s:Button id="saveModif" label="Enregistrer" click="saveModif_clickHandler(event)"/>
