@@ -56,9 +56,12 @@
 	<fx:Script>
 		
 		<![CDATA[
+			import flashx.textLayout.container.ScrollPolicy;
+			
 			import gevu.popup;
 			
 			import mx.collections.ArrayCollection;
+			import mx.core.ScrollPolicy;
 			import mx.managers.PopUpManager;
 			
 			import spark.events.TextOperationEvent;
@@ -177,6 +180,8 @@
 				this.rep_6.cocheVals();
 				this.rep_13.cocheVals();
 				this.rep_14.cocheVals();
+				
+				this.bat_scro.setStyle("horizontalScrollPolicy",mx.core.ScrollPolicy.OFF);
 			}
 			
 			public function editModif1(val:String) : void {
@@ -360,6 +365,7 @@
 						<view:repType2 id="rep_13" lblQ="Présence d'aire(s) de stationnement(s), à l'intérieur du bâtiment ?" Q="reponse_13" fnct="{this.editModif13}" val="{this.reponse13}"/>
 						<view:repType2 id="rep_14" lblQ="Présence d'aire(s) de stationnement(s), à l'extérieur du bâtiment ?" Q="reponse_14" fnct="{this.editModif14}" val="{this.reponse14}"/>
 						<s:Button id="SaveModif" label="Enregistrer les modifications" click="SaveModif_clickHandler(event)"/>
+						<s:Label height="30"/>
 						
 					</s:VGroup>		
 					<s:VGroup width="489" height="559" gap="25" paddingTop="13">

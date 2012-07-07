@@ -60,7 +60,6 @@
 			this.scroller.setStyle("verticalscrollpolicy",ScrollPolicy.OFF);
             borderStroke.color = getStyle("borderColor");
             borderStroke.alpha = getStyle("borderAlpha");
-            
             super.updateDisplayList(unscaledWidth, unscaledHeight);
         }
     </fx:Script>
