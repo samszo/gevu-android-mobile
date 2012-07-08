@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="repTypeDyna"
+		creationComplete="repTypeDyna_creationCompleteHandler(event)">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			import spark.components.RadioButton;
+			
+            [Bindable] public var type:String;
+            [Bindable] public var arrCtrl:Array;
+            [Bindable] public var fnct:Function;
+			[Bindable] public var val:String;
+		
+			
+			private function changeModif(e:MouseEvent):void{
+				fnct(e);
+			}
+			
+			protected function repTypeDyna_creationCompleteHandler(event:FlexEvent):void
+			{
+			 var len:int=arrCtrl.length;	
+				for (var i:int;i<len;i++)
+				{
+				 var r:RadioButton = new RadioButton();
+				 r.label=arrCtrl[i];
+				 r.addEventListener(MouseEvent.CLICK,changeModif)
+				 this.radio.addElement(r);
+				}
+				if(len<4)
+					pan.height=50*len;
+				else
+					pan.height=200;
+			}
+			
+		]]>
+	</fx:Script>
+ <s:Panel id="pan" title="{this.type}" width="300" height="200">
+	 <s:Scroller width="100%" height="100%">	 
+ <s:Group>	 
+    <s:VGroup id="radio" paddingLeft="13" paddingTop="13" gap="15">
+	
+	</s:VGroup>
+		
+ </s:Group>
+	 </s:Scroller>		 
+ </s:Panel>	
+</s:View>

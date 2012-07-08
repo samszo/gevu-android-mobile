@@ -43,6 +43,7 @@
 			[Bindable] private var dp:ArrayCollection = new ArrayCollection();
 			[Bindable] private var cont:Array;
 			[Bindable] private var type:String;
+			[Bindable] private var reponse:String;
 			[Bindable] private var selected_id:int;
 			[Bindable] private var ref:String=" ";
 			[Bindable] private var fonc:String=" ";
@@ -77,7 +78,7 @@
 				  temp=sqlState.getResult().data;
 				  type=temp[0].lib;
 				  this.dp.addItem({typeCtrl:type});
-				  arrCtrl[type]=y;
+				  arrCtrl[i]=type;
 				 }
 				this.obj_ext_que.execute();
 			}
@@ -167,9 +168,9 @@
 			}
 			
 			
-			protected function cbType_gridItemEditorSessionSaveHandler(event:GridItemEditorEvent):void
-			{
-				this.type=event.currentTarget.dataProvider[0].typeCtrl;
+			public function editModif(val:MouseEvent) : void {
+				this.reponse =val.currentTarget.label;
+				
 			}
 			
 		]]>
@@ -195,14 +196,7 @@
 		</s:HGroup>
 
 		<s:HGroup>
-			<s:DataGrid id="cbType" dataProvider="{this.dp}" editable="false" width="200"
-						gridItemEditorSessionSave="cbType_gridItemEditorSessionSaveHandler(event)">
-				<s:columns>
-					<s:ArrayCollection>
-						<s:GridColumn headerText="Type d'objet" dataField="typeCtrl" />
-					</s:ArrayCollection>
-				</s:columns>
-			</s:DataGrid>				
+		 <view:repTypeDyna type="Type d'objet" arrCtrl="{this.arrCtrl}" fnct="{this.editModif}"/>				
 		</s:HGroup>
 		<s:HGroup>
 			<s:Button id="saveModif" label="Enregistrer" click="saveModif_clickHandler(event)" />
