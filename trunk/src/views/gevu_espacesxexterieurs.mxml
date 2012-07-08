@@ -28,6 +28,7 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import mx.collections.ArrayCollection;
 			import mx.collections.ArrayList;
 			import mx.core.FlexGlobals;
 			
@@ -43,7 +44,7 @@
 			[Bindable] private var ref:String=" ";
 			[Bindable] private var fonc:String=" ";
 			[Bindable] private var combo:String=" ";
-			
+			[Bindable] private var reponse:String;
 			
 			protected function update_obj_resultHandler(event:SQLEvent):void
 			{
@@ -113,7 +114,7 @@
 					temp=sqlState.getResult().data;
 					type=temp[0].lib;
 					this.dp.addItem({typeCtrl:type});
-					arrCtrl[type]=y;
+					arrCtrl[i]=type;
 				}
 				this.esp_ext_que.execute();
 			}
@@ -135,12 +136,10 @@
 			}
 			
 
-			protected function cbType_gridItemEditorSessionSaveHandler(event:GridItemEditorEvent):void
-			{
-				// TODO Auto-generated method stub
+			public function editModif(val:MouseEvent) : void {
+				this.reponse =val.currentTarget.label;
 				
 			}
-			
 		]]>
 	</fx:Script>
 
@@ -164,14 +163,7 @@
 			</s:HGroup>
 
 			<s:HGroup>
-				<s:DataGrid id="cbType" dataProvider="{this.dp}" editable="false" width="200"
-							gridItemEditorSessionSave="cbType_gridItemEditorSessionSaveHandler(event)">
-					<s:columns>
-						<s:ArrayCollection>
-							<s:GridColumn headerText="Type d'objet" dataField="typeCtrl" />
-						</s:ArrayCollection>
-					</s:columns>
-				</s:DataGrid>
+				<view:repTypeDyna type="Type d'espace" arrCtrl="{this.arrCtrl}" fnct="{this.editModif}"/>
 			</s:HGroup>
 
 			<s:HGroup>
