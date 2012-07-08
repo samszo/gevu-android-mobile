@@ -106,7 +106,7 @@
 			
 			protected function cbType_gridItemEditorSessionSaveHandler(event:GridItemEditorEvent):void
 			{
-				
+			  this.type=event.currentTarget.dataProvider[0].typeCtrl;	
 			}
 			
 		]]>
