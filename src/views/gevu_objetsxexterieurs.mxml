@@ -42,6 +42,7 @@
 			[Bindable] private var arrCtrl:Array=new Array();
 			[Bindable] private var dp:ArrayCollection = new ArrayCollection();
 			[Bindable] private var cont:Array;
+			[Bindable] private var type:String;
 			[Bindable] private var selected_id:int;
 			[Bindable] private var ref:String=" ";
 			[Bindable] private var fonc:String=" ";
@@ -160,14 +161,15 @@
 			protected function ajoutDiag_clickHandler(event:MouseEvent):void
 			{
 			  var diag:gevu_diagnostics = new gevu_diagnostics();
-			  diag.vs.selectedIndex=0;
+			  if (FlexGlobals.topLevelApplication.main_interface.numChildren>0)
+				  FlexGlobals.topLevelApplication.main_interface.removeAllElements();
+			  FlexGlobals.topLevelApplication.main_interface.addElement(diag);
 			}
 			
 			
 			protected function cbType_gridItemEditorSessionSaveHandler(event:GridItemEditorEvent):void
 			{
-				// TODO Auto-generated method stub
-				
+				this.type=event.currentTarget.dataProvider[0].typeCtrl;
 			}
 			
 		]]>

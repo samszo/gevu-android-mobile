@@ -2,22 +2,46 @@
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" title="gevu_diagnostics"
 		xmlns:f4cb="com.oreilly.f4cb.*"
-		xmlns:view="views.*">
+		xmlns:view="views.*"
+		creationComplete="diag_creationCompleteHandler(event)">
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			protected function diag_creationCompleteHandler(event:FlexEvent):void
+			{
+				this.vs.selectedIndex=0;
+			}
+			
+			protected function eye_clickHandler(event:MouseEvent):void
+			{
+				
+				
+			}
+			
+			protected function add_clickHandler(event:MouseEvent):void
+			{
+				this.vs.selectedIndex=1;
+				
+			}
+			
+		]]>
+	</fx:Script>
 	
 	<fx:Declarations>
 		
 	</fx:Declarations>
 	
-	<s:VGroup width="100%" height="100%">
+	<s:VGroup width="958" height="460">
 		     <s:HGroup verticalAlign="middle">
-			    <s:Image  source="@Embed('assets/eye.gif')" height="18" width="18"/>			
-			    <s:Image  source="@Embed('assets/AddRecord.png')" />			
+			    <s:Image  source="@Embed('assets/eye.gif')" height="18" width="18" click="eye_clickHandler(event)"/>			
+			    <s:Image  source="@Embed('assets/AddRecord.png')" click="add_clickHandler(event)"/>			
 		     </s:HGroup>
 	
-		<f4cb:CustomViewStack id="vs" width="100%" height="100%"> 	
+		<f4cb:CustomViewStack id="vs" width="933" height="429"> 	
 		
-			<s:HGroup id="lecture" width="988" height="488">
-				<s:DataGrid id="adgCrit" width="476" height="293" color="0x323232">
+			<s:HGroup id="lecture" width="988" height="488" paddingLeft="13" paddingTop="13" paddingRight="13">
+				<s:DataGrid id="adgCrit" width="450" height="293" color="0x323232">
 				  <s:columns>
 						<s:ArrayCollection>
 							<s:GridColumn dataField="exis" headerText="Diagnostics" />
@@ -28,7 +52,7 @@
 				  </s:columns>
 				</s:DataGrid>
 				
-				<s:DataGrid id="dgQuestions" width="505" height="296">
+				<s:DataGrid id="dgQuestions" width="450" height="296">
 					<s:columns>
 						<s:ArrayCollection>
 							<s:GridColumn dataField="id_diag" visible="false" />
@@ -38,11 +62,10 @@
 						</s:ArrayCollection>	
 					</s:columns>
 				</s:DataGrid>
-				
-			</s:HGroup>
+			  </s:HGroup>
 
 		
-	<s:VGroup id="ajout" width="100%" height="100%">
+	<s:VGroup id="ajout" width="100%" height="100%" paddingLeft="13" paddingTop="13">
 	  <s:HGroup verticalAlign="middle">
 		    	<s:Label text="Etapes : " />
 			    <s:Button styleName="leftArrowButton" id="btnPrevEtape" />
