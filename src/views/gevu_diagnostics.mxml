@@ -6,11 +6,13 @@
 		creationComplete="diag_creationCompleteHandler(event)">
 	<fx:Script>
 		<![CDATA[
+			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
 			
 			protected function diag_creationCompleteHandler(event:FlexEvent):void
 			{
 				this.vs.selectedIndex=0;
+				
 			}
 			
 			protected function eye_clickHandler(event:MouseEvent):void

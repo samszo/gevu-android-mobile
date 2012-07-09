@@ -58,7 +58,10 @@
 			protected function ajoutDiag_clickHandler(event:MouseEvent):void
 			{
 				var diag:gevu_diagnostics = new gevu_diagnostics();
-				diag.vs.selectedIndex=0;
+				if (FlexGlobals.topLevelApplication.main_interface.numChildren>0)
+					FlexGlobals.topLevelApplication.main_interface.removeAllElements();
+				FlexGlobals.topLevelApplication.main_interface.addElement(diag);
+				
 			}
 			
 			protected function saveModif_clickHandler(event:MouseEvent):void
