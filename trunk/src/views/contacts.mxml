@@ -58,7 +58,9 @@
 		<sqlite:Query id="antenne_contact_query" connection="{db.connection}"
 					  sql="select c.id_contact,c.nom,c.prenom,c.fixe,c.mobile,c.fax,c.mail
 					  from gevu_antennes a ,gevu_contactsxantennes b,gevu_contacts c
-					  where (a.id_antenne = b.id_antenne) and (c.id_contact =  b.id_contact)"
+					  where (a.id_antenne = b.id_antenne) and (c.id_contact =  b.id_contact)
+					  and (a.id_antenne={this.id_antenne})"
+					  
 					  result="antenne_contact_query_resultHandler(event)"
 					  error="query_errorHandler(event)"/>
 		

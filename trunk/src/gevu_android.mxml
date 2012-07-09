@@ -136,6 +136,7 @@
 					popmsg.setMsg("Veuillez séléctioner un lieu");
 					popmsg.open(this,false);
 					
+					
 				}
 				else {
 					PopUpManager.addPopUp(delpopup,this,true);
