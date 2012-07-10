@@ -9,7 +9,7 @@
 			   xmlns:f4cb="com.oreilly.f4cb.*"
 			   xmlns:gallery="gallery.*"
 			   backgroundColor="black"
-			   
+			   creationComplete="application_creationCompleteHandler(event)"
 			   >
 	
 	<fx:Style>
@@ -39,6 +39,7 @@
 			
 			import gevu.arbre;
 			import gevu.delPopup;
+			import gevu.login;
 			import gevu.popup;
 			
 			import mx.core.FlexGlobals;
@@ -47,7 +48,10 @@
 			import mx.events.PropertyChangeEvent;
 			import mx.managers.PopUpManager;
 			
+			import spark.components.TitleWindow;
+			
 			import views.Images;
+			
 			[Bindable] public var lat:Number;
 			[Bindable] public var lng:Number;
 			
@@ -230,12 +234,21 @@
 			}
 			
 			
+			protected function application_creationCompleteHandler(event:FlexEvent):void
+			{
+				var helpWindow:TitleWindow = new TitleWindow();
+				PopUpManager.centerPopUp(helpWindow);
+				helpWindow= PopUpManager.createPopUp(this, login, false) as TitleWindow;
+				
+				
+			}
+			
 		]]>
 	</fx:Script>
 	<s:layout>
 		<s:HorizontalLayout/>
 	</s:layout>
-	<s:VGroup id="left_interface" paddingLeft="13" paddingTop="13">
+	<s:VGroup id="left_interface" paddingLeft="13" paddingTop="13" visible="false">
 		
 	  <s:HGroup gap="20">   
 		
@@ -260,7 +273,7 @@
 	  </s:HGroup>
 		
 		<f4cb:CustomViewStack id="viewstack" width="300" height="300"
-							  skinClass="com.oreilly.f4cb.CustomBorderSkin">
+							  skinClass="com.oreilly.f4cb.CustomBorderSkin" >
 			
 			<gevu:arbre  id="mytree" width="300" height="300"/>
 			<s:VGroup paddingLeft="13" paddingTop="13">
@@ -297,7 +310,7 @@
 	</s:VGroup>
 	
 	
-	<f4cb:CustomViewStack id="view2" width="1023" height="730">
+	<f4cb:CustomViewStack id="view2" width="1023" height="730" visible="false">
 		
 		<s:Scroller width="100%" height="100%">
 			<s:VGroup id="main_interface" paddingLeft="13" paddingTop="13">
