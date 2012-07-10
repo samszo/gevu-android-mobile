@@ -18,12 +18,18 @@
 			protected function eye_clickHandler(event:MouseEvent):void
 			{
 				
-				
+				this.vs.selectedIndex=0;	
 			}
 			
 			protected function add_clickHandler(event:MouseEvent):void
 			{
 				this.vs.selectedIndex=1;
+				
+			}
+			
+			protected function problem_clickHandler(event:MouseEvent):void
+			{
+				this.vs.selectedIndex=2;
 				
 			}
 			
@@ -37,7 +43,9 @@
 	<s:VGroup width="958" height="460">
 		     <s:HGroup verticalAlign="middle">
 			    <s:Image  source="@Embed('assets/eye.gif')" height="18" width="18" click="eye_clickHandler(event)"/>			
-			    <s:Image  source="@Embed('assets/AddRecord.png')" click="add_clickHandler(event)"/>			
+			    <s:Image  source="@Embed('assets/AddRecord.png')" click="add_clickHandler(event)"/>	
+				<s:Label width="500"/>
+				<s:Button label="Problèmes" click="problem_clickHandler(event)"/>            
 		     </s:HGroup>
 	
 		<f4cb:CustomViewStack id="vs" width="933" height="429"> 	
@@ -49,8 +57,7 @@
 							<s:GridColumn dataField="exis" headerText="Diagnostics" />
 							<s:GridColumn dataField="commentaires" headerText="Commentaires" />
 							<s:GridColumn dataField="instant" headerText="Date"  />
-					    </s:ArrayCollection>
-						
+					    </s:ArrayCollection>	
 				  </s:columns>
 				</s:DataGrid>
 				
@@ -67,7 +74,7 @@
 			  </s:HGroup>
 
 		
-	<s:VGroup id="ajout" width="100%" height="100%" paddingLeft="13" paddingTop="13">
+<s:VGroup id="ajout" width="100%" height="100%" paddingLeft="13" paddingTop="13">
 	  <s:HGroup verticalAlign="middle">
 		    	<s:Label text="Etapes : " />
 			    <s:Button styleName="leftArrowButton" id="btnPrevEtape" />
@@ -94,11 +101,9 @@
 				  <s:Button id="btnSaveChoix" width="116" label="enregistrer"/>
 				  <s:Label text="Commentaires :" />
 				  <s:TextInput id="txtComment" />
-			    </s:HGroup>
-		
- </s:VGroup>
-				
-		
+		</s:HGroup>
+ </s:VGroup>				
+ <view:gevu_problemes/>		
   </f4cb:CustomViewStack> 
  	
 </s:VGroup>
