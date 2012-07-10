@@ -260,6 +260,7 @@
 			[Bindable] private var last_id:int;
 			
 			private function init():void {
+				
 				init_tree();
 				get_new_geo();
 				GetScenarioParam.execute();

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- containers\spark\myComponents\MyLoginForm.mxml -->
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:mx="library://ns.adobe.com/flex/mx" 
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   close="handleCloseEvent();">
+	<s:layout>
+		<s:VerticalLayout/>
+	</s:layout>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.core.FlexGlobals;
+			import mx.managers.PopUpManager;
+			
+			private var dbFile:File;
+			private var sqlConn:SQLConnection;
+			private var sqlState:SQLStatement;
+[Bindable]	private var userName:String;
+[Bindable]	private var pw:String;
+			private var popmsg:popup = new popup();
+			
+			// Handle the close button and Cancel button.
+			private function handleCloseEvent():void {
+				NativeApplication.nativeApplication.exit();
+			}            
+			
+			// Handle the OK button.
+			private function processLogin():void {
+				dbFile =File.applicationDirectory.resolvePath("gevu_mobile.db");
+				sqlConn= new SQLConnection();
+				sqlState = new SQLStatement();
+				sqlConn.open(dbFile);
+				sqlState.sqlConnection=sqlConn;
+				userName=this.log.text;
+				this.pw=this.mdp.text;
+				sqlState.text="SELECT id_exi FROM gevu_exis WHERE (mdp='"+this.pw+"') and (nom='"+this.userName+"')";
+				sqlState.execute();
+				if(sqlState.getResult().data != null)
+				{	
+				  PopUpManager.removePopUp(this);
+				  FlexGlobals.topLevelApplication.left_interface.visible=true;
+				  FlexGlobals.topLevelApplication.view2.visible=true;
+				}
+				else {
+					PopUpManager.addPopUp(popmsg,this,true);
+					PopUpManager.centerPopUp(popmsg);
+					popmsg.setMsg("Veuillez vérifier les informations");
+					popmsg.open(this,false);
+					
+				}
+			}
+		]]>
+	</fx:Script>
+	
+	<s:Form>
+		<s:FormItem label="Login : ">
+			<s:TextInput id="log" width="100%"/>
+		</s:FormItem> 
+		<s:FormItem label="Mot de passe : ">
+			<s:TextInput id="mdp" 
+						 displayAsPassword="true" 
+						 width="100%"/>
+		</s:FormItem> 
+	</s:Form>
+	<s:HGroup paddingLeft="13" paddingBottom="13" paddingTop="13"> 
+		<s:Button label="Valider"
+				  click="processLogin();" /> 
+		<s:Button label="Cancel"
+				  click="handleCloseEvent();"/> 
+	</s:HGroup> 
+</s:TitleWindow>
