@@ -10,7 +10,7 @@
 		<sqlite:SQLite id="db" file="gevu_mobile.db"/>
 		
 		<sqlite:Query id="esp_in_que" connection="{db.connection}"
-					  sql="SELECT ref,fonction
+					  sql="SELECT ref,fonction,id_instant
 					  FROM gevu_espacesxinterieurs
 					  WHERE id_lieu={this.selected_id}"
 					  result="esp_in_que_resultHandler(event)"
@@ -43,11 +43,13 @@
 			[Bindable] private var ref:String=" ";
 			[Bindable] private var fonc:String=" ";
 			[Bindable] private var reponse:String;
+			[Bindable] private var id_instant:int;
 			protected function esp_in_que_resultHandler(event:SQLEvent):void
 			{
 				var temp:Array = this.esp_in_que.data;
 				this.F2.text= temp[0].ref
 				this.F3.text=	temp[0].fonctions;
+				this.id_instant=temp[0].id_instant;
 			}
 			
 			protected function obj_ext_que_errorHandler(event:SQLErrorEvent):void
@@ -58,6 +60,7 @@
 			protected function ajoutDiag_clickHandler(event:MouseEvent):void
 			{
 				var diag:gevu_diagnostics = new gevu_diagnostics();
+				diag.id_instant=this.id_instant;
 				if (FlexGlobals.topLevelApplication.main_interface.numChildren>0)
 					FlexGlobals.topLevelApplication.main_interface.removeAllElements();
 				FlexGlobals.topLevelApplication.main_interface.addElement(diag);

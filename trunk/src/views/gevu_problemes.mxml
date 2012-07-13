@@ -23,16 +23,15 @@
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 
-<s:VGroup width="600" height="470">
-		
-	<s:HGroup paddingBottom="13" paddingLeft="13" paddingTop="13">
+<s:VGroup width="898" height="246">
+   <s:HGroup paddingBottom="13" paddingLeft="13" paddingTop="13">
 		<s:Image  id="btnAjout"  source="@Embed('assets/AddRecord.png')" click="btnAjout_clickHandler(event)"/>			
 		<s:Image  id="btnDelete" source="@Embed('assets/delete.png')" click="btnDelete_clickHandler(event)"/>
 	</s:HGroup>
-	<s:HGroup width="879" height="372" paddingLeft="13" paddingTop="13">
-	<f4cb:CustomViewStack id="vs" width="777" height="343">
-		
-		<s:VGroup id="lecture" width="100%" height="100%" paddingTop="15" paddingBottom="13" paddingLeft="13" paddingRight="13"  >						
+	
+	<s:HGroup width="879" height="161" paddingLeft="13" paddingTop="13">
+	<f4cb:CustomViewStack id="vs" width="851" height="127">
+		<s:VGroup id="lecture" width="100%" height="100%" paddingTop="10" paddingBottom="13" paddingLeft="13" paddingRight="13"  >						
 			<s:HGroup width="100%" height="100%">
 				<s:DataGrid  id="dataGrid" width="100%" height="100%">
 					<s:columns>
@@ -48,23 +47,30 @@
 		</s:VGroup>
 		
 	   <s:VGroup id="ajout"  paddingTop="6" paddingBottom="6" paddingLeft="13" paddingRight="6"  >
-			<s:HGroup>
-				<s:Label text="Saisissez votre probleme :"/> 
-				<s:Button id="btnAjouter" label="Enregistrer" />
-				<s:Button id="btnAnnuler" label="Annuler" />				
+			<s:HGroup id="insertForm" height="75" gap="15">
+				<s:HGroup>
+				 <s:Label text="mesure:" />
+				 <s:TextInput id="mesure" width="150" />
+				</s:HGroup>
+				
+				<s:HGroup>
+				  <s:Label text="N° de marker" />
+				  <s:TextInput id="num_marker" width="150"  />
+				</s:HGroup>
+				
+				
+				<s:HGroup>
+					<s:Label text="observation" />
+					<s:TextInput id="observations" width="150"  />
+				</s:HGroup>
 			</s:HGroup>
-		 
-			<s:Form id="insertForm">			                    		
-				<s:FormItem label="mesure:" >
-					<s:TextInput id="mesure" width="100%" />
-				</s:FormItem>
-				<s:FormItem label="N° de marker" >
-					<s:TextInput id="num_marker" width="100%"  />
-				</s:FormItem>
-				<s:FormItem label="Observations" >
-					<s:TextInput id="observations" width="100%"  />
-				</s:FormItem>
-			</s:Form>		
+		   
+		   <s:HGroup>
+			   <s:Label text="Saisissez votre probleme :"/> 
+			   <s:Button id="btnAjouter" label="Enregistrer" />
+			   <s:Button id="btnAnnuler" label="Annuler" />				
+		   </s:HGroup>
+		   
 		</s:VGroup>
 	</f4cb:CustomViewStack>
 	</s:HGroup>	

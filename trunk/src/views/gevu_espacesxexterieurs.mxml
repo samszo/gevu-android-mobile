@@ -10,7 +10,7 @@
 		<sqlite:SQLite id="db" file="gevu_mobile.db"/>
 		
 		<sqlite:Query id="esp_ext_que" connection="{db.connection}"
-					  sql="SELECT ref,fonction,id_type_espace
+					  sql="SELECT ref,fonction,id_type_espace,id_instant
 					  FROM gevu_espacesxexterieurs
 					  WHERE id_lieu={this.selected_id}"
 					  result="obj_ext_que_resultHandler(event)"
@@ -45,6 +45,7 @@
 			[Bindable] private var fonc:String=" ";
 			[Bindable] private var combo:String=" ";
 			[Bindable] private var reponse:String;
+			[Bindable] private var id_instant:int;
 			
 			protected function update_obj_resultHandler(event:SQLEvent):void
 			{
@@ -58,6 +59,7 @@
 				var temp:Array = this.esp_ext_que.data;
 				this.F2.text= temp[0].ref
 				this.F3.text=	temp[0].fonctions;
+				this.id_instant=temp[0].id_instant;
 				
 				switch(this.combo)
 				{
@@ -123,6 +125,7 @@
 			protected function ajoutDiag_clickHandler(event:MouseEvent):void
 			{
 				var diag:gevu_diagnostics = new gevu_diagnostics();
+				diag.id_instant=this.id_instant;
 				if (FlexGlobals.topLevelApplication.main_interface.numChildren>0)
 					FlexGlobals.topLevelApplication.main_interface.removeAllElements();
 				FlexGlobals.topLevelApplication.main_interface.addElement(diag);
@@ -148,7 +151,7 @@
 <s:Panel x="0" y="0" width="926" height="686"  backgroundColor="black" title="Espace extérieur">
 		<s:VGroup paddingLeft="13" paddingTop="13" paddingBottom="13" gap="20">
 			<s:HGroup width="100%">
-				<s:Label text="ref: " color="white" height="100%" verticalAlign="middle"/>
+				<s:Label width="66" height="100%" color="white" text="ref: " verticalAlign="middle"/>
 				<s:TextInput id="F2" width="200" />
 			</s:HGroup>
 
@@ -165,7 +168,8 @@
 			</s:HGroup>
 
 			<s:HGroup>
-				<view:repTypeDyna type="Type d'espace" arrCtrl="{this.arrCtrl}" fnct="{this.editModif}"/>
+				<view:repTypeDyna height="297" arrCtrl="{this.arrCtrl}" fnct="{this.editModif}"
+								  type="Type d'espace"/>
 			</s:HGroup>
 
 			<s:HGroup>
