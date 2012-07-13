@@ -8,6 +8,7 @@
 		creationComplete="this.query_execution()"
 		>
 	
+	
 	<fx:Declarations>
 		
 		
@@ -56,7 +57,7 @@
 					  result="reset_table_resultHandler(event)"/>
 		
 		<sqlite:Query id="antenne_contact_query" connection="{db.connection}"
-					  sql="select c.id_contact,c.nom,c.prenom,c.fixe,c.mobile,c.fax,c.mail
+					  sql="select c.id_contact as id_contact,c.nom,c.prenom,c.fixe,c.mobile,c.fax,c.mail
 					  from gevu_antennes a ,gevu_contactsxantennes b,gevu_contacts c
 					  where (a.id_antenne = b.id_antenne) and (c.id_contact =  b.id_contact)
 					  and (a.id_antenne={this.id_antenne})"
@@ -86,6 +87,11 @@
 					  from gevu_contacts where id_contact={this.id_contact}"
 					  result="parcelle_contact_resultHandler(event)"   
 					  error="query_errorHandler(event)" />
+		
+		<sqlite:Query id="get_contact" connection="{db.connection}"
+					  sql="SELECT nom, id_exi FROM gevu_exis" 
+					  error="query_errorHandler(event)"
+					  result="get_contact_resultHandler(event)"/>
 		
 		
 		
@@ -119,17 +125,28 @@
 			[Bindable] private var last_inserted_id:int;
 			[Bindable] private var id_antenne:int;
 			[Bindable] public var id_contact:String;
+			
+			
 			private var popmsg:popup = new popup();
 			private var delpopup:delPopup = new delPopup();
+			private var contact:String;
+			[Bindable] private var cont:Array = new Array();
+			
+			
+			public function editModif(val:MouseEvent) : void {
+				this.contact =val.currentTarget.label;
+				
+			}
 			
 			protected function parcelle_contact_resultHandler(event:SQLEvent):void
 			{
+				
 				contact_info= new ArrayCollection(this.parcelle_contact.data);		
 			}
 			
 			protected function add_form_clickHandler(event:MouseEvent):void
 			{
-				Conviewstack.selectedIndex = 1;	
+				Conviewstack.selectedIndex = 2;	
 				this.nom_in.text="";
 				this.prenom_in.text="";
 				this.fixe_in.text="";
@@ -189,11 +206,12 @@
 			
 			protected function antenne_contact_query_resultHandler(event:SQLEvent):void
 			{
-				contact_info = new ArrayCollection(antenne_contact_query.data);
+			  contact_info = new ArrayCollection(antenne_contact_query.data);
 				
 			}
 			
-			public function query_execution():void{
+			public function query_execution():void
+			{
 				PopUpManager.addPopUp(delpopup,this,false);
 				PopUpManager.centerPopUp(delpopup);
 				PopUpManager.addPopUp(popmsg,this,false);
@@ -271,6 +289,16 @@
 				
 			}
 			
+			protected function get_contact_resultHandler(event:SQLEvent):void
+			{
+			 var temp:Array;
+			 temp=this.get_contact.data;
+			  for(var i:int=0;temp.length;i++)
+			  {
+				  cont[i]=temp[i].nom;
+			  } 
+			
+			}
 		]]>
 	</fx:Script>
 	<s:Panel x="-4" y="-2" width="903" height="310" title="Contacts" backgroundColor="black">
@@ -304,8 +332,9 @@
 		<s:VGroup id="viewContactUnique"   paddingBottom="6"
 				  paddingLeft="6" paddingRight="6" paddingTop="6">
 			
-			<s:VGroup id="add_contact_form">
-				<s:HGroup>
+		<s:VGroup id="add_contact_form">
+			<s:HGroup gap="25">	
+			    <s:HGroup>
 					<s:Label text="Nom:"/>
 					<s:TextInput id="nom_in" height="25" width="125"/>
 				</s:HGroup>	
@@ -314,29 +343,32 @@
 					<s:TextInput id="prenom_in" height="25" width="125" />
 				</s:HGroup>
 				<s:HGroup>	
+					<s:Label text="Fax"/>
+					<s:TextInput id="fax_in" height="25" width="125"/>
+				</s:HGroup>
+			</s:HGroup>
+			
+			<s:HGroup>
+				<s:HGroup>	
 					<s:Label text="Fixe:"/>
-					<s:TextInput id="fixe_in" height="25" width="125"
-								 />
+					<s:TextInput id="fixe_in" height="25" width="125"/>
 				</s:HGroup>
 				<s:HGroup>	
 					<s:Label text="Mobile"/>
-					<s:TextInput id="mobile_in" height="25" width="125"
-								 />
-				</s:HGroup>
-				<s:HGroup>	
-					<s:Label text="Fax"/>
-					<s:TextInput id="fax_in" height="25" width="125"
-								 />
+					<s:TextInput id="mobile_in" height="25" width="125"/>
 				</s:HGroup>
 				<s:HGroup>	
 					<s:Label text="Mail"/>
-					<s:TextInput id="mail_in" height="25" width="125"
-								 />
-				</s:HGroup>	
+					<s:TextInput id="mail_in" height="25" width="125"/>
+				</s:HGroup>
+			</s:HGroup>	
+				
+					
 				<s:Button label="Enregistrer ce contact" click="save_contact_clickHandler(event)"/>	
 			</s:VGroup>
 			
 		   </s:VGroup>	
+			<view:repTypeDyna type="Contact" arrCtrl="{this.cont}" fnct="{this.editModif}"/>
 		</f4cb:CustomViewStack>
 	</s:Panel>
 </s:View>	

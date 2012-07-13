@@ -236,6 +236,7 @@
 			
 			protected function application_creationCompleteHandler(event:FlexEvent):void
 			{
+				
 				var helpWindow:TitleWindow = new TitleWindow();
 				PopUpManager.centerPopUp(helpWindow);
 				helpWindow= PopUpManager.createPopUp(this, login, false) as TitleWindow;

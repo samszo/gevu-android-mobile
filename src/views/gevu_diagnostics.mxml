@@ -3,16 +3,63 @@
 		xmlns:s="library://ns.adobe.com/flex/spark" title="gevu_diagnostics"
 		xmlns:f4cb="com.oreilly.f4cb.*"
 		xmlns:view="views.*"
+		xmlns:sqlite="com.peterelst.air.sqlite.*"
 		creationComplete="diag_creationCompleteHandler(event)">
+	
+		
 	<fx:Script>
 		<![CDATA[
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
+			private var diag_ids:Array = new Array();
+			private var dbFile:File;
+			private var sqlConn:SQLConnection;
+			private var sqlState:SQLStatement;
+[Bindable]  private var maintenant:String;
+[Bindable]			private var nom:String;
+			
+		private function init():void{
+			var id_exi:int;
+			dbFile =File.applicationDirectory.resolvePath("gevu_mobile.db");
+			sqlConn= new SQLConnection();
+			sqlState = new SQLStatement();
+			sqlConn.open(dbFile);
+			sqlState.sqlConnection=sqlConn;
+			var temp:Array = new Array();
+			
+			///Retrieve the DIAG ids
+			sqlState.text="SELECT id_diag FROM gevu_diagnostics WHERE id_instant="+this.id_instant;
+			sqlState.execute();
+			temp=sqlState.getResult().data;
+			  
+			for(var i:int;i<temp.length;i++)
+			  {
+				 diag_ids[i]=temp[i].id_diag;
+			  }
+			
+			//Retrieve Date + nom
+			sqlState.text= "SELECT id_exi,maintenant FROM gevu_instants WHERE id_instant="+this.id_instant;
+			sqlState.execute();
+			temp=sqlState.getResult().data;
+			this.maintenant=temp[0].maintenant;
+			id_exi=temp[0].id_exi;
+			
+			sqlState.text="SELECT nom FROM gevu_exis WHERE id_exi="+id_exi;
+			sqlState.execute();
+			temp=sqlState.getResult().data;
+			this.nom=temp[0].nom;
+			
+			
+			
+		}
+			
+	  [Bindable] public var id_instant:int;
 			
 			protected function diag_creationCompleteHandler(event:FlexEvent):void
 			{
-				this.vs.selectedIndex=0;
 				
+				this.vs.selectedIndex=0;
+				//init();
 			}
 			
 			protected function eye_clickHandler(event:MouseEvent):void
@@ -33,35 +80,37 @@
 				
 			}
 			
+			
+			
 		]]>
 	</fx:Script>
 	
 	<fx:Declarations>
 		
 	</fx:Declarations>
-	
-	<s:VGroup width="958" height="460">
-		     <s:HGroup verticalAlign="middle">
+<s:Panel width="926" height="642" backgroundColor="black" title="Panel des diagnostiques">	
+	<s:VGroup width="958" height="460" paddingLeft="13" paddingTop="13" paddingBottom="13">
+		     <s:HGroup verticalAlign="middle" paddingLeft="13" paddingTop="13" paddingBottom="13">
 			    <s:Image  source="@Embed('assets/eye.gif')" height="18" width="18" click="eye_clickHandler(event)"/>			
 			    <s:Image  source="@Embed('assets/AddRecord.png')" click="add_clickHandler(event)"/>	
-				<s:Label width="500"/>
-				<s:Button label="Problèmes" click="problem_clickHandler(event)"/>            
+				<s:Label width="500"/>            
 		     </s:HGroup>
 	
-		<f4cb:CustomViewStack id="vs" width="933" height="429"> 	
-		
+		<f4cb:CustomViewStack id="vs" width="897" height="275"> 	
 			<s:HGroup id="lecture" width="988" height="488" paddingLeft="13" paddingTop="13" paddingRight="13">
-				<s:DataGrid id="adgCrit" width="450" height="293" color="0x323232">
+				
+				<s:DataGrid id="adgCrit" width="432" height="250" color="0x323232" >
 				  <s:columns>
 						<s:ArrayCollection>
+							<s:GridColumn dataField="id_diag" visible="false"/>
 							<s:GridColumn dataField="exis" headerText="Diagnostics" />
 							<s:GridColumn dataField="commentaires" headerText="Commentaires" />
-							<s:GridColumn dataField="instant" headerText="Date"  />
+							<s:GridColumn dataField="maintenant" headerText="Date"  />
 					    </s:ArrayCollection>	
 				  </s:columns>
 				</s:DataGrid>
 				
-				<s:DataGrid id="dgQuestions" width="450" height="296">
+				<s:DataGrid id="dgQuestions" width="432" height="250">
 					<s:columns>
 						<s:ArrayCollection>
 							<s:GridColumn dataField="id_diag" visible="false" />
@@ -72,10 +121,8 @@
 					</s:columns>
 				</s:DataGrid>
 			  </s:HGroup>
-
-		
-<s:VGroup id="ajout" width="100%" height="100%" paddingLeft="13" paddingTop="13">
-	  <s:HGroup verticalAlign="middle">
+      <s:VGroup id="ajout" width="100%" height="100%" paddingLeft="13" paddingTop="13">
+	      <s:HGroup verticalAlign="middle">
 		    	<s:Label text="Etapes : " />
 			    <s:Button styleName="leftArrowButton" id="btnPrevEtape" />
 			    <s:Label id="lblEtapeNum" text="0" />
@@ -93,19 +140,16 @@
 			    <s:Label id="lblQuestionAll" text="0" />
 				<s:Button styleName="rightArrowButton" id="btnNextQuestion" />
 		</s:HGroup>
-				 
 		    <view:repType2 id="ckReponse" />
-				
-		
-		        <s:HGroup width="100%">
+			    <s:HGroup width="100%">
 				  <s:Button id="btnSaveChoix" width="116" label="enregistrer"/>
 				  <s:Label text="Commentaires :" />
 				  <s:TextInput id="txtComment" />
-		</s:HGroup>
- </s:VGroup>				
- <view:gevu_problemes/>		
-  </f4cb:CustomViewStack> 
- 	
-</s:VGroup>
-		
+		        </s:HGroup>
+ </s:VGroup>						
+  </f4cb:CustomViewStack>
+		<s:Label width="31" height="26"/>
+		<view:gevu_problemes height="216"/>		
+ 	</s:VGroup>
+ </s:Panel>		
 </s:View>
