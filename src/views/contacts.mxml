@@ -8,6 +8,12 @@
 		creationComplete="this.query_execution()"
 		>
 	
+	<fx:Script>
+		<![CDATA[
+			
+		]]>
+	</fx:Script>
+	
 	
 	<fx:Declarations>
 		
@@ -59,9 +65,8 @@
 		<sqlite:Query id="antenne_contact_query" connection="{db.connection}"
 					  sql="select c.id_contact as id_contact,c.nom,c.prenom,c.fixe,c.mobile,c.fax,c.mail
 					  from gevu_antennes a ,gevu_contactsxantennes b,gevu_contacts c
-					  where (a.id_antenne = b.id_antenne) and (c.id_contact =  b.id_contact)
-					  and (a.id_antenne={this.id_antenne})"
-					  
+					  where ((a.id_antenne = b.id_antenne) and (c.id_contact =  b.id_contact))
+					  and (a.id_antenne={this.id_antenne})"					  
 					  result="antenne_contact_query_resultHandler(event)"
 					  error="query_errorHandler(event)"/>
 		
@@ -89,10 +94,19 @@
 					  error="query_errorHandler(event)" />
 		
 		<sqlite:Query id="get_contact" connection="{db.connection}"
-					  sql="SELECT nom, id_exi FROM gevu_exis" 
+					  sql="SELECT nom, id_exi 
+					  FROM gevu_exis
+					  where id_exi !=
+					  (select c.id_contact as id_contact       
+					  from gevu_antennes a ,gevu_contactsxantennes b,gevu_contacts c        
+					  where ((a.id_antenne = b.id_antenne) and (c.id_contact =  b.id_contact) ) and (a.id_antenne={this.id_antenne}))" 
 					  error="query_errorHandler(event)"
 					  result="get_contact_resultHandler(event)"/>
 		
+		<sqlite:Query id="add_seleced_contact" connection="{db.connection}"
+		              sql="INSERT INTO gevu_contactsxantennes VALUES({this.id_contact},{this.id_antenne})"
+					  result="add_seleced_contact_resultHandler(event)"
+					  error="query_errorHandler(event)"/>
 		
 		
 	</fx:Declarations>
@@ -113,6 +127,7 @@
 			
 			[Bindable] public var id_lieu:int;
 			[Bindable] private var contact_info:ArrayCollection =new ArrayCollection;
+			[Bindable] private var all_contact_info:ArrayCollection =new ArrayCollection;
 			[Bindable] private var nom:String ="";
 			[Bindable] private var prenom:String="";
 			[Bindable] private var fixe:String ="";
@@ -125,7 +140,7 @@
 			[Bindable] private var last_inserted_id:int;
 			[Bindable] private var id_antenne:int;
 			[Bindable] public var id_contact:String;
-			
+		
 			
 			private var popmsg:popup = new popup();
 			private var delpopup:delPopup = new delPopup();
@@ -146,13 +161,28 @@
 			
 			protected function add_form_clickHandler(event:MouseEvent):void
 			{
-				Conviewstack.selectedIndex = 2;	
+				
+				this.get_contact.execute();	
+				
+				/*
 				this.nom_in.text="";
 				this.prenom_in.text="";
 				this.fixe_in.text="";
 				this.mobile_in.text="";
 				this.fax_in.text="";
 				this.mail_in.text="";
+				*/
+			}
+			
+			protected function add_seleced_contact_resultHandler(event:SQLEvent):void
+			{
+			 var o:Object=event;
+			}
+			
+			protected function all_conctact_clickHandler(event:MouseEvent):void
+			{
+			 var item:Object = this.all_conctact.selectedItem;	
+			 this.id_contact=item['id_exi'];	
 			}
 			
 			protected function save_contact_clickHandler(event:MouseEvent):void
@@ -196,7 +226,8 @@
 					popmsg.setMsg("Veuillez séléctioner un contact");
                     popmsg.open(this,false); 
 				}	
-				else {
+				else 
+				{
 					item=this.dgContact.selectedItem;	
 					this.deleting_id=item['id_contact'];
 					delpopup.fnct=delContact;
@@ -222,7 +253,6 @@
 					case "antenne":
 					{
 						this.get_antenne_id.execute();
-						this.antenne_contact_query.execute();
 						break;
 					}
 						
@@ -285,19 +315,21 @@
 			
 			protected function get_antenne_id_resultHandler(event:SQLEvent):void
 			{
-				this.id_antenne=this.get_antenne_id.data[0].id_antenne;
-				
+		    	this.id_antenne=this.get_antenne_id.data[0].id_antenne;
+				this.antenne_contact_query.execute();
 			}
 			
 			protected function get_contact_resultHandler(event:SQLEvent):void
 			{
 			 var temp:Array;
 			 temp=this.get_contact.data;
-			  for(var i:int=0;temp.length;i++)
-			  {
-				  cont[i]=temp[i].nom;
-			  } 
+			 this.all_contact_info = new ArrayCollection(temp);
+			 Conviewstack.selectedIndex=1;  
+			 }
 			
+			protected function add_selected_contact_clickHandler(event:MouseEvent):void
+			{
+			 this.add_seleced_contact.execute();	
 			}
 		]]>
 	</fx:Script>
@@ -328,7 +360,22 @@
 			</s:columns>
 		</s:DataGrid>
 		
-		
+	 <s:HGroup>		
+		 
+		<s:DataGrid id="all_conctact" width="200" height="100%"
+		dataProvider="{this.all_contact_info}" editable="false" 
+		click="all_conctact_clickHandler(event)" >
+			<s:columns>
+				<s:ArrayCollection>
+					<s:GridColumn dataField="id_exi" visible="false"/>
+					<s:GridColumn headerText="nom" dataField="nom"/>
+				</s:ArrayCollection>
+			</s:columns>
+		</s:DataGrid>
+		 
+		 <s:Button label="Ajouter ce contact" click="add_selected_contact_clickHandler(event)"/>
+	 </s:HGroup>				
+			
 		<s:VGroup id="viewContactUnique"   paddingBottom="6"
 				  paddingLeft="6" paddingRight="6" paddingTop="6">
 			
@@ -361,14 +408,11 @@
 					<s:Label text="Mail"/>
 					<s:TextInput id="mail_in" height="25" width="125"/>
 				</s:HGroup>
-			</s:HGroup>	
-				
-					
+			</s:HGroup>			
 				<s:Button label="Enregistrer ce contact" click="save_contact_clickHandler(event)"/>	
 			</s:VGroup>
+		</s:VGroup>	
 			
-		   </s:VGroup>	
-			<view:repTypeDyna type="Contact" arrCtrl="{this.cont}" fnct="{this.editModif}"/>
 		</f4cb:CustomViewStack>
 	</s:Panel>
 </s:View>	

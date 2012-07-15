@@ -11,14 +11,19 @@
 		<![CDATA[
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
+			
+			import spark.events.GridItemEditorEvent;
 			private var diag_ids:Array = new Array();
 			private var dbFile:File;
 			private var sqlConn:SQLConnection;
 			private var sqlState:SQLStatement;
 [Bindable]  private var maintenant:String;
-[Bindable]			private var nom:String;
+[Bindable]	private var nom:String;
+[Bindable]  private var leftGrid:ArrayCollection;			
+[Bindable]  private var rightGrid:ArrayCollection;
+[Bindable]  private var downtGrid:ArrayCollection;		
 			
-		private function init():void{
+			private function init():void{
 			var id_exi:int;
 			dbFile =File.applicationDirectory.resolvePath("gevu_mobile.db");
 			sqlConn= new SQLConnection();
@@ -28,28 +33,18 @@
 			var temp:Array = new Array();
 			
 			///Retrieve the DIAG ids
-			sqlState.text="SELECT id_diag FROM gevu_diagnostics WHERE id_instant="+this.id_instant;
+			sqlState.text="select diag.id_instant as id_instant" +
+				          ",diag.id_lieu as id_lieu,STRFTIME('%Y-%m-%d',inst.maintenant) as maintenant,inst.commentaires as commentaires,"+
+                           "crit.id_type_controle as id_type_controle,tc.lib as lib,exi.nom as nom "+
+						   "From gevu_diagnostics as diag "+
+						   "inner join  gevu_criteres as crit on diag.id_critere = crit.id_critere "+
+                           "inner join  gevu_instants as inst on diag.id_instant = inst.id_instant "+
+                           "inner join  gevu_typesxcontroles as tc on tc.id_type_controle = crit.id_type_controle "+
+                           "inner join  gevu_exis as exi on  inst.id_exi = exi.id_exi "+              	
+                           "group by diag.id_instant"
 			sqlState.execute();
 			temp=sqlState.getResult().data;
-			  
-			for(var i:int;i<temp.length;i++)
-			  {
-				 diag_ids[i]=temp[i].id_diag;
-			  }
-			
-			//Retrieve Date + nom
-			sqlState.text= "SELECT id_exi,maintenant FROM gevu_instants WHERE id_instant="+this.id_instant;
-			sqlState.execute();
-			temp=sqlState.getResult().data;
-			this.maintenant=temp[0].maintenant;
-			id_exi=temp[0].id_exi;
-			
-			sqlState.text="SELECT nom FROM gevu_exis WHERE id_exi="+id_exi;
-			sqlState.execute();
-			temp=sqlState.getResult().data;
-			this.nom=temp[0].nom;
-			
-			
+			leftGrid= new ArrayCollection(temp);
 			
 		}
 			
@@ -59,7 +54,7 @@
 			{
 				
 				this.vs.selectedIndex=0;
-				//init();
+				init();
 			}
 			
 			protected function eye_clickHandler(event:MouseEvent):void
@@ -82,6 +77,53 @@
 			
 			
 			
+			protected function adgCrit_clickHandler(event:MouseEvent):void
+			{
+				dbFile =File.applicationDirectory.resolvePath("gevu_mobile.db");
+				sqlConn= new SQLConnection();
+				sqlState = new SQLStatement();
+				sqlConn.open(dbFile);
+				sqlState.sqlConnection=sqlConn;
+				var temp:Array = new Array();
+				var item:Object;
+				var id_instant:int;
+				item=this.adgCrit.selectedItem;
+				id_instant=item['id_instant'];
+				sqlState.text="select diag.id_diag as id_diag," +
+					"crit.ref as ref,crit.criteres as criteres,mc.titre as titre "+
+					"From gevu_diagnostics as diag "+
+					"inner join  gevu_criteres as crit on diag.id_critere = crit.id_critere "+
+					"inner join gevu_motsclefs as mc on diag.id_reponse = mc.id_motclef " +           	
+					"where diag.id_instant="+id_instant;
+				sqlState.execute();
+				temp=sqlState.getResult().data;
+				rightGrid=new ArrayCollection(temp);
+				this.problems.visible=false;
+				
+			}
+			
+			protected function dgQuestions_clickHandler(event:MouseEvent):void
+			{
+				dbFile =File.applicationDirectory.resolvePath("gevu_mobile.db");
+				sqlConn= new SQLConnection();
+				sqlState = new SQLStatement();
+				sqlConn.open(dbFile);
+				sqlState.sqlConnection=sqlConn;
+				var temp:Array = new Array();
+				var item:Object;
+				var id_diag:int;
+				item=this.dgQuestions.selectedItem;
+				id_diag=item['id_diag'];
+				sqlState.text="select prob.id_probleme,prob.mesure,prob.observations,prob.num_marker "+
+					           "From gevu_diagnostics as diag "+
+							   "inner join gevu_problemes as prob on diag.id_diag = prob.id_diag ";
+							   //"where diag.id_diag="+id_diag;
+				sqlState.execute();
+				temp=sqlState.getResult().data;			   
+				downtGrid = new ArrayCollection(temp);
+				this.problems.visible=true;
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -99,28 +141,30 @@
 		<f4cb:CustomViewStack id="vs" width="897" height="275"> 	
 			<s:HGroup id="lecture" width="988" height="488" paddingLeft="13" paddingTop="13" paddingRight="13">
 				
-				<s:DataGrid id="adgCrit" width="432" height="250" color="0x323232" >
+				<s:DataGrid id="adgCrit" width="432" height="250" color="0x323232" dataProvider="{this.leftGrid}" 
+					click="adgCrit_clickHandler(event)">
 				  <s:columns>
 						<s:ArrayCollection>
-							<s:GridColumn dataField="id_diag" visible="false"/>
-							<s:GridColumn dataField="exis" headerText="Diagnostics" />
+							<s:GridColumn dataField="id_instant" visible="false"/>
+							<s:GridColumn dataField="nom" headerText="Diagnostics" />
 							<s:GridColumn dataField="commentaires" headerText="Commentaires" />
 							<s:GridColumn dataField="maintenant" headerText="Date"  />
 					    </s:ArrayCollection>	
 				  </s:columns>
 				</s:DataGrid>
 				
-				<s:DataGrid id="dgQuestions" width="432" height="250">
+				<s:DataGrid id="dgQuestions" width="432" height="250" dataProvider="{this.rightGrid}" click="dgQuestions_clickHandler(event)">
 					<s:columns>
 						<s:ArrayCollection>
 							<s:GridColumn dataField="id_diag" visible="false" />
-							<s:GridColumn dataField="ref"  />
-							<s:GridColumn dataField="criteres" />
-							<s:GridColumn dataField="reponse"  /> 
+							<s:GridColumn dataField="ref" headerText="ref" width="120"/>
+							<s:GridColumn dataField="criteres" headerText="criteres" resizable="false" width="200"/>
+							<s:GridColumn dataField="titre" headerText="reponse" width="50"/> 
 						</s:ArrayCollection>	
 					</s:columns>
 				</s:DataGrid>
 			  </s:HGroup>
+			
       <s:VGroup id="ajout" width="100%" height="100%" paddingLeft="13" paddingTop="13">
 	      <s:HGroup verticalAlign="middle">
 		    	<s:Label text="Etapes : " />
@@ -149,7 +193,7 @@
  </s:VGroup>						
   </f4cb:CustomViewStack>
 		<s:Label width="31" height="26"/>
-		<view:gevu_problemes height="216"/>		
+		<view:gevu_problemes id="problems" height="216" probGrid="{this.downtGrid}" visible="false"/>		
  	</s:VGroup>
  </s:Panel>		
 </s:View>

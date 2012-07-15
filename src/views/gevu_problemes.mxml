@@ -6,15 +6,22 @@
 	
 	<fx:Script>
 		<![CDATA[
+			
+		[Bindable]	public var probGrid:ArrayCollection;
+		[Bindable]  private var id_problem :int;	
+			
 			protected function btnAjout_clickHandler(event:MouseEvent):void
 			{
-			  	this.vs.selectedIndex=0;
+			  	this.vs.selectedIndex=1;
 			}
+			
 			
 			protected function btnDelete_clickHandler(event:MouseEvent):void
 			{
 				this.vs.selectedIndex=1;
 			}
+			
+			
 			
 		]]>
 	</fx:Script>
@@ -23,17 +30,17 @@
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 
-<s:VGroup width="898" height="246">
+<s:VGroup width="898" height="226">
    <s:HGroup paddingBottom="13" paddingLeft="13" paddingTop="13">
 		<s:Image  id="btnAjout"  source="@Embed('assets/AddRecord.png')" click="btnAjout_clickHandler(event)"/>			
 		<s:Image  id="btnDelete" source="@Embed('assets/delete.png')" click="btnDelete_clickHandler(event)"/>
 	</s:HGroup>
 	
-	<s:HGroup width="879" height="161" paddingLeft="13" paddingTop="13">
+	<s:HGroup width="879" height="151" paddingLeft="13" paddingTop="13">
 	<f4cb:CustomViewStack id="vs" width="851" height="127">
 		<s:VGroup id="lecture" width="100%" height="100%" paddingTop="10" paddingBottom="13" paddingLeft="13" paddingRight="13"  >						
 			<s:HGroup width="100%" height="100%">
-				<s:DataGrid  id="dataGrid" width="100%" height="100%">
+				<s:DataGrid  id="dataGrid" width="100%" height="100%" dataProvider="{this.probGrid}">
 					<s:columns>
 						<s:ArrayCollection>
 						<s:GridColumn headerText="n° marker" dataField="num_marker" width="100" />
@@ -47,26 +54,24 @@
 		</s:VGroup>
 		
 	   <s:VGroup id="ajout"  paddingTop="6" paddingBottom="6" paddingLeft="13" paddingRight="6"  >
-			<s:HGroup id="insertForm" height="75" gap="15">
+			<s:HGroup id="insertForm" height="75" gap="30">
 				<s:HGroup>
-				 <s:Label text="mesure:" />
+				 <s:Label text="mesure:" height="100%" verticalAlign="middle"/>
 				 <s:TextInput id="mesure" width="150" />
 				</s:HGroup>
 				
 				<s:HGroup>
-				  <s:Label text="N° de marker" />
+				  <s:Label text="N° de marker:" height="100%" verticalAlign="middle"/>
 				  <s:TextInput id="num_marker" width="150"  />
 				</s:HGroup>
-				
-				
 				<s:HGroup>
-					<s:Label text="observation" />
+					<s:Label text="observation:" height="100%" verticalAlign="middle"/>
 					<s:TextInput id="observations" width="150"  />
 				</s:HGroup>
 			</s:HGroup>
 		   
-		   <s:HGroup>
-			   <s:Label text="Saisissez votre probleme :"/> 
+		   <s:HGroup paddingBottom="13">
+			   <s:Label text="Saisissez votre probleme :" height="100%" verticalAlign="middle"/> 
 			   <s:Button id="btnAjouter" label="Enregistrer" />
 			   <s:Button id="btnAnnuler" label="Annuler" />				
 		   </s:HGroup>
