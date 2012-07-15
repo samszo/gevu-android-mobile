@@ -792,13 +792,17 @@
 			 var extension:String ;
 			 var str:String;
 			 ids = new Array();
+			 numChild=FlexGlobals.topLevelApplication.main_interface.numChildren 
+			 if (numChild>0)
+			 {
+				 FlexGlobals.topLevelApplication.main_interface.removeAllElements();
+			 }
+			 FlexGlobals.topLevelApplication.nom_lieu.text=this.nom_lieu;
+			 FlexGlobals.topLevelApplication.view2.selectedIndex=0;
+			 FlexGlobals.topLevelApplication.previewPanel.visible=false;
+			 
 			  if (cont.length!=0)
 			  {  
-				  numChild=FlexGlobals.topLevelApplication.main_interface.numChildren 
-				  if (numChild>0)
-				  {
-				  FlexGlobals.topLevelApplication.main_interface.removeAllElements();
-			  }
 				 for(var i:int=0;i<cont.length;i++)
 				 {
 				  btns[i] = new Button();
@@ -810,13 +814,10 @@
 				  btns[i].addEventListener(MouseEvent.CLICK,new_lieu_ctrl_clickHandler);
 				  FlexGlobals.topLevelApplication.main_interface.addElement(btns[i]); 
 				  }
-				 FlexGlobals.topLevelApplication.nom_lieu.text=this.nom_lieu;
-				 FlexGlobals.topLevelApplication.view2.selectedIndex=0;
-				 FlexGlobals.topLevelApplication.previewPanel.visible=false;
 				 
 			  }
 			  else {
-				  form_query.execute();
+				       form_query.execute();
 				 
 			  }
 			  geo_query.execute();   
