@@ -8,12 +8,6 @@
 		creationComplete="this.query_execution()"
 		>
 	
-	<fx:Script>
-		<![CDATA[
-			
-		]]>
-	</fx:Script>
-	
 	
 	<fx:Declarations>
 		
@@ -96,7 +90,7 @@
 		<sqlite:Query id="get_contact" connection="{db.connection}"
 					  sql="SELECT nom, id_exi 
 					  FROM gevu_exis
-					  where id_exi !=
+					  where id_exi not in 
 					  (select c.id_contact as id_contact       
 					  from gevu_antennes a ,gevu_contactsxantennes b,gevu_contacts c        
 					  where ((a.id_antenne = b.id_antenne) and (c.id_contact =  b.id_contact) ) and (a.id_antenne={this.id_antenne}))" 
@@ -104,7 +98,7 @@
 					  result="get_contact_resultHandler(event)"/>
 		
 		<sqlite:Query id="add_seleced_contact" connection="{db.connection}"
-		              sql="INSERT INTO gevu_contactsxantennes VALUES({this.id_contact},{this.id_antenne})"
+		              sql="INSERT INTO gevu_contactsxantennes (id_contact,id_antenne) VALUES({this.id_contact},{this.id_antenne})"
 					  result="add_seleced_contact_resultHandler(event)"
 					  error="query_errorHandler(event)"/>
 		
@@ -140,7 +134,7 @@
 			[Bindable] private var last_inserted_id:int;
 			[Bindable] private var id_antenne:int;
 			[Bindable] public var id_contact:String;
-		
+			[Bindable] private var op:String="<>";
 			
 			private var popmsg:popup = new popup();
 			private var delpopup:delPopup = new delPopup();
@@ -176,6 +170,8 @@
 			
 			protected function add_seleced_contact_resultHandler(event:SQLEvent):void
 			{
+			 this.antenne_contact_query.execute();	
+			 Conviewstack.selectedIndex=0;
 			 var o:Object=event;
 			}
 			
@@ -295,7 +291,6 @@
 			protected function query_errorHandler(event:SQLErrorEvent):void
 			{
 				var o:Object=event;
-				
 			}
 			
 			
