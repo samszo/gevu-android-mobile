@@ -88,12 +88,13 @@
 					  error="query_errorHandler(event)" />
 		
 		<sqlite:Query id="get_contact" connection="{db.connection}"
-					  sql="SELECT nom, id_exi 
-					  FROM gevu_exis
-					  where id_exi not in 
-					  (select c.id_contact as id_contact       
-					  from gevu_antennes a ,gevu_contactsxantennes b,gevu_contacts c        
-					  where ((a.id_antenne = b.id_antenne) and (c.id_contact =  b.id_contact) ) and (a.id_antenne={this.id_antenne}))" 
+					  sql="SELECT nom, id_contact 
+					  FROM gevu_contacts
+					  where id_contact not in 
+					  (select c.id_contact as id_contact
+					  from gevu_antennes a ,gevu_contactsxantennes b,gevu_contacts c
+					  where ((a.id_antenne = b.id_antenne) and (c.id_contact =  b.id_contact))
+					  and (a.id_antenne={this.id_antenne}))" 
 					  error="query_errorHandler(event)"
 					  result="get_contact_resultHandler(event)"/>
 		
@@ -172,13 +173,12 @@
 			{
 			 this.antenne_contact_query.execute();	
 			 Conviewstack.selectedIndex=0;
-			 var o:Object=event;
 			}
 			
 			protected function all_conctact_clickHandler(event:MouseEvent):void
 			{
 			 var item:Object = this.all_conctact.selectedItem;	
-			 this.id_contact=item['id_exi'];	
+			 this.id_contact=item['id_contact'];	
 			}
 			
 			protected function save_contact_clickHandler(event:MouseEvent):void
@@ -362,7 +362,7 @@
 		click="all_conctact_clickHandler(event)" >
 			<s:columns>
 				<s:ArrayCollection>
-					<s:GridColumn dataField="id_exi" visible="false"/>
+					<s:GridColumn dataField="id_contact" visible="false"/>
 					<s:GridColumn headerText="nom" dataField="nom"/>
 				</s:ArrayCollection>
 			</s:columns>
