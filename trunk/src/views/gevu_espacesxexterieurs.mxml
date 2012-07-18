@@ -149,7 +149,8 @@
 	</fx:Script>
 
 <s:Panel x="0" y="0" width="926" height="686"  backgroundColor="black" title="Espace extérieur">
-		<s:VGroup paddingLeft="13" paddingTop="13" paddingBottom="13" gap="20">
+	<s:HGroup>
+		<s:VGroup paddingLeft="13" paddingTop="13" paddingBottom="13" gap="20">	 	
 			<s:HGroup width="100%">
 				<s:Label width="66" height="100%" color="white" text="ref: " verticalAlign="middle"/>
 				<s:TextInput id="F2" width="200" />
@@ -166,18 +167,18 @@
 				<s:RadioButton groupName="type" id="reponse_2" label="Public" color="white" />
 				<s:RadioButton groupName="type" id="reponse_3" label="Mixte" color="white"/>
 			</s:HGroup>
-
-			<s:HGroup>
-				<view:repTypeDyna height="297" arrCtrl="{this.arrCtrl}" fnct="{this.editModif}"
-								  type="Type d'espace"/>
-			</s:HGroup>
-
-			<s:HGroup>
-				<s:Button id="saveModif" label="Enregistrer" click="saveModif_clickHandler(event)"/>
-				<s:Button id="ajoutDiag" label="Ajouter des diagnostics" click="ajoutDiag_clickHandler(event)"/>			
-			</s:HGroup>
-
+			<s:Button id="saveModif" label="Enregistrer" click="saveModif_clickHandler(event)"/>
+				 
+	    </s:VGroup>
+		
+		<s:VGroup paddingLeft="13" paddingTop="13" paddingBottom="13" gap="15" >
+			<view:repTypeDyna height="370" arrCtrl="{this.arrCtrl}" fnct="{this.editModif}"
+							  type="Type d'espace"/>
 		</s:VGroup>
+		
+	</s:HGroup>	
 	
 	</s:Panel>
+	<s:Button id="ajoutDiag" x="508" y="570" label="Ajouter des diagnostics"
+			  click="ajoutDiag_clickHandler(event)"/>
 </s:View>

@@ -286,6 +286,7 @@
 			public function getID():int{
 				return this.selected_id;
 			}
+			
 			public function lpad(original:Object, length:int, pad:String):String
 			{
 				var padded:String = original == null ? "" : original.toString();
@@ -457,7 +458,7 @@
 				
 				
 				
-		public function getLieuCtl(idLieu:int,idScenar:int=10,forTypeControle:String=null,forTypeControle2:Boolean=false):Array{
+	public function getLieuCtl(idLieu:int,idScenar:int=10,forTypeControle:String=null,forTypeControle2:Boolean=false):Array{
 			var arrCtl:Array = new Array();
 			var rTypeCtrl:Array = new Array();
 			var items:Array = new Array();
@@ -559,7 +560,6 @@
 							  for (var r:int;r<result.length();r++)
 							  {	  
         					    x=result.descendants()[r];
-								trace(x.attribute("idCtrl"))
 								temp[r]=x.attribute("idCtrl");
 							  }		
 							 if (forTypeControle2==true)
@@ -817,9 +817,8 @@
 				 
 			  }
 			  else {
-				       form_query.execute();
-				 
-			  }
+		        form_query.execute();
+				  }
 			  geo_query.execute();   
 			 }
 			 
@@ -845,14 +844,21 @@
 				// have a refernce and execute the getDefinitionByName()
 				//methode and if not, an : variable not found error will happen
 				
-				
-				//removing all interfaces
 				if (FlexGlobals.topLevelApplication.main_interface.numChildren>0)
 					FlexGlobals.topLevelApplication.main_interface.removeAllElements();
 				
-				for (var k:int=0;k<ids.length;k++)
-				{
-					
+				
+				if(ids.length==0) 
+				 {
+                  var diag:gevu_diagnostics = new gevu_diagnostics();
+				  diag.flag=1;
+				  FlexGlobals.topLevelApplication.main_interface.addElement(diag);
+				 }
+				//removing all interfaces
+				else
+				{ 
+				 for (var k:int=0;k<ids.length;k++)
+				{	
 					className= "views."+ids[k];
 					if(
 						className == 'views.gevu_antennes'  ||
@@ -879,6 +885,8 @@
 						instance.set_selected_id(selected_id);
 						FlexGlobals.topLevelApplication.main_interface.addElement(instance);
 					}
+				 }
+					
 				}
 			}
 			
@@ -922,6 +930,7 @@
 						instance.set_selected_id(selected_id);
 						FlexGlobals.topLevelApplication.main_interface.addElement(instance);
 					}
+					
 				
 			}
 			

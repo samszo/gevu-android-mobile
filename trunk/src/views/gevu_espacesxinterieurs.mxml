@@ -114,7 +114,8 @@
 		]]>
 	</fx:Script>
 
-<s:Panel x="0" y="0" width="926" height="686"  backgroundColor="black" name="EspaInt" title="Espace intérieur">	
+<s:Panel x="0" y="0" width="926" height="686"  backgroundColor="black" name="EspaInt" title="Espace intérieur">
+  <s:HGroup>	
 	<s:VGroup width="389" height="249" gap="20" paddingBottom="13" paddingLeft="13" paddingTop="13">
 		<s:HGroup>
 			<s:Label width="109" height="100%" color="white" text="ref:" verticalAlign="middle"/>
@@ -124,14 +125,17 @@
 			<s:Label width="107" height="100%" color="white" text="fonction:" verticalAlign="middle"/>
 			<s:TextInput id="F3" width="100" />
 		</s:HGroup>
+		<s:Button id="saveModif" label="Enregistrer" click="saveModif_clickHandler(event)"/>
 		<s:HGroup  id="lblType" >
-			<view:repTypeDyna type="Type d'espace" arrCtrl="{this.arrCtrl}" fnct="{this.editModif}"/>		
-		</s:HGroup>
-		<s:HGroup>
-			<s:Button id="saveModif" label="Enregistrer" click="saveModif_clickHandler(event)"/>
-			<s:Button id="ajoutDiag" label="Ajouter des diagnostics" click="ajoutDiag_clickHandler(event)"/>			
+					
 		</s:HGroup>
 	</s:VGroup>
-		
+	  <s:VGroup gap="15" paddingBottom="13" paddingLeft="13" paddingTop="13">
+		  <view:repTypeDyna height="443" arrCtrl="{this.arrCtrl}" fnct="{this.editModif}"
+							type="Type d'espace"/>
+	  </s:VGroup>
+  </s:HGroup>	
 </s:Panel>
+	<s:Button id="ajoutDiag" x="411" y="557" label="Ajouter des diagnostics"
+			  click="ajoutDiag_clickHandler(event)"/>
 </s:View> 

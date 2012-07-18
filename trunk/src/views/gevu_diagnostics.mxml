@@ -21,7 +21,12 @@
 [Bindable]	private var nom:String;
 [Bindable]  private var leftGrid:ArrayCollection;			
 [Bindable]  private var rightGrid:ArrayCollection;
-[Bindable]  private var downtGrid:ArrayCollection;		
+[Bindable]  private var downtGrid:ArrayCollection;
+[Bindable]	private var id_lieu:int;
+[Bindable]	private var id_diag:int;
+[Bindable]	private var id_critere:int;
+[Bindable]  public var id_instant:int;
+            public var flag:int = 0;
 			
 			private function init():void{
 			var id_exi:int;
@@ -48,12 +53,12 @@
 			
 		}
 			
-	  [Bindable] public var id_instant:int;
+	  
 			
 			protected function diag_creationCompleteHandler(event:FlexEvent):void
 			{
 				
-				this.vs.selectedIndex=0;
+				this.vs.selectedIndex=this.flag;
 				init();
 			}
 			
@@ -112,15 +117,31 @@
 				var temp:Array = new Array();
 				var item:Object;
 				var id_diag:int;
+				var critere:String;
 				item=this.dgQuestions.selectedItem;
+				critere=item['criteres'];
 				id_diag=item['id_diag'];
-				sqlState.text="select prob.id_probleme,prob.mesure,prob.observations,prob.num_marker "+
+				this.problems.critere=critere;
+				sqlState.text="select prob.id_probleme,prob.mesure,prob.observations,prob.num_marker,"+
+					           "diag.id_lieu as id_lieu, diag.id_instant as id_instant,diag.id_critere as id_critere " +
 					           "From gevu_diagnostics as diag "+
-							   "inner join gevu_problemes as prob on diag.id_diag = prob.id_diag ";
-							   //"where diag.id_diag="+id_diag;
+							   "inner join gevu_problemes as prob on diag.id_diag = prob.id_diag "+
+							   "where diag.id_diag="+18;
+							   
 				sqlState.execute();
-				temp=sqlState.getResult().data;			   
+				temp=sqlState.getResult().data;	
+				this.id_diag=id_diag;
+				this.id_lieu=temp[0].id_lieu;
+				this.id_instant=temp[0].id_instant;
+				this.id_critere=temp[0].id_critere;
 				downtGrid = new ArrayCollection(temp);
+				//assigning the values to problemes
+				this.problems.id_diag=this.id_diag;
+				this.problems.id_lieu=this.id_lieu;
+				this.problems.id_instant=this.id_instant;
+				this.problems.id_critere=this.id_critere;
+				 if(this.problems.vs != null )
+					 this.problems.vs.selectedIndex=0;
 				this.problems.visible=true;
 			}
 			
@@ -138,7 +159,7 @@
 				<s:Label width="500"/>            
 		     </s:HGroup>
 	
-		<f4cb:CustomViewStack id="vs" width="897" height="275"> 	
+		<f4cb:CustomViewStack id="vs" width="893" height="275"> 	
 			<s:HGroup id="lecture" width="988" height="488" paddingLeft="13" paddingTop="13" paddingRight="13">
 				
 				<s:DataGrid id="adgCrit" width="432" height="250" color="0x323232" dataProvider="{this.leftGrid}" 
@@ -156,10 +177,10 @@
 				<s:DataGrid id="dgQuestions" width="432" height="250" dataProvider="{this.rightGrid}" click="dgQuestions_clickHandler(event)">
 					<s:columns>
 						<s:ArrayCollection>
-							<s:GridColumn dataField="id_diag" visible="false" />
-							<s:GridColumn dataField="ref" headerText="ref" width="120"/>
-							<s:GridColumn dataField="criteres" headerText="criteres" resizable="false" width="200"/>
-							<s:GridColumn dataField="titre" headerText="reponse" width="50"/> 
+							<s:GridColumn dataField="id_diag" visible="false"  />
+							<s:GridColumn dataField="ref" headerText="ref" width="135"/>
+							<s:GridColumn dataField="criteres" headerText="criteres" width="100"/>
+							<s:GridColumn dataField="titre" headerText="reponse" /> 
 						</s:ArrayCollection>	
 					</s:columns>
 				</s:DataGrid>

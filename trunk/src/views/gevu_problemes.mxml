@@ -2,13 +2,45 @@
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" title="gevu_problemes"
 		xmlns:view="views.*"
-		xmlns:f4cb="com.oreilly.f4cb.*">
+		xmlns:f4cb="com.oreilly.f4cb.*"
+		xmlns:sqlite="com.peterelst.air.sqlite.*">
+	
+	<fx:Declarations>
+		<sqlite:SQLite id="db" file="gevu_mobile.db"/>
+		<sqlite:Query id="add_prob" connection="{db.connection}"
+					  sql="INSERT INTO gevu_problemes (id_lieu,id_critere,num_marker,mesure,observations,fichier,doc,id_instant,id_donnee,maj,id_diag)
+					  VALUES ({this.id_lieu},{this.id_critere},'{this.numMurker}','{this.mes}','{this.obs}','rien','rien',
+					  {this.id_instant},0,strftime('%J','{this.toSqlDate(myDate)}'),{this.id_diag})"
+					  result="add_prob_resultHandler(event)"
+					  error="add_prob_errorHandler(event)" />
+																																					  
+	</fx:Declarations>
 	
 	<fx:Script>
 		<![CDATA[
+			import spark.events.TextOperationEvent;
 			
 		[Bindable]	public var probGrid:ArrayCollection;
-		[Bindable]  private var id_problem :int;	
+		[Bindable]  private var id_problem:int;
+		[Bindable]	public var id_lieu:int;
+		[Bindable]	public var id_diag:int;
+		[Bindable]	public var id_critere:int;
+		[Bindable]	public var id_instant:int;	
+		[Bindable]  private var numMurker:String;
+		[Bindable]  private var obs:String;
+		[Bindable]  private var mes:String;
+		[Bindable]  public	var critere:String;
+		[Bindable]  private var myDate:Date=new Date();
+			
+			protected function add_prob_resultHandler(event:SQLEvent):void
+			{
+			   var o:Object=event;	
+			}
+			
+			protected function add_prob_errorHandler(event:SQLErrorEvent):void
+			{
+				var o:Object=event;
+			}
 			
 			protected function btnAjout_clickHandler(event:MouseEvent):void
 			{
@@ -18,10 +50,57 @@
 			
 			protected function btnDelete_clickHandler(event:MouseEvent):void
 			{
-				this.vs.selectedIndex=1;
+				
+			}
+			
+			public function lpad(original:Object, length:int, pad:String):String
+			{
+				var padded:String = original == null ? "" : original.toString();
+				while (padded.length < length) padded = pad + padded;
+				return padded;
+			}
+			
+			public function toSqlDate(dateVal:Date):String
+			{
+				return dateVal == null ? null : dateVal.fullYear
+					+ "-" + lpad(dateVal.month + 1,2,'0')  // month is zero-based
+					+ "-" + lpad(dateVal.date,2,'0')
+					+ " " + lpad(dateVal.hours,2,'0')
+					+ ":" + lpad(dateVal.minutes,2,'0')
+					+ ":" + lpad(dateVal.seconds,2,'0')
+					;
 			}
 			
 			
+			
+			protected function addProb_clickHandler(event:MouseEvent):void
+			{
+			this.add_prob.execute();		
+			}
+			
+			
+			
+			protected function mesure_changeHandler(event:TextOperationEvent):void
+			{
+		    	this.mes=this.mesure.text;
+			}
+			
+			protected function num_marker_changeHandler(event:TextOperationEvent):void
+			{
+			   	this.numMurker=this.num_marker.text;
+			}
+			
+			protected function observations_changeHandler(event:TextOperationEvent):void
+			{
+				this.obs=this.observations.text;
+				
+			}
+			
+			protected function btnAnnuler_clickHandler(event:MouseEvent):void
+			{
+				this.visible=false;
+				
+			}
 			
 		]]>
 	</fx:Script>
@@ -30,15 +109,16 @@
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 
-<s:VGroup width="898" height="226">
+<s:VGroup width="898" height="265">
    <s:HGroup paddingBottom="13" paddingLeft="13" paddingTop="13">
 		<s:Image  id="btnAjout"  source="@Embed('assets/AddRecord.png')" click="btnAjout_clickHandler(event)"/>			
 		<s:Image  id="btnDelete" source="@Embed('assets/delete.png')" click="btnDelete_clickHandler(event)"/>
 	</s:HGroup>
 	
-	<s:HGroup width="879" height="151" paddingLeft="13" paddingTop="13">
-	<f4cb:CustomViewStack id="vs" width="851" height="127">
-		<s:VGroup id="lecture" width="100%" height="100%" paddingTop="10" paddingBottom="13" paddingLeft="13" paddingRight="13"  >						
+	<s:HGroup width="879" height="183" paddingLeft="13" paddingTop="13">
+	<f4cb:CustomViewStack id="vs" width="851" height="154">
+		<s:VGroup id="lecture" width="100%" height="100%" paddingTop="10" paddingBottom="13" paddingLeft="13" paddingRight="13"  >
+			<s:Label text="{this.critere}" />
 			<s:HGroup width="100%" height="100%">
 				<s:DataGrid  id="dataGrid" width="100%" height="100%" dataProvider="{this.probGrid}">
 					<s:columns>
@@ -57,23 +137,24 @@
 			<s:HGroup id="insertForm" height="75" gap="30">
 				<s:HGroup>
 				 <s:Label text="mesure:" height="100%" verticalAlign="middle"/>
-				 <s:TextInput id="mesure" width="150" />
+				 <s:TextInput id="mesure" width="150" change="mesure_changeHandler(event)"/>
 				</s:HGroup>
 				
 				<s:HGroup>
 				  <s:Label text="N° de marker:" height="100%" verticalAlign="middle"/>
-				  <s:TextInput id="num_marker" width="150"  />
+				  <s:TextInput id="num_marker" width="150" change="num_marker_changeHandler(event)"/>
 				</s:HGroup>
 				<s:HGroup>
 					<s:Label text="observation:" height="100%" verticalAlign="middle"/>
-					<s:TextInput id="observations" width="150"  />
+					<s:TextInput id="observations" width="150" change="observations_changeHandler(event)" />
 				</s:HGroup>
 			</s:HGroup>
 		   
 		   <s:HGroup paddingBottom="13">
 			   <s:Label text="Saisissez votre probleme :" height="100%" verticalAlign="middle"/> 
-			   <s:Button id="btnAjouter" label="Enregistrer" />
-			   <s:Button id="btnAnnuler" label="Annuler" />				
+			   <s:Button id="btnAjouter" label="Enregistrer" click="addProb_clickHandler(event)"/>
+			   <s:Button id="btnAnnuler" label="Annuler" click="btnAnnuler_clickHandler(event)" />		
+			   <s:Label height="5"/>
 		   </s:HGroup>
 		   
 		</s:VGroup>

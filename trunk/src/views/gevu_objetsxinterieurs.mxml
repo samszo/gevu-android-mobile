@@ -118,6 +118,9 @@
 		]]>
 	</fx:Script>
 	<s:Panel x="0" y="0" width="926" height="686"  backgroundColor="black" title="Objet interieur">
+		<s:HGroup>
+			
+		
 		<s:VGroup width="378" height="243" gap="20" paddingBottom="13" paddingLeft="13"
 				  paddingTop="13">
 			<s:HGroup>
@@ -128,15 +131,14 @@
 				<s:Label width="82" color="white" text="fonctions:" height="100%" verticalAlign="middle"/>
 				<s:TextInput id="F3" text="{}" width="50%" />
 			</s:HGroup>
-			<s:HGroup>
-				<view:repTypeDyna type="Type d'objet" arrCtrl="{this.arrCtrl}" fnct="{this.editModif}"/>
-			</s:HGroup>
-			<s:HGroup>
-				<s:Button id="saveModif" label="Enregistrer"  click="saveModif_clickHandler(event)"/>
-				<s:Button id="ajoutDiag" label="Ajouter des diagnostics" click="ajoutDiag_clickHandler(event)"/>			
-			</s:HGroup>
-			
+			<s:Button id="saveModif" label="Enregistrer"  click="saveModif_clickHandler(event)"/>				
 		</s:VGroup>
-		
+		<s:VGroup gap="15" paddingBottom="13" paddingLeft="13" paddingTop="13">
+			<view:repTypeDyna height="421" arrCtrl="{this.arrCtrl}" fnct="{this.editModif}"
+							  type="Type d'objet"/>
+		</s:VGroup>	
+	</s:HGroup>		
 	</s:Panel>
+	<s:Button id="ajoutDiag" x="400" y="563" label="Ajouter des diagnostics"
+			  click="ajoutDiag_clickHandler(event)"/>
 </s:View>
