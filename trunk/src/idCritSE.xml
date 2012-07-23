@@ -1,189 +1,252 @@
-<?xml version="1.0" encoding="UTF-8"?>
 
-<!-- New document created with EditiX at Tue Jun 12 17:12:04 CEST 2012 -->
-
-<node idCtrl="-1" lib="contrôles" isBranch="true">
-	<node idCtrl="61" lib="Groupe" isBranch="true">
-		<node idCtrl="45" lib="Bâtiment" isBranch="true">
-			<node idCtrl="46" lib="Niveau" isBranch="true">
-				<node idCtrl="70" lib="Parties communes" isBranch="true">
-					<node idCtrl="50" lib="Espace intérieur" isBranch="true">
-						<node idCtrl="71" lib="Hall d'entrée" isBranch="true">
-							<node idCtrl="8" lib="Entrée" isBranch="false"/>
-							<node idCtrl="25" lib="Sols Murs Plafonds" isBranch="false"/>
-							<node idCtrl="9" lib="Equipement" isBranch="false"/>
-							<node idCtrl="5" lib="Commandes" isBranch="false"/>
-							<node idCtrl="7" lib="Eclairage" isBranch="false"/>
+<node idCtrl="-1" lib="univers" isBranch="true">
+	<node idCtrl="60" lib="Antenne" objZend="gevu_antennes" uid="66AD6CCC-FD9C-025B-60F9-0AAC261AEEEA" isBranch="true">
+		<node idCtrl="61" lib="Groupe" objZend="gevu_groupes" uid="FE36E10C-8725-671A-CF74-0AB2FEC70A61" isBranch="true">
+			<node idCtrl="45" lib="Bâtiment" objZend="gevu_batiments" uid="FC621E13-5C08-2AD2-868E-0DB9D7212971" isBranch="true">
+				<node idCtrl="8" lib="Entrée" objZend="null" uid="C37438D7-8D59-D3C0-9678-0DB9F39F7D29" isBranch="true">
+					<node idCtrl="46" lib="Niveau" objZend="gevu_niveaux" uid="73F7BC1A-8485-C2E5-7E3B-0DBA0C0EF501" isBranch="true">
+						<node idCtrl="70" lib="Parties communes" objZend="gevu_partiescommunes" uid="AA9CD6E0-2EBD-F431-A2C1-0DBA3CA833C6" isBranch="true">
+							<node idCtrl="57" lib="Espace" objZend="gevu_espaces" uid="79DA57F4-E483-D4DB-8B6D-0DBA91562D9C" isBranch="true">
+								<node idCtrl="71" lib="Hall d'entrée" objZend="null" uid="1F7B93D0-C4DE-FCF7-A979-0DBAA9271AC9" isBranch="true">
+									<node idCtrl="8" lib="Entrée" objZend="null" uid="9F5AFC0D-8CE5-88B2-79B6-23F1A4D9AD48" isBranch="false"/>
+									<node idCtrl="25" lib="Sols Murs Plafonds" objZend="" uid="A575B96F-CBF9-9CEF-2289-4D1B226ACBE9" controles="" isBranch="false"/>
+									<node idCtrl="16" lib="Pentes ressauts" objZend="null" uid="52D7C42D-E5E9-16FB-0F33-4D1F7A88987D" isBranch="false"/>
+									<node idCtrl="9" lib="Equipement" objZend="null" uid="7F2A8439-2C71-6054-6ED7-4D2012F52CDA" isBranch="false"/>
+									<node idCtrl="5" lib="Commandes" objZend="null" uid="09C0BFF0-2DDA-9FA7-1CC8-4D2081C0BF5A" isBranch="false"/>
+									<node idCtrl="7" lib="Eclairage" objZend="null" uid="57B861E7-8C11-5BB2-A6BF-4D20A379E81B" isBranch="false"/>
+								</node>
+								<node idCtrl="72" lib="Couloir" objZend="null" uid="FB6CE980-D714-6458-1096-0DBACD0F2DE3" isBranch="true">
+									<node idCtrl="25" lib="Sols Murs Plafonds" objZend="null" uid="E39686ED-CF26-FDC8-E7B5-4D1B12C11AE0" isBranch="false"/>
+									<node idCtrl="16" lib="Pentes ressauts" objZend="null" uid="9E123087-1941-31BC-AF0F-4D5333091605" isBranch="false"/>
+									<node idCtrl="9" lib="Equipement" objZend="null" uid="529D506C-271C-EE32-C045-4D5918FAF421" isBranch="false"/>
+									<node idCtrl="5" lib="Commandes" objZend="null" uid="BB43E3DF-6877-46FA-FB23-4D593FEF894D" isBranch="false"/>
+									<node idCtrl="7" lib="Eclairage" objZend="null" uid="D9B11166-52D5-3D0F-2F16-4D5959980AE9" isBranch="false"/>
+								</node>
+								<node idCtrl="73" lib="Local Poubelle" objZend="null" uid="BF2A6F3A-95FB-BED6-9C01-0DBAE3D53D6E" isBranch="true">
+									<node idCtrl="25" lib="Sols Murs Plafonds" objZend="null" uid="CFB17C60-1559-2C31-4F40-4D59E2399B33" isBranch="false"/>
+									<node idCtrl="16" lib="Pentes ressauts" objZend="null" uid="7BC651C3-CFB1-4F54-A802-4D5A0641D384" isBranch="false"/>
+									<node idCtrl="9" lib="Equipement" objZend="null" uid="E784FAB9-51E9-B166-97FB-4D5A2F885B89" isBranch="false"/>
+									<node idCtrl="5" lib="Commandes" objZend="null" uid="F806433D-4CF0-8F9B-F2B9-4D5A4B2159A0" isBranch="false"/>
+									<node idCtrl="7" lib="Eclairage" objZend="null" uid="C8947546-8B32-9AEB-2AC7-4D5A8F919112" isBranch="false"/>
+								</node>
+								<node idCtrl="74" lib="Local vélo" objZend="null" uid="6E7D2B39-0920-5C48-AB4C-0DBAFB5D8E60" isBranch="true">
+									<node idCtrl="25" lib="Sols Murs Plafonds" objZend="null" uid="6C032C5D-24A1-89C1-6BFA-4D5ACF213C35" isBranch="false"/>
+									<node idCtrl="16" lib="Pentes ressauts" objZend="null" uid="6F4791B9-53D9-8309-93D9-4D5AF411464C" isBranch="false"/>
+									<node idCtrl="9" lib="Equipement" objZend="null" uid="B5007959-835B-FD5C-C1B3-4D5B18F8E82F" isBranch="false"/>
+									<node idCtrl="5" lib="Commandes" objZend="null" uid="F185F152-6EEF-3D61-FE64-4D5B2F3884EB" isBranch="false"/>
+									<node idCtrl="7" lib="Eclairage" objZend="null" uid="63F24EDA-F788-B1E0-BE44-4D5B4F2B18B9" isBranch="false"/>
+								</node>
+								<node idCtrl="76" lib="Conciergerie" objZend="null" uid="58F0DD81-014C-20B2-DC9E-0DBB1F6CE121" isBranch="true">
+									<node idCtrl="25" lib="Sols Murs Plafonds" objZend="null" uid="EC64B069-71B9-1697-FDBA-5640EACAB023" isBranch="false"/>
+									<node idCtrl="16" lib="Pentes ressauts" objZend="null" uid="64A317DB-0639-EE80-AC86-564126B6836A" isBranch="false"/>
+									<node idCtrl="9" lib="Equipement" objZend="null" uid="892420FB-342C-B47E-624C-56415BAE6D5E" isBranch="false"/>
+									<node idCtrl="5" lib="Commandes" objZend="null" uid="E0B5F2E7-E4E4-19BF-F232-5641B20D5F2F" isBranch="false"/>
+									<node idCtrl="7" lib="Eclairage" objZend="null" uid="A8729C40-213C-C5CF-0A07-5641C9AC7A77" isBranch="false"/>
+								</node>
+								<node idCtrl="48" lib="Parking" objZend="null" uid="ADF5987F-2C46-746B-FCC7-0DBB4144264B" isBranch="true">
+									<node idCtrl="25" lib="Sols Murs Plafonds" objZend="null" uid="2E5B53FB-B1EE-F81C-0E49-5644FE067913" isBranch="false"/>
+									<node idCtrl="16" lib="Pentes ressauts" objZend="null" uid="3B24120C-9D9D-0975-3A1B-564560A64F82" isBranch="false"/>
+									<node idCtrl="9" lib="Equipement" objZend="null" uid="922EDA3E-DA80-AB93-4AF1-5646137CEA49" isBranch="false"/>
+									<node idCtrl="5" lib="Commandes" objZend="null" uid="D2B0D222-331F-6E41-D304-5646805D3958" isBranch="false"/>
+									<node idCtrl="7" lib="Eclairage" objZend="null" uid="B92AF0FF-7A9C-EE52-68E0-5646B29E6E76" isBranch="false"/>
+									<node idCtrl="2" lib="Aire de stationnement" objZend="null" uid="4097A24F-F1CD-18AC-8E1A-5646C7C6EBB1" isBranch="false"/>
+								</node>
+								<node idCtrl="78" lib="Box stationnement" objZend="null" uid="09B761F5-AA91-9D4D-B719-0DBB6B324794" isBranch="true">
+									<node idCtrl="2" lib="Aire de stationnement" objZend="null" uid="D62169B2-3291-7659-D519-565548D06690" isBranch="false"/>
+									<node idCtrl="25" lib="Sols Murs Plafonds" objZend="null" uid="A4275759-5130-E5A5-2FCE-565579FDD2D4" isBranch="false"/>
+									<node idCtrl="5" lib="Commandes" objZend="null" uid="44A9BF47-5344-E489-99B3-5655C4280B4A" isBranch="false"/>
+									<node idCtrl="7" lib="Eclairage" objZend="null" uid="900CA441-5050-00ED-D6F2-5655DDCEE392" isBranch="false"/>
+								</node>
+								<node idCtrl="17" lib="Place GIC" objZend="null" uid="60774BDD-77D6-838A-5CB9-0DBB8F51ED07" isBranch="true">
+									<node idCtrl="17" lib="Place GIC" objZend="null" uid="0B18A5C3-14A4-6E3F-740D-5656237D8EC2" isBranch="false"/>
+								</node>
+								<node idCtrl="15" lib="Palier ascenseur" objZend="null" uid="B357AF26-4E73-A458-0598-0DBBB7E91E2C" isBranch="true">
+									<node idCtrl="25" lib="Sols Murs Plafonds" objZend="null" uid="C3BF8E3C-2FF8-E0A2-E55F-5656C1A38F94" isBranch="false"/>
+									<node idCtrl="16" lib="Pentes ressauts" objZend="null" uid="6BA5375B-C15F-532E-2947-5656F46ED20D" isBranch="false"/>
+									<node idCtrl="9" lib="Equipement" objZend="null" uid="D267DC76-7107-24BB-DE7E-5657176692C3" isBranch="false"/>
+									<node idCtrl="5" lib="Commandes" objZend="" uid="60309F9A-10BB-46AA-7691-56574A1EB063" controles="" isBranch="false"/>
+									<node idCtrl="7" lib="Eclairage" objZend="null" uid="DF09E884-4A04-9238-0DDA-56577EAEE76F" isBranch="false"/>
+									<node idCtrl="15" lib="Palier ascenseur" objZend="null" uid="FC9E306A-04AF-4945-6472-56579A75ABF5" isBranch="false"/>
+								</node>
+								<node idCtrl="75" lib="Cave" objZend="null" uid="B75E09B7-5E4C-8804-F9E2-0DBBD3E88A93" isBranch="true">
+									<node idCtrl="25" lib="Sols Murs Plafonds" objZend="null" uid="AA167E82-D398-B31E-E0B0-5657EABDBEC2" isBranch="false"/>
+									<node idCtrl="16" lib="Pentes ressauts" objZend="null" uid="00D889E7-2838-4ADD-D581-5658151E4DC1" isBranch="false"/>
+									<node idCtrl="9" lib="Equipement" objZend="null" uid="98DDC11E-688E-40D3-3C33-56583D269272" isBranch="false"/>
+									<node idCtrl="5" lib="Commandes" objZend="null" uid="4958E98A-6233-48CE-931E-565855167AC1" isBranch="false"/>
+									<node idCtrl="7" lib="Eclairage" objZend="null" uid="7B15DCDD-CCA8-0F2E-5A3E-56587E56D50B" isBranch="false"/>
+								</node>
+								<node idCtrl="94" lib="Pièce Parties Communes" objZend="null" uid="2DB70FB5-26AA-BB8C-C94F-0DBBFBB04BCA" isBranch="false"/>
+							</node>
+							<node idCtrl="58" lib="Objet intérieur" objZend="gevu_objetsxinterieurs" uid="3D0F33E2-DD72-71B3-5333-0DBC96B77C91" isBranch="true">
+								<node idCtrl="18" lib="Porte" objZend="" uid="854D3742-3423-2A47-6344-0DBCA7510227" controles="" isBranch="true">
+									<node idCtrl="18" lib="Porte" objZend="null" uid="22E22CDB-F8FD-BA6D-2784-5665FC2AF2E3" isBranch="false"/>
+									<node idCtrl="14" lib="Face des portes" objZend="null" uid="DA7E4075-82DC-D4B4-2393-56661526FCD5" isBranch="false"/>
+								</node>
+								<node idCtrl="95" lib="Porte Coupe Feu" objZend="null" uid="A52D849E-1FB1-110B-B724-0DBD172EF28A" isBranch="true">
+									<node idCtrl="18" lib="Porte" objZend="null" uid="267B3EB6-444C-B7BC-2874-565B5B637B7A" isBranch="false"/>
+									<node idCtrl="14" lib="Face des portes" objZend="null" uid="B08135F0-8CDC-8912-C896-56662717B39E" isBranch="false"/>
+								</node>
+								<node idCtrl="11" lib="Escalier" objZend="null" uid="E14F704E-4BB6-313C-B8C7-0DBD49AE0CA9" isBranch="false"/>
+							</node>
+							<node idCtrl="126" lib="Lot technique" objZend="null" uid="7DD9F77F-AD52-7FB4-653A-0DC21D548B58" isBranch="true">
+								<node idCtrl="97" lib="Menuiserie intérieure" objZend="null" uid="3A431BE9-5B58-580B-0607-0DC29D00BAEF" isBranch="false"/>
+								<node idCtrl="98" lib="Serrurerie - Métallerie" objZend="null" uid="07375947-4473-ABA7-4D7E-12BC8CFCA2D4" isBranch="false"/>
+								<node idCtrl="99" lib="Electricité Courant Fort" objZend="null" uid="04980309-CBCE-2B85-DE0E-12BFB8F87DBD" isBranch="false"/>
+								<node idCtrl="100" lib="Plomberie Sanitaire" objZend="null" uid="1B649CED-DE32-6729-7459-12C067633E6D" isBranch="false"/>
+								<node idCtrl="101" lib="Revêtement de sol" objZend="null" uid="A7F051BF-68DB-8928-DD5F-12C15746AE1D" isBranch="false"/>
+								<node idCtrl="102" lib="Revêtement Mural" objZend="null" uid="21239229-00A4-D23B-C21C-12C25AD98473" isBranch="false"/>
+								<node idCtrl="103" lib="Electricité courant faible" objZend="null" uid="0D432E8F-B449-0C51-1D50-12C2F3418C64" isBranch="false"/>
+								<node idCtrl="104" lib="Sécurité" objZend="null" uid="3C4BB753-F9B6-E191-AD24-12C3EE1474D3" isBranch="false"/>
+							</node>
 						</node>
-						<node idCtrl="72" lib="Couloir" isBranch="true">
-							<node idCtrl="7" lib="Eclairage" isBranch="false"/>
-							<node idCtrl="5" lib="Commandes" isBranch="false"/>
-							<node idCtrl="25" lib="Sols Murs Plafonds" isBranch="false"/>
+						<node idCtrl="62" lib="Logement" objZend="gevu_logements" uid="0CA75D74-9ACE-D75A-4625-12E3C1F5B2C3" isBranch="true">
+							<node idCtrl="69" lib="Etage" objZend="gevu_niveaux" uid="3C451A55-20C3-92C6-E82B-12E3EAFB4725" isBranch="true">
+								<node idCtrl="50" lib="Espace intérieur" objZend="gevu_espacesxinterieurs" uid="C0B20873-97FB-373D-5C06-12E43FD173E1" isBranch="true">
+									<node idCtrl="8" lib="Entrée" objZend="null" uid="0133FCE9-50C1-5D9C-2F9E-12E87D870B60" isBranch="true">
+										<node idCtrl="124" lib="Sols Murs Plafonds Logement" objZend="null" uid="84C5B284-9261-E1A6-1F8D-565BD5F8DE66" isBranch="false"/>
+										<node idCtrl="123" lib="Commandes Logement" objZend="null" uid="032EA95C-8E70-3309-1C64-565C15402FBC" isBranch="false"/>
+									</node>
+									<node idCtrl="83" lib="Séjour" objZend="null" uid="22E4C635-89B1-8CB0-9971-12E8B7529A3D" isBranch="true">
+										<node idCtrl="124" lib="Sols Murs Plafonds Logement" objZend="null" uid="E96DEB6C-E261-5187-FE03-565CB35B9BED" isBranch="false"/>
+										<node idCtrl="123" lib="Commandes Logement" objZend="null" uid="2C2103C5-0111-C724-E276-565CD578757C" isBranch="false"/>
+									</node>
+									<node idCtrl="40" lib="Cuisine" objZend="null" uid="D03DCA01-FEDB-F98F-7220-12E8D6ECC192" isBranch="true">
+										<node idCtrl="40" lib="Cuisine" objZend="null" uid="D9B1DA61-8819-6A4D-092B-565D69747859" isBranch="false"/>
+										<node idCtrl="124" lib="Sols Murs Plafonds Logement" objZend="null" uid="9FCE66DA-C141-B989-474E-565DDC220ED7" isBranch="false"/>
+										<node idCtrl="123" lib="Commandes Logement" objZend="null" uid="5CF0ECE0-B04B-8418-1BFB-565DFD679B84" isBranch="false"/>
+									</node>
+									<node idCtrl="41" lib="Chambre" objZend="null" uid="FDF90AEA-422B-D8CF-F461-12E8F8FA046E" isBranch="true">
+										<node idCtrl="41" lib="Chambre" objZend="null" uid="5CF255B5-6CA3-A514-1EF7-565EC654BE25" isBranch="false"/>
+										<node idCtrl="124" lib="Sols Murs Plafonds Logement" objZend="null" uid="3AB63B47-AEF5-FFA2-75BE-565EEB8BA48A" isBranch="false"/>
+										<node idCtrl="123" lib="Commandes Logement" objZend="null" uid="DD97415F-FBA4-1486-B6D4-565F065F3F2E" isBranch="false"/>
+									</node>
+									<node idCtrl="43" lib="Salle de bain " objZend="null" uid="4C58C266-0468-7D67-A70B-12E91991D820" isBranch="true">
+										<node idCtrl="43" lib="Salle de bain " objZend="null" uid="F5BFD32F-8D79-AF22-CC95-56613311A477" isBranch="false"/>
+										<node idCtrl="124" lib="Sols Murs Plafonds Logement" objZend="null" uid="218EA15E-BB89-062C-69D7-566197941360" isBranch="false"/>
+										<node idCtrl="123" lib="Commandes Logement" objZend="null" uid="A3722335-024D-C9AE-620A-5661BAD052BA" isBranch="false"/>
+									</node>
+									<node idCtrl="36" lib="WC" objZend="null" uid="C22518AE-68E6-E3EB-84A7-12E9330E9A14" isBranch="true">
+										<node idCtrl="36" lib="WC" objZend="null" uid="35826BC0-60FE-0017-92E3-5661DCFC7886" isBranch="false"/>
+										<node idCtrl="124" lib="Sols Murs Plafonds Logement" objZend="null" uid="D162A7FA-D942-2E72-CC91-566223EF737E" isBranch="false"/>
+										<node idCtrl="123" lib="Commandes Logement" objZend="null" uid="94EB3157-1C32-166D-22A3-56625CFFDC5A" isBranch="false"/>
+									</node>
+									<node idCtrl="42" lib="Terrasse" objZend="null" uid="3CDABB08-AA5C-460C-B2DB-12E94EA1B0D4" isBranch="true">
+										<node idCtrl="42" lib="Terrasse" objZend="null" uid="B25D5E8E-3B3E-0161-7556-5664F27C2931" isBranch="false"/>
+										<node idCtrl="122" lib="Sol Terrasse" objZend="null" uid="C0E7A402-E19D-18F8-AC1D-566500B7F8F2" isBranch="false"/>
+										<node idCtrl="16" lib="Pentes ressauts" objZend="null" uid="743AF71B-CF37-D21A-C138-566526778E51" isBranch="false"/>
+										<node idCtrl="123" lib="Commandes Logement" objZend="null" uid="5F9FF470-8B32-2BE6-85B0-56655054AFC9" isBranch="false"/>
+									</node>
+									<node idCtrl="91" lib="Garage" objZend="null" uid="579F0810-3759-42A1-3A81-12E971D2402A" isBranch="false"/>
+								</node>
+								<node idCtrl="58" lib="Objet intérieur" objZend="gevu_objetsxinterieurs" uid="B01EEACD-288C-7325-EA15-12E454125B6E" isBranch="true">
+									<node idCtrl="106" lib="Porte d'entrée logement" objZend="null" uid="9BA68649-8190-FF1B-E2F2-12E99FD9213D" isBranch="true">
+										<node idCtrl="106" lib="Porte d'entrée logement" objZend="null" uid="B62AFA81-C6D7-1F83-2281-5666764A1211" isBranch="false"/>
+										<node idCtrl="14" lib="Face des portes" objZend="null" uid="CD52FD3F-B01E-6D9C-13FD-5666A7ACC8D7" isBranch="false"/>
+									</node>
+									<node idCtrl="105" lib="Porte logement " objZend="null" uid="C1B31F03-5A9F-F429-1C0E-12E9BC3A0A39" isBranch="true">
+										<node idCtrl="105" lib="Porte logement " objZend="null" uid="30EA291E-2BF7-BB89-E943-566688251754" isBranch="false"/>
+										<node idCtrl="14" lib="Face des portes" objZend="null" uid="9DC388C4-ECAE-D9D6-8800-5666B196FAA4" isBranch="false"/>
+									</node>
+									<node idCtrl="11" lib="Escalier" objZend="null" uid="734083FE-7A1C-A99B-2F93-12E9E8891ED0" isBranch="true">
+										<node idCtrl="125" lib="Escalier Logement" objZend="null" uid="37E94BA3-4CB4-B03A-B1FE-56665983A9D8" isBranch="false"/>
+									</node>
+								</node>
+							</node>
+							<node idCtrl="126" lib="Lot technique" objZend="null" uid="9E5A9A1F-1298-F593-73D2-12EA8CE260FE" isBranch="true">
+								<node idCtrl="107" lib="Chauffage individuel" objZend="null" uid="459D8128-5763-0509-CC00-12EAD21951C4" isBranch="false"/>
+								<node idCtrl="100" lib="Plomberie Sanitaire" objZend="null" uid="1C08444B-DC7B-3BE4-C6E2-12EAF9B96779" isBranch="false"/>
+								<node idCtrl="101" lib="Revêtement de sol" objZend="null" uid="B5CF43F2-206E-B27B-86B5-12EB16416C9B" isBranch="false"/>
+								<node idCtrl="97" lib="Menuiserie intérieure" objZend="null" uid="8A0AB2C9-DAD0-5792-44FB-12EB5C2879CF" isBranch="false"/>
+								<node idCtrl="99" lib="Electricité Courant Fort" objZend="null" uid="8213BF9C-7BEA-E80B-5731-12EB84AF0B9F" isBranch="false"/>
+								<node idCtrl="104" lib="Sécurité" objZend="null" uid="64403AB5-2A40-FA9C-1B98-12EBA0CE91C2" isBranch="false"/>
+								<node idCtrl="108" lib="Ventilation" objZend="null" uid="5A238527-E2AC-465E-E041-12EBB97E205D" isBranch="false"/>
+							</node>
 						</node>
-						<node idCtrl="73" lib="Local Poubelle" isBranch="true">
-							<node idCtrl="73" lib="Local Poubelle" isBranch="false"/>
-							<node idCtrl="9" lib="Equipement" isBranch="false"/>
-							<node idCtrl="5" lib="Commandes" isBranch="false"/>
-							<node idCtrl="7" lib="Eclairage" isBranch="false"/>
-						</node>
-						<node idCtrl="74" lib="Local vélo" isBranch="true">
-							<node idCtrl="25" lib="Sols Murs Plafonds" isBranch="false"/>
-							<node idCtrl="5" lib="Commandes" isBranch="false"/>
-							<node idCtrl="9" lib="Equipement" isBranch="false"/>
-							<node idCtrl="7" lib="Eclairage" isBranch="false"/>
-						</node>
-						<node idCtrl="75" lib="Cave" isBranch="true">
-							<node idCtrl="7" lib="Eclairage" isBranch="false"/>
-							<node idCtrl="9" lib="Equipement" isBranch="false"/>
-							<node idCtrl="5" lib="Commandes" isBranch="false"/>
-							<node idCtrl="25" lib="Sols Murs Plafonds" isBranch="false"/>
-						</node>
-						<node idCtrl="76" lib="Conciergerie" isBranch="true">
-							<node idCtrl="7" lib="Eclairage" isBranch="false"/>
-							<node idCtrl="9" lib="Equipement" isBranch="false"/>
-							<node idCtrl="5" lib="Commandes" isBranch="false"/>
-							<node idCtrl="25" lib="Sols Murs Plafonds" isBranch="false"/>
-						</node>
-						<node idCtrl="48" lib="Parking" isBranch="true">
-							<node idCtrl="7" lib="Eclairage" isBranch="false"/>
-							<node idCtrl="9" lib="Equipement" isBranch="false"/>
-							<node idCtrl="5" lib="Commandes" isBranch="false"/>
-							<node idCtrl="25" lib="Sols Murs Plafonds" isBranch="false"/>
-							<node idCtrl="2" lib="Aire de stationnement" isBranch="false"/>
-						</node>
-						<node idCtrl="78" lib="Box stationnement" isBranch="true">
-							<node idCtrl="7" lib="Eclairage" isBranch="false"/>
-						</node>
-						<node idCtrl="17" lib="Place GIC" isBranch="true">
-							<node idCtrl="17" lib="Place GIC" isBranch="false"/>
-						</node>
-						<node idCtrl="15" lib="Palier ascenseur" isBranch="true">
-							<node idCtrl="7" lib="Eclairage" isBranch="false"/>
-							<node idCtrl="9" lib="Equipement" isBranch="false"/>
-							<node idCtrl="5" lib="Commandes" isBranch="false"/>
-							<node idCtrl="15" lib="Palier ascenseur" isBranch="false"/>
-							<node idCtrl="25" lib="Sols Murs Plafonds" isBranch="false"/>
+						<node idCtrl="68" lib="Local d'activité" objZend="gevu_locaux" uid="241831D4-A57D-EB77-C877-12F2E712BB76" isBranch="true">
+							<node idCtrl="50" lib="Espace intérieur" objZend="gevu_espacesxinterieurs" uid="FAFEE92A-4C95-B544-915F-12F38C36123E" isBranch="true">
+								<node idCtrl="8" lib="Entrée" objZend="null" uid="7EA4DD50-D5A2-8B86-B020-12F3E0842371" isBranch="false"/>
+								<node idCtrl="118" lib="Pièce local" objZend="null" uid="39D32B46-AF4F-150C-0890-12F403F8CEA5" isBranch="false"/>
+								<node idCtrl="40" lib="Cuisine" objZend="null" uid="0C88E18B-F408-D128-3D53-12F41FE7C0FB" isBranch="false"/>
+								<node idCtrl="36" lib="WC" objZend="null" uid="90C5B209-5988-C809-C3CC-12F4C8C60CEE" isBranch="false"/>
+								<node idCtrl="42" lib="Terrasse" objZend="null" uid="4FEACA7B-B985-D077-14E3-12F4DC0D8EB8" isBranch="false"/>
+								<node idCtrl="127" lib="Vestiaire" objZend="null" uid="CD56A30B-D09D-D743-550A-12F95BCEED42" isBranch="false"/>
+							</node>
+							<node idCtrl="58" lib="Objet intérieur" objZend="gevu_objetsxinterieurs" uid="6F203F49-A05C-24D8-E8BF-12F3A2086B3D" isBranch="true">
+								<node idCtrl="18" lib="Porte" objZend="null" uid="15092644-CD17-D003-7AA3-12F986782381" isBranch="false"/>
+								<node idCtrl="11" lib="Escalier" objZend="null" uid="82F2B416-CF37-AA3B-1B62-12F9A709BB35" isBranch="false"/>
+							</node>
 						</node>
 					</node>
-					<node idCtrl="58" lib="Objet intérieur" isBranch="true">
-						<node idCtrl="18" lib="Porte" isBranch="true">
-							<node idCtrl="18" lib="Porte" isBranch="false"/>
-							<node idCtrl="14" lib="Face des portes" isBranch="false"/>
-						</node>
-						<node idCtrl="11" lib="Escalier" isBranch="true">
-							<node idCtrl="11" lib="Escalier" isBranch="false"/>
-						</node>
-					</node>
+					<node idCtrl="3" lib="Cabine ascenseur" objZend="null" uid="E7976202-9AE3-6EDB-A980-12FA8B26CB5D" isBranch="false"/>
 				</node>
-				<node idCtrl="62" lib="Logement" isBranch="true">
-					<node idCtrl="69" lib="Etage" isBranch="true">
-						<node idCtrl="50" lib="Espace intérieur" isBranch="true">
-							<node idCtrl="42" lib="Terrasse" isBranch="true">
-								<node idCtrl="42" lib="Terrasse" isBranch="false"/>
-							</node>
-							<node idCtrl="36" lib="WC" isBranch="true">
-								<node idCtrl="39" lib="Unite de vie" isBranch="false"/>
-								<node idCtrl="36" lib="WC" isBranch="false"/>
-								<node idCtrl="25" lib="Sols Murs Plafonds" isBranch="false"/>
-							</node>
-							<node idCtrl="43" lib="Salle de bain " isBranch="true">
-								<node idCtrl="39" lib="Unite de vie" isBranch="false"/>
-								<node idCtrl="25" lib="Sols Murs Plafonds" isBranch="false"/>
-								<node idCtrl="43" lib="Salle de bain " isBranch="false"/>
-							</node>
-							<node idCtrl="40" lib="Cuisine" isBranch="true">
-								<node idCtrl="39" lib="Unite de vie" isBranch="false"/>
-								<node idCtrl="25" lib="Sols Murs Plafonds" isBranch="false"/>
-								<node idCtrl="40" lib="Cuisine" isBranch="false"/>
-							</node>
-							<node idCtrl="41" lib="Chambre" isBranch="true">
-								<node idCtrl="39" lib="Unite de vie" isBranch="false"/>
-								<node idCtrl="41" lib="Chambre" isBranch="false"/>
-								<node idCtrl="25" lib="Sols Murs Plafonds" isBranch="false"/>
-							</node>
-							<node idCtrl="8" lib="Entrée" isBranch="true">
-								<node idCtrl="39" lib="Unite de vie" isBranch="false"/>
-								<node idCtrl="25" lib="Sols Murs Plafonds" isBranch="false"/>
-							</node>
-							<node idCtrl="72" lib="Couloir" isBranch="true">
-								<node idCtrl="39" lib="Unite de vie" isBranch="false"/>
-								<node idCtrl="25" lib="Sols Murs Plafonds" isBranch="false"/>
-							</node>
-							<node idCtrl="83" lib="Séjour" isBranch="true">
-								<node idCtrl="39" lib="Unite de vie" isBranch="false"/>
-								<node idCtrl="25" lib="Sols Murs Plafonds" isBranch="false"/>
-							</node>
-						</node>
-						<node idCtrl="58" lib="Objet intérieur" isBranch="true">
-							<node idCtrl="18" lib="Porte" isBranch="true">
-								<node idCtrl="18" lib="Porte" isBranch="false"/>
-								<node idCtrl="14" lib="Face des portes" isBranch="false"/>
-							</node>
-							<node idCtrl="11" lib="Escalier" isBranch="true">
-								<node idCtrl="11" lib="Escalier" isBranch="false"/>
-							</node>
-						</node>
+				<node idCtrl="126" lib="Lot technique" objZend="null" uid="02EF8E71-0C03-53D2-C7C3-12FAF0D5E3E2" isBranch="true">
+					<node idCtrl="109" lib="Clos Couvert" objZend="null" uid="EE6E9A96-D1DB-AACB-6941-12FB2B1B0444" isBranch="true">
+						<node idCtrl="110" lib="Couverture" objZend="null" uid="CCBCB9FE-A999-41F7-0E60-12FB90DEF761" isBranch="false"/>
+						<node idCtrl="112" lib="Façade" objZend="null" uid="A8588377-1830-BCEE-BE17-12FBB1F1AA23" isBranch="false"/>
+						<node idCtrl="113" lib="Menuiserie Exterieure" objZend="null" uid="1FE2F188-0ED7-2568-C3A5-12FBC7F8BA19" isBranch="false"/>
+						<node idCtrl="98" lib="Serrurerie - Métallerie" objZend="null" uid="7174FD73-AD7B-2BA6-EE05-12FBEAB129A8" isBranch="false"/>
 					</node>
-				</node>
-				<node idCtrl="68" lib="Local d'activité" isBranch="true">
-					<node idCtrl="58" lib="Objet intérieur" isBranch="true">
-						<node idCtrl="18" lib="Porte" isBranch="true">
-							<node idCtrl="18" lib="Porte" isBranch="false"/>
-							<node idCtrl="14" lib="Face des portes" isBranch="false"/>
-						</node>
-						<node idCtrl="11" lib="Escalier" isBranch="true">
-							<node idCtrl="11" lib="Escalier" isBranch="false"/>
-						</node>
-					</node>
-					<node idCtrl="50" lib="Espace intérieur" isBranch="true">
-						<node idCtrl="42" lib="Terrasse" isBranch="false"/>
-						<node idCtrl="36" lib="WC" isBranch="false"/>
-						<node idCtrl="22" lib="Sanitaire" isBranch="false"/>
-						<node idCtrl="8" lib="Entrée" isBranch="false"/>
-						<node idCtrl="40" lib="Cuisine" isBranch="false"/>
+					<node idCtrl="114" lib="Equipements Collectifs" objZend="null" uid="A118D4D6-4BC3-0722-D3E1-12FB437B0B78" isBranch="true">
+						<node idCtrl="3" lib="Cabine ascenseur" objZend="null" uid="CEED219E-7E8E-42AA-396E-12FC3C393A36" isBranch="false"/>
+						<node idCtrl="103" lib="Electricité courant faible" objZend="null" uid="64F988A2-4853-9208-B1E5-12FC5C4FDC7E" isBranch="false"/>
+						<node idCtrl="115" lib="Chaufferie collective" objZend="null" uid="6BA32EB1-C837-B8D6-8E87-12FC81CE3391" isBranch="false"/>
+						<node idCtrl="108" lib="Ventilation" objZend="null" uid="39EDE77E-A769-3AD0-6AFD-12FCCE3FDBBC" isBranch="false"/>
+						<node idCtrl="104" lib="Sécurité" objZend="null" uid="F238C3FA-8BF6-8B2F-160E-12FCEA8518AD" isBranch="false"/>
 					</node>
 				</node>
 			</node>
-		</node>
-		<node idCtrl="51" lib="Parcelle extérieure" isBranch="true">
-			<node idCtrl="49" lib="Espace extérieur" isBranch="true">
-				<node idCtrl="4" lib="Cheminement exterieur" isBranch="true">
-					<node idCtrl="4" lib="Cheminement exterieur" isBranch="false"/>
-					<node idCtrl="16" lib="Pentes ressauts" isBranch="false"/>
-					<node idCtrl="24" lib="Sol extérieur" isBranch="false"/>
+			<node idCtrl="51" lib="Parcelle extérieure" objZend="gevu_parcelles" uid="2DBF0C54-7291-D5E5-5466-130339636559" isBranch="true">
+				<node idCtrl="49" lib="Espace extérieur" objZend="gevu_espacesxexterieurs" uid="19DE503B-3B42-EE6C-B385-13038391B97E" isBranch="true">
+					<node idCtrl="2" lib="Aire de stationnement" objZend="null" uid="B20E9C38-3A2B-2F90-0C0C-13042E20BDFC" isBranch="true">
+						<node idCtrl="2" lib="Aire de stationnement" objZend="null" uid="81679A67-4FC4-28C2-1680-566B7F7ACD34" isBranch="false"/>
+						<node idCtrl="24" lib="Sol extérieur" objZend="null" uid="6F60DE32-BC13-1CE4-06CC-566B9D9A06DE" isBranch="false"/>
+						<node idCtrl="4" lib="Cheminement exterieur" objZend="null" uid="2DA402AA-83F0-E385-92AC-566BC0540DFD" isBranch="false"/>
+						<node idCtrl="16" lib="Pentes ressauts" objZend="null" uid="A1620E73-FF25-0223-D23A-566C01ED772E" isBranch="false"/>
+						<node idCtrl="7" lib="Eclairage" objZend="null" uid="E87F9CD2-3693-74EC-8557-566C70224D89" isBranch="false"/>
+					</node>
+					<node idCtrl="80" lib="Aire de jeux" objZend="null" uid="0071C044-6D5F-93C7-21BA-1304458861DB" isBranch="true">
+						<node idCtrl="24" lib="Sol extérieur" objZend="null" uid="C8D2C640-3747-29F1-609B-566CD753BFDC" isBranch="false"/>
+						<node idCtrl="4" lib="Cheminement exterieur" objZend="null" uid="24D48543-32B8-79F7-D19B-566CFE2C15BD" isBranch="false"/>
+						<node idCtrl="16" lib="Pentes ressauts" objZend="null" uid="6BC482BF-1EDB-CB42-AAEB-566D325A7B5F" isBranch="false"/>
+						<node idCtrl="7" lib="Eclairage" objZend="null" uid="E57D4543-A406-BBA1-F7A6-566D5C8B094D" isBranch="false"/>
+					</node>
+					<node idCtrl="81" lib="Jardin" objZend="null" uid="EB8D27FA-7F3C-C366-4B67-130467176C83" isBranch="true">
+						<node idCtrl="24" lib="Sol extérieur" objZend="null" uid="892A6212-C98F-E40B-A0DC-566D85DF8C51" isBranch="false"/>
+						<node idCtrl="4" lib="Cheminement exterieur" objZend="null" uid="41797506-D186-7251-9BE7-566D989667D0" isBranch="false"/>
+						<node idCtrl="16" lib="Pentes ressauts" objZend="null" uid="9005E0DB-6D95-03B3-E30B-566DAACD714B" isBranch="false"/>
+						<node idCtrl="7" lib="Eclairage" objZend="null" uid="4399D155-6150-45BD-38FC-566DCFAD05D7" isBranch="false"/>
+					</node>
+					<node idCtrl="82" lib="Patio" objZend="null" uid="1E599E06-83FD-E248-B664-1304790038E1" isBranch="true">
+						<node idCtrl="24" lib="Sol extérieur" objZend="null" uid="ACACC7E5-40BA-1241-D35B-566DE742B207" isBranch="false"/>
+						<node idCtrl="4" lib="Cheminement exterieur" objZend="null" uid="8A080691-3D15-FBB1-7AC6-566DFA95E2EA" isBranch="false"/>
+						<node idCtrl="16" lib="Pentes ressauts" objZend="null" uid="6E390089-3FA1-2DA2-02CE-566E142D76DE" isBranch="false"/>
+						<node idCtrl="7" lib="Eclairage" objZend="null" uid="5A0F4FC5-B021-F909-3A94-566E38F1042D" isBranch="false"/>
+					</node>
+					<node idCtrl="17" lib="Place GIC" objZend="null" uid="D0F4631B-F729-384F-282E-13049457929B" isBranch="true">
+						<node idCtrl="17" lib="Place GIC" objZend="null" uid="8401B169-25FB-04C4-1A49-566EC52A6535" isBranch="false"/>
+					</node>
+					<node idCtrl="52" lib="Voirie" objZend="gevu_objetsxvoiries" uid="AEF972E1-0B4A-CD51-40AF-1304ABDF9216" isBranch="false"/>
+					<node idCtrl="4" lib="Cheminement exterieur" objZend="null" uid="460900B8-3D23-C253-94E1-566ADA44334B" isBranch="true">
+						<node idCtrl="24" lib="Sol extérieur" objZend="null" uid="06938D64-8C89-6DD3-81CA-566F40FA5FED" isBranch="false"/>
+						<node idCtrl="4" lib="Cheminement exterieur" objZend="null" uid="1854616A-D8B8-091F-F830-566F5C7369DA" isBranch="false"/>
+						<node idCtrl="16" lib="Pentes ressauts" objZend="null" uid="CF2F0A97-37B8-994C-CD11-566F7ED00C49" isBranch="false"/>
+						<node idCtrl="7" lib="Eclairage" objZend="null" uid="BBB11401-AFA8-CE44-5C24-566FBFBD52F3" isBranch="false"/>
+					</node>
 				</node>
-				<node idCtrl="2" lib="Aire de stationnement" isBranch="true">
-					<node idCtrl="4" lib="Cheminement exterieur" isBranch="false"/>
-					<node idCtrl="2" lib="Aire de stationnement" isBranch="false"/>
-					<node idCtrl="24" lib="Sol extérieur" isBranch="false"/>
-					<node idCtrl="16" lib="Pentes ressauts" isBranch="false"/>
+				<node idCtrl="47" lib="Objet extérieur" objZend="gevu_objetsxexterieurs" uid="92BC6BCC-97E6-661A-9F01-13039B0A5CCA" isBranch="true">
+					<node idCtrl="18" lib="Porte" objZend="null" uid="49399AC9-10D6-AC54-3FFC-1304DD7784B3" isBranch="true">
+						<node idCtrl="18" lib="Porte" objZend="null" uid="CEEA539C-8EFE-EBC8-D783-566FE5D48EAC" isBranch="false"/>
+						<node idCtrl="14" lib="Face des portes" objZend="null" uid="876CBCEF-10A9-62E6-7389-5670141F8A71" isBranch="false"/>
+					</node>
+					<node idCtrl="12" lib="Escalier extérieur" objZend="null" uid="9932B6BB-CB93-2686-8C97-13051C5547FC" isBranch="true">
+						<node idCtrl="49" lib="Espace extérieur" objZend="gevu_espacesxexterieurs" uid="43E477C2-68BC-9321-7BBC-56703EEC497A" isBranch="false"/>
+					</node>
 				</node>
-				<node idCtrl="17" lib="Place GIC" isBranch="true">
-					<node idCtrl="17" lib="Place GIC" isBranch="false"/>
-				</node>
-				<node idCtrl="80" lib="Aire de jeux" isBranch="true">
-					<node idCtrl="4" lib="Cheminement exterieur" isBranch="false"/>
-					<node idCtrl="16" lib="Pentes ressauts" isBranch="false"/>
-					<node idCtrl="24" lib="Sol extérieur" isBranch="false"/>
-				</node>
-				<node idCtrl="81" lib="Jardin" isBranch="true">
-					<node idCtrl="4" lib="Cheminement exterieur" isBranch="false"/>
-					<node idCtrl="16" lib="Pentes ressauts" isBranch="false"/>
-					<node idCtrl="24" lib="Sol extérieur" isBranch="false"/>
-				</node>
-				<node idCtrl="82" lib="Patio" isBranch="true">
-					<node idCtrl="4" lib="Cheminement exterieur" isBranch="false"/>
-					<node idCtrl="16" lib="Pentes ressauts" isBranch="false"/>
-					<node idCtrl="24" lib="Sol extérieur" isBranch="false"/>
-				</node>
-			</node>
-			<node idCtrl="47" lib="Objet extérieur" isBranch="true">
-				<node idCtrl="18" lib="Porte" isBranch="true">
-					<node idCtrl="18" lib="Porte" isBranch="false"/>
-					<node idCtrl="14" lib="Face des portes" isBranch="false"/>
-				</node>
-				<node idCtrl="12" lib="Escalier extérieur" isBranch="true">
-					<node idCtrl="12" lib="Escalier extérieur" isBranch="false"/>
+				<node idCtrl="126" lib="Lot technique" objZend="null" uid="A123CF5B-0381-2881-4DA7-1303C414116D" isBranch="true">
+					<node idCtrl="116" lib="Déchets" objZend="null" uid="9D52C3A9-B8DD-7694-655C-1305346E5640" isBranch="false"/>
+					<node idCtrl="98" lib="Serrurerie - Métallerie" objZend="null" uid="CA652E89-FDD7-8438-BDE8-13055AFC2110" isBranch="false"/>
+					<node idCtrl="99" lib="Electricité Courant Fort" objZend="null" uid="68CD9D66-39AA-5189-B26A-1305789D3798" isBranch="false"/>
+					<node idCtrl="52" lib="Voirie" objZend="gevu_objetsxvoiries" uid="CF9F2AF9-EE4F-DE4D-CC1C-13059C23CAFA" isBranch="false"/>
 				</node>
 			</node>
 		</node>
