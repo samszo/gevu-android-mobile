@@ -44,12 +44,12 @@
 					  error="query_errorHandler(event)"/>
 		
 		<sqlite:Query id="add_geo" connection="{db.connection}"
-					  sql="insert into gevu_geos 
-					  (id_instant,id_lieu,lat,lng,zoom_min,zoom_max,adresse,kml,type_carte,id_donnee,maj)
-					  values (0,{this.last_id},
+					  sql="INSERT INTO gevu_geos(id_instant,id_lieu,lat,lng,zoom_min,zoom_max, 
+					  adresse,codepostal,ville,pays,kml,type_carte,maj) VALUES 
+					  (0,{this.last_id},
 					  {this.lat},
 					  {this.lng},
-					  0,0,'','','hybird',0,strftime('%J','{this.toSqlDate(myDate)}'))"
+					  0,0,'','','','','','hybird',strftime('%J','{this.toSqlDate(myDate)}'))"
 					  error="query_errorHandler(event)"
 					  result="insert_update_resultHandler(event)"/>		
 		
@@ -148,11 +148,7 @@
 		
 		<!-- ********************************************************* -->
 		
-		<sqlite:Query id="GetScenarioParam" connection="{db.connection}"
-					  sql="SELECT params FROM gevu_scenario WHERE id_scenario=10"
-					  result="GetScenarioParam_resultHandler(event)"
-					  error="query_errorHandler(event)"/>
-		
+				
 		<s:ArrayCollection id="testData" />
 		
 		<fx:XML id="xmlScene" source="idCritSE.xml"/>
@@ -220,27 +216,22 @@
 			[Bindable] private var lat:Number =0.0;
 			[Bindable] private var lng:Number =0.0;
 			[Bindable] private var verifIsControleQuery: String =
-					  "SELECT l.lib, l.id_lieu, a.id_antenne, b.id_batiment,c.id_geo,d.id_diag,e.id_doc,"+
-					  "f.id_espace,g.id_espace_ext,h.id_espace_int,i.id_etablissement,j.id_niveau,"+
-					  "k.id_objet_ext,m.id_objet_int,n.id_objet_voirie,o.id_observations,"+
-					  "p.id_parcelle,q.id_probleme,s.id_groupe,t.id_logement,u.id_local,v.id_part_commu "+
+					  "SELECT l.lib, l.id_lieu, a.id_antenne, b.id_batiment,c.id_geo,d.id_diag,"+
+					  "f.id_espace,g.id_espace_ext,h.id_espace_int,j.id_niveau,"+
+					  "k.id_objet_ext,m.id_objet_int,"+
+					  "p.id_parcelle,s.id_groupe,t.id_logement,u.id_local,v.id_part_commu "+
 					  "FROM gevu_lieux AS l "+
 					  "LEFT JOIN gevu_antennes AS a ON a.id_lieu = l.id_lieu "+
 					  "LEFT JOIN gevu_batiments AS b ON b.id_lieu = l.id_lieu "+
 					  "LEFT JOIN gevu_geos AS c ON c.id_lieu = l.id_lieu "+
-					  "LEFT JOIN gevu_diagnostics AS d ON d.id_lieu = l.id_lieu "+
-					  "LEFT JOIN gevu_docsxlieux AS e ON e.id_lieu = l.id_lieu "+
+					  "LEFT JOIN gevu_diagnostics AS d ON d.id_lieu = l.id_lieu "+					  
 					  "LEFT JOIN gevu_espaces AS f ON f.id_lieu = l.id_lieu "+
 					  "LEFT JOIN gevu_espacesxexterieurs AS g ON g.id_lieu = l.id_lieu "+
 					  "LEFT JOIN Gevu_espacesxinterieurs AS h ON h.id_lieu = l.id_lieu "+
-					  "LEFT JOIN Gevu_etablissements AS i ON i.id_lieu = l.id_lieu "+
 					  "LEFT JOIN Gevu_niveaux AS j ON j.id_lieu = l.id_lieu "+
 					  "LEFT JOIN Gevu_objetsxexterieurs AS k ON k.id_lieu = l.id_lieu "+
-					  "LEFT JOIN Gevu_objetsxinterieurs AS m ON m.id_lieu = l.id_lieu "+
-					  "LEFT JOIN Gevu_objetsxvoiries AS n ON n.id_lieu = l.id_lieu "+
-					  "LEFT JOIN Gevu_observations AS o ON o.id_lieu = l.id_lieu "+
+					  "LEFT JOIN Gevu_objetsxinterieurs AS m ON m.id_lieu = l.id_lieu "+					  
 					  "LEFT JOIN Gevu_parcelles AS p ON p.id_lieu = l.id_lieu "+
-					  "LEFT JOIN Gevu_problemes AS q ON q.id_lieu = l.id_lieu "+
 					  "LEFT JOIN Gevu_groupes AS s ON s.id_lieu = l.id_lieu "+
 					  "LEFT JOIN Gevu_logements AS t ON t.id_lieu = l.id_lieu "+
 					  "LEFT JOIN Gevu_locaux AS u ON u.id_lieu = l.id_lieu "+
@@ -249,7 +240,7 @@
 			
 			private var arrScenar:Array;
 			private var params:Array;
-			public var treeItem:TreeItem;
+			public  var treeItem:TreeItem;
 			private var finished:Boolean=false;
 			private var fetchingChildNode:TreeItem;			
 			private var dbFile:File;
@@ -259,12 +250,10 @@
 			
 			[Bindable] private var last_id:int;
 			
-			private function init():void {
-				
+			private function init():void 
+			{
 				init_tree();
 				get_new_geo();
-				GetScenarioParam.execute();
-			
 			}
 			
 			public function getLat():Number{
@@ -320,19 +309,46 @@
 			}
 			
 			
-			private function verifIsControle(id:String,obj:String,id_lieu:String):Array {
+			private function verifIsControle(id_type_controle:int,id:String,obj:String,id_lieu:String):Array {
 			 var temp:Array;
-		
+			 sqlState.addEventListener(SQLErrorEvent.ERROR,query_errorHandler);
+			 
+			
+			 if(obj!=null)
+			 {	 
 			 sqlState.text=
 			 "SELECT " + id +
 				 " FROM gevu_lieux AS l "+
 				 "LEFT JOIN "+ obj + " AS a ON a.id_lieu = l.id_lieu where l.id_lieu ="+ id_lieu ;
-			 sqlState.addEventListener(SQLErrorEvent.ERROR,query_errorHandler);
-             sqlState.execute();
+			
+			 sqlState.execute();
 			 temp=sqlState.getResult().data;
 			 
-			 return temp;
+			 }
 			 
+			 else 
+			 {
+			  var temp2:Array;	 
+			  sqlState.text="select id_type_controle from gevu_lieux where id_lieu="+id_lieu;
+			  sqlState.execute();
+			  temp2=sqlState.getResult().data;
+			  
+			  if (temp2!=null)
+			   {	   
+			    if(temp2[0].id_type_controle == id_type_controle)
+			     {
+			 	   sqlState.text="select id_geo from gevu_lieux as a " +
+					   "LEFT JOIN gevu_geos as b ON a.id_lieu = b.id_lieu " +
+					   "where a.id_lieu="+id_lieu;
+				   sqlState.execute();
+				   temp=sqlState.getResult().data;
+				     
+			     }
+			   }	
+			  
+			 }
+			 
+			 return temp;
 			}
 			
 			
@@ -345,21 +361,48 @@
 			 return temp;
 			}
 			
-		   private function getParentForTypeControle(obj:String,id_lieu:String):Array
+		   private function getParentForTypeControle(obj:String,id_lieu:String,id_type_control:int=-1):Array
 			{
-				var temp:Array;	
+				var temp:Array;
+				sqlState.addEventListener(SQLErrorEvent.ERROR,query_errorHandler);
+				
+				
+				if (obj!=null)
+				{		
 				sqlState.text=
 				"select * from gevu_lieux as node, gevu_lieux as parent,"+ obj + 
 				" as t " +
 				"where  (node.lft BETWEEN parent.lft AND parent.rgt) "+
 				"and (t.id_lieu = parent.id_lieu) "+
 				"and (node.id_lieu="+id_lieu+")";
-				sqlState.addEventListener(SQLErrorEvent.ERROR,query_errorHandler);
+				}
+				
+			else
+			{	
+				sqlState.text=
+				"select * from gevu_lieux as node, gevu_lieux as parent "+ 
+				"where  (node.lft BETWEEN parent.lft AND parent.rgt) "+
+				"and (node.id_lieu="+id_lieu+") "+
+				"and (parent.id_type_controle=" +id_type_control +")"	
+			}		
+				
 				sqlState.execute();
 				temp=sqlState.getResult().data;
 				return temp
 			}
 			//get control
+		
+			
+			
+		private function findByIdScenarioType(id_scenario:int,type:String):Array
+		{
+			var temp:Array;	
+			sqlState.text="SELECT * FROM gevu_scenes WHERE id_scenario="+id_scenario+" and type='"+type+"'";
+			sqlState.addEventListener(SQLErrorEvent.ERROR,query_errorHandler);
+			sqlState.execute();
+			temp=sqlState.getResult().data;	
+			return temp;
+		}
 			
 			
 		private function getIDtoVerifyTypeControle(x:String):String {
@@ -458,7 +501,7 @@
 				
 				
 				
-	public function getLieuCtl(idLieu:int,idScenar:int=10,forTypeControle:String=null,forTypeControle2:Boolean=false):Array{
+public function getLieuCtl(idLieu:int,idScenar:int=10,forTypeControle:String=null,forTypeControle2:Boolean=false):Array{
 			var arrCtl:Array = new Array();
 			var rTypeCtrl:Array = new Array();
 			var items:Array = new Array();
@@ -470,6 +513,7 @@
 			var arrLP:Array=new Array();
 			var id_type_controle:int;
 			var Path:String;
+			var firstCtl:XML;
 			var niv:int;
 			var result:XMLList;
 			var id:String;
@@ -480,40 +524,39 @@
 			sqlConn.open(dbFile);
 			sqlState.sqlConnection=sqlConn;
 			
-			//select * from gevu_lieux where id_lieu={this.selected_id}"
-			
 			sqlState.text="select * from gevu_lieux where id_lieu="+idLieu;
 			sqlState.execute();
 			var lieuInfo:Array=sqlState.getResult().data;
 			this.selected_niv=lieuInfo[0].niv;
-			//on boucle sur les scènes
-			for (var i:int=0;i<this.params.length;i++)
+			
+			result=xmlScene.children();
+			//recherche le premier controle
+			firstCtl=result[0];	
+			
+			if(firstCtl)
 			{	
-				etapes=params[i].etapes;
-				if(etapes!=null)
-				{
-				 //on boucle sur les étapes de la scène	
-				 for(var k:int=0;k<etapes.length;k++) 
-				 {
-				  id_type_controle=etapes[k].id_type_controle;
+			  id_type_controle=firstCtl.@idCtrl;
+			  
 				  //récupère les informations du contrôle
-				  
 				  rTypeCtrl= findByIdTypeControle(id_type_controle);
-				  //sort s'il n'y a pas d'objet lié
-				  if(rTypeCtrl[0].zend_obj==null) continue;
+				  
 				  //vérifie si le lieu a le controle
 				  id=getIDtoVerifyTypeControle(rTypeCtrl[0].zend_obj);  
-				  items=verifIsControle(id,rTypeCtrl[0].zend_obj,idLieu.toString());
+				  
+				  items=verifIsControle(id_type_controle,id,rTypeCtrl[0].zend_obj,idLieu.toString());
 				  //ObjectUtil.getClassInfo(items[0]).properties[0]
-				   
+				  if (id==null) 
+					  id="id_geo"; 
 				  if(items[0][id]!=null) 
 				  {
-					  
 					  sqlConn.close();
 					  return arrCtl; 			  
 				  }
 				  //récupère le parent qui possède ce type de controle
 				  arrLieuxParents=getParentForTypeControle(rTypeCtrl[0].zend_obj,idLieu.toString());
+				  
+				  //checked
+				  
 				  if(arrLieuxParents !=null)
 				  { 
 					//on récupère le détail de la scène
@@ -521,37 +564,50 @@
 					  
 				    niv=this.selected_niv - arrLieuxParents[0].niv ; 
 					
-					Path= "/node";
+					Path= "/node/node";
 					//création de la requête Xpath
-					for (var j:int=0;j<niv;j++) {
-					 Path += "/node";	
+					for (var j:int=0;j<niv;j++) 
+					{
+						
+					 Path += "/node";
+					 //vérifie si un des parents à déjà le contrôle
+					 //sauf pour le dernier niveau 
+					 //car une type de contrôle peut être plusieurs fois dans un scénario
+					 if(j+1<niv)
+					 {		 
 					 //vérifie si un des parents a déjà le contrôle
 					 var myQuery:XPathQuery = new XPathQuery(Path);
 					 result=myQuery.exec(xmlScene);
 						for (var m:int=0;m<result.length();m++)
 						{
+							
 						  rTC=findByIdTypeControle(result[m].@idCtrl);
-						   if(rTC[0].zend_obj!=null) 
-						   {
-							   arrLP=getParentForTypeControle(rTC[0].zend_obj,idLieu.toString());
+						   
+							   arrLP=getParentForTypeControle(rTC[0].zend_obj,idLieu.toString(),result[m].@idCtrl);
 							     if(arrLP)
 								 {
 								   //ajoute une condition dans la requête XML
 								   Path += "[@idCtrl="+result[m].@idCtrl+"]";
 								 }
-						   }
+						   
 						}//Xpath query result
+					 }//j+1<niv	
 					}//création de la requête Xpath
 					
+					/*
 					if(forTypeControle!=null)
 					{
 				    Path += forTypeControle;
 					}
+					*/
+					
+					//checked
 					var myQuery1:XPathQuery = new XPathQuery(Path);
 					result=myQuery1.exec(xmlScene);
 					  for (var t:int=0;t<result.length();t++) 
 					  {
 						  var jk:int =result[t].@idCtrl;
+						  var id_type_control2:int=result[t].@idCtrl;
 						  rTypeCtrl1=findByIdTypeControle(result[t].@idCtrl);
 						  if(rTypeCtrl1[0].zend_obj==null)
 						  {
@@ -568,30 +624,54 @@
 								 return new Array();
 						  }
 						  id=getIDtoVerifyTypeControle(rTypeCtrl1[0].zend_obj);  
-						  items1=verifIsControle(id,rTypeCtrl1[0].zend_obj,idLieu.toString());
+						  items1=verifIsControle(id_type_control2,id,rTypeCtrl1[0].zend_obj,idLieu.toString());
 						  
 						  //si le lieu à déjà le contrôle on ne peut pas en ajouter
+						  if (id==null) id="id_geo";
 						  if(items1[0][id]!=null) 
 						    
 						  {
-						   sqlConn.close();
-						   return new Array();
-						  }
-						  else {
-							  arrCtl.push(rTypeCtrl1);
-						  }
+							 //sauf dans le cas d'une liste déroulante  
+						    if(forTypeControle)
+							{
+								arrCtl.push(rTypeCtrl1);	
+							}
+						  
+						  else
+						  {
+							  //recherche les critères pour le controle
+							  var uid:String = result[t].@uid
+							  //Recherche la scène
+							  var arrScene:Array=findByIdScenarioType(12,uid);
+							  //vérifie si la scène possède des critères
+							  if(arrScene !=null)
+							  {
+								var rsCrit:Array = findByIdTypeControle(id_type_control2);
+								var arrCrit: Array = new Array;
+								arrCrit["criteres"]["ctrl_"+id_type_control2] = rsCrit;
+								//arrCrit["etapes"][]=
+							  }
+							  arrCtl.push(arrCrit)
+							  return new Array();  
+						  }//sauf dans le cas
+						 }	
+						else
+						{
+						arrCtl.push(rTypeCtrl1);	
+						}
+						  	
 					  }//
 				  }//arrLieuxParents
 				  else {
 					  //si on ne trouve aucun controle on peut ajouter le contrôle
+					  /*
 					  var arrType:Array = new Array();
 					  arrType=findByIdTypeControle(id_type_controle);
-					  arrCtl.push(arrType);
+					  */
+					  arrCtl.push(rTypeCtrl);
 				  }//
-				}//on boucle sur les étapes de la scène
-			  }//etapes !=null	 
-			}//on boucle sur les scènes
-			
+				
+			}//if fristCtl
 			sqlConn.close(); 
 			return arrCtl; 
 			
@@ -623,7 +703,7 @@
 			
             
 			
-			protected function new_lieu_ctrl_clickHandler(event:MouseEvent):void{
+	protected function new_lieu_ctrl_clickHandler(event:MouseEvent):void{
 			 dbFile =File.applicationDirectory.resolvePath("gevu_mobile.db");
 			 sqlConn= new SQLConnection();
 			 sqlState = new SQLStatement();
@@ -776,14 +856,16 @@
 			}
 			
 			
-			protected function tree_clickHandler(event:MouseEvent):void
+  protected function tree_clickHandler(event:MouseEvent):void
 			{
+				
 			 this.treeItem= event.currentTarget.selectedItem as TreeItem;
 			 this.selected_id=this.treeItem.source.@idLieu;
 			 this.nom_lieu=this.treeItem.source.@label;
-			 if(this.selected_id!=1) 
+			 
+		if(this.selected_id!=1) 
 			 {
-			 var cont:Array=getLieuCtl(this.selected_id,10);
+			 var cont:Array=getLieuCtl(this.selected_id,12);
 			 var btns:Array = new Array();
 			 var temp:Array;
 			 var v:View = new View();
@@ -822,10 +904,7 @@
 			  geo_query.execute();   
 			 }
 			 
-			 
-			 
-			  
-			 }
+	 }
 			
 			protected function form_query_resultHandler(event:SQLEvent):void
 			{
@@ -1048,6 +1127,7 @@
 				sqlState.sqlConnection=sqlConn;
 				var temp:Array;
 			    var maxrgt:int;
+				sqlState.addEventListener(SQLErrorEvent.ERROR,query_errorHandler)
 				if (this.selected_rgt != this.selected_lft +1)
 				{	
 				sqlState.text= "SELECT max(node.rgt)-1 as maxrgt " +
@@ -1066,13 +1146,13 @@
 				
 				//insert
 				sqlState.text=
-			    "insert into gevu_lieux (id_rubrique,lib,id_parent,id_instant,lft,rgt,niv,maj,lieu_parent) "+ 
-				"values(0,'" + this.new_nom_lieu + "',0,0," +
+			    "insert into gevu_lieux (lib,id_instant,lft,rgt,niv,maj,lieu_parent,id_type_controle) "+ 
+				"values('" + this.new_nom_lieu + "',0," +
 			    (maxrgt + 1) + "," +
 			    (maxrgt + 2) + "," +
 				(this.selected_niv + 1) + "," +
 				"strftime('%J','"+this.toSqlDate(myDate)+"') , " +
-				this.selected_id + ")";
+				this.selected_id + ",0)";
 				this.sqlState.addEventListener(SQLEvent.RESULT,insert_lieu_resultHandler);
 				this.sqlState.execute();
 				}//parent
@@ -1088,13 +1168,13 @@
 					
 					//insert
 					sqlState.text=
-					"insert into gevu_lieux (id_rubrique,lib,id_parent,id_instant,lft,rgt,niv,maj,lieu_parent) "+
-					"values(0,'{this.new_nom_lieu}',0,0,"+
+					"insert into gevu_lieux (lib,id_instant,lft,rgt,niv,maj,lieu_parent,id_type_controle) "+
+					"values('"+this.new_nom_lieu+"',0,"+
 					(this.selected_lft + 1)+","+
 					(this.selected_lft + 2)+","+
 					(this.selected_niv + 1)+","+
 					 "strftime('%J','"+this.toSqlDate(myDate)+"'),"+
-					this.selected_id+ ")";
+					this.selected_id+ ",0)";
 					this.sqlState.addEventListener(SQLEvent.RESULT,insert_lieu_resultHandler);
 					this.sqlState.execute();
 					
@@ -1250,12 +1330,12 @@
 				
 			}
 			
+			/*
 			protected function GetScenarioParam_resultHandler(event:SQLEvent):void
 			{
 			 arrScenar = this.GetScenarioParam.data;
 			 params= JSON.decode(arrScenar[0].params) as Array;
-			 
-			}
+			 }*/
 			
 		]]>	
 	</fx:Script>
