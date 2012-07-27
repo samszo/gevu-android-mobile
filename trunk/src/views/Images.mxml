@@ -3,7 +3,8 @@
 		xmlns:s="library://ns.adobe.com/flex/spark" 
 		xmlns:mx="library://ns.adobe.com/flex/mx" 
 		xmlns:sqlite="com.peterelst.air.sqlite.*"
-		title="Photo Upload" xmlns:f4cb="com.oreilly.f4cb.*">
+		title="Photo Upload" xmlns:f4cb="com.oreilly.f4cb.*"
+		creationComplete="Images_creationCompleteHandler(event)">
 	
 	
 	<fx:Declarations>
@@ -21,6 +22,7 @@
 			import flash.media.Camera;
 			
 			import mx.core.FlexGlobals;
+			import mx.events.FlexEvent;
 			import mx.graphics.codec.JPEGEncoder;
 			import mx.utils.object_proxy;
 			[Bindable] private var tofH:int = 360;
@@ -30,6 +32,9 @@
 			[Bindable] private var FileName:String;
 			[Bindable] private var url:String;
 			[Bindable] private var myDate:Date = new Date();
+			[Bindable] private var dir:int;
+			[Bindable] public  var type:String; 
+			
 			private var trim:RegExp = /[~+%&\\;:"',<>?#\s]/g
 				
 			private function takePicture(event:MouseEvent):void {	
@@ -45,7 +50,7 @@
 				FileName=FileName.replace(trim,"");
 				var dir:File=File.applicationStorageDirectory.resolvePath("galary");
 				if(dir.exists==false) dir.createDirectory();
-				var fl:File= File.applicationStorageDirectory.resolvePath("galary/"+FlexGlobals.topLevelApplication.getID()+"/"+FileName+ ".jpg");
+				var fl:File= File.applicationStorageDirectory.resolvePath("galary/"+this.type+"/"+this.dir+"/"+FileName+ ".jpg");
 				url= fl.url;
 				//Use a FileStream to save the bytearray as bytes to the new file
 				var fs:FileStream = new FileStream();
@@ -163,6 +168,19 @@
 					;
 			}
 			
+			
+			protected function Images_creationCompleteHandler(event:FlexEvent):void
+			{
+			 if(this.type=="lieu")
+			 {
+				this.dir=FlexGlobals.topLevelApplication.getID(); 
+			 }
+			 
+			 if(this.type=="prob")
+			 {
+				 
+			 }
+			}
 			
 		]]>
 	</fx:Script>

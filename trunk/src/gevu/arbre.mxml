@@ -302,7 +302,8 @@
 				this.nom_lieu=lib;
 			}
 			
-			public function init_tree():void{
+			public function init_tree():void
+			{
 				TreeData = new XMLListCollection(xmlist);
                 this.dataProvider=TreeData;
 				this.tree_query.execute();
@@ -314,7 +315,7 @@
 			 sqlState.addEventListener(SQLErrorEvent.ERROR,query_errorHandler);
 			 
 			
-			 if(obj!=null)
+			 if(obj!=null && id!=null)
 			 {	 
 			 sqlState.text=
 			 "SELECT " + id +
@@ -397,7 +398,7 @@
 		private function findByIdScenarioType(id_scenario:int,type:String):Array
 		{
 			var temp:Array;	
-			sqlState.text="SELECT * FROM gevu_scenes WHERE id_scenario="+id_scenario+" and type='"+type+"'";
+			sqlState.text="SELECT paramsCrit FROM gevu_scenes WHERE id_scenario="+id_scenario+" and type='"+type+"'";
 			sqlState.addEventListener(SQLErrorEvent.ERROR,query_errorHandler);
 			sqlState.execute();
 			temp=sqlState.getResult().data;	
@@ -640,7 +641,7 @@ public function getLieuCtl(idLieu:int,idScenar:int=10,forTypeControle:String=nul
 						  else
 						  {
 							  //recherche les critères pour le controle
-							  var uid:String = result[t].@uid
+							  var uid:String = result[t].@uid;
 							  //Recherche la scène
 							  var arrScene:Array=findByIdScenarioType(12,uid);
 							  //vérifie si la scène possède des critères
@@ -648,11 +649,16 @@ public function getLieuCtl(idLieu:int,idScenar:int=10,forTypeControle:String=nul
 							  {
 								var rsCrit:Array = findByIdTypeControle(id_type_control2);
 								var arrCrit: Array = new Array;
-								arrCrit["criteres"]["ctrl_"+id_type_control2] = rsCrit;
-								//arrCrit["etapes"][]=
+								var Assotemp:Array =new Array();
+								arrCrit["criteres_ctrl"] = rsCrit;
+								Assotemp["idCtrl"]=id_type_control2;
+								Assotemp["uid"]=uid;
+								Assotemp["paramsCrit"]=arrScene[0].paramsCrit;
+								arrCrit["etapes"]=Assotemp ;
+								arrCtl.push(arrCrit);
+								
 							  }
-							  arrCtl.push(arrCrit)
-							  return new Array();  
+							  return arrCtl; 
 						  }//sauf dans le cas
 						 }	
 						else
@@ -883,7 +889,12 @@ public function getLieuCtl(idLieu:int,idScenar:int=10,forTypeControle:String=nul
 			 FlexGlobals.topLevelApplication.view2.selectedIndex=0;
 			 FlexGlobals.topLevelApplication.previewPanel.visible=false;
 			 
-			  if (cont.length!=0)
+			  if(cont.length!=0 && cont[0].etapes!=null) 
+			  {
+				  trace ("hi");
+			  }
+			 
+		   else if (cont.length!=0)
 			  {  
 				 for(var i:int=0;i<cont.length;i++)
 				 {
@@ -933,6 +944,15 @@ public function getLieuCtl(idLieu:int,idScenar:int=10,forTypeControle:String=nul
 				  diag.flag=1;
 				  FlexGlobals.topLevelApplication.main_interface.addElement(diag);
 				 }
+				else if (ids[0]=='gevu_diagnostics')
+				{	
+				 className == 'views.gevu_diagnostics';
+				 ClassReference = getDefinitionByName(className) as Class;
+				 instance = new ClassReference();
+				 instance.flag=0;
+				 FlexGlobals.topLevelApplication.main_interface.addElement(instance);
+					 
+				}
 				//removing all interfaces
 				else
 				{ 

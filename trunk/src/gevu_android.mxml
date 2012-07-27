@@ -87,6 +87,8 @@
 			
 			protected function galary_clickHandler(event:MouseEvent):void
 			{
+				this.photoPanel.type="lieu";
+				this.myGalary.type="lieu";
 				this.Preview.source="";
 				if(this.photoPanel.myVid!=null)
 					this.photoPanel.initCamera();

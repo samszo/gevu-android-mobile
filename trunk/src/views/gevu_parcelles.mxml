@@ -132,7 +132,8 @@
 				var o:Object=event;
 			}
 			
-			public function editModif(val:String) : void {
+			public function editModif(val:String) : void 
+			{
 				this.cloture=val;
 			}
 			
