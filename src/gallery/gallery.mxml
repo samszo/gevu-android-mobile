@@ -30,12 +30,24 @@
 			
 		[Bindable] private var myDate:Date = new Date();
 	    [Bindable] private var FileName:String;
-		[Bindable] private var url:String;	
+		[Bindable] private var url:String;
+		[Bindable] public var type:String;
+		[Bindable] private var dir:int; 
 		private var uploadedFile:File;
 			
 		private var popmsg:popup = new popup();	
 		
-		public function init_list():void{
+		public function init_list():void
+		{
+			if(this.type=="lieu")
+			{
+			 this.dir=FlexGlobals.topLevelApplication.getID();
+			}
+		  if (this.type=="prob")
+		  {
+			  
+		  }
+			
 			this.lst3.scroller.setStyle("verticalscrollpolicy",ScrollPolicy.OFF);
 		}
 			
@@ -80,7 +92,7 @@
 			}
 					
 	public function initGalary():void{
-		var dir:File=File.applicationStorageDirectory.resolvePath("galary/"+FlexGlobals.topLevelApplication.getID());
+		var dir:File=File.applicationStorageDirectory.resolvePath("galary/"+this.type+"/"+this.dir);
 		if(dir.exists)
 		{
 		 var photos:Array=dir.getDirectoryListing();
@@ -89,7 +101,7 @@
 		 sampleData.removeAll();
 		  for (var i:int=0; i < photos.length;i++)
 		  {  
-			pic=File.applicationStorageDirectory.resolvePath("galary/"+FlexGlobals.topLevelApplication.getID()+"/"+photos[i].name);
+			pic=File.applicationStorageDirectory.resolvePath("galary/"+this.type+"/"+this.dir+"/"+photos[i].name);
 			path=pic.url;
 			sampleData.addItem({imageURL:path});
 		  }

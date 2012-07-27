@@ -214,7 +214,7 @@
  </s:VGroup>						
   </f4cb:CustomViewStack>
 		<s:Label width="31" height="26"/>
-		<view:gevu_problemes id="problems" height="216" probGrid="{this.downtGrid}" visible="false"/>		
+		<view:gevu_problemes id="problems" height="216" probGrid="{this.downtGrid}" visible="true"/>		
  	</s:VGroup>
  </s:Panel>		
 </s:View>
