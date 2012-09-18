@@ -4,7 +4,7 @@
 		xmlns:mx="library://ns.adobe.com/flex/mx" 
 		xmlns:sqlite="com.peterelst.air.sqlite.*"
 		title="Photo Upload" xmlns:f4cb="com.oreilly.f4cb.*"
-		creationComplete="Images_creationCompleteHandler(event)">
+		>
 	
 	
 	<fx:Declarations>
@@ -169,7 +169,7 @@
 			}
 			
 			
-			protected function Images_creationCompleteHandler(event:FlexEvent):void
+			public function init_img():void
 			{
 			 if(this.type=="lieu")
 			 {

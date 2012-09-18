@@ -3,16 +3,20 @@
 		xmlns:s="library://ns.adobe.com/flex/spark" title="gevu_diagnostics"
 		xmlns:f4cb="com.oreilly.f4cb.*"
 		xmlns:view="views.*"
+		xmlns:gevu="gevu.*"
 		xmlns:sqlite="com.peterelst.air.sqlite.*"
 		creationComplete="diag_creationCompleteHandler(event)">
 	
 		
 	<fx:Script>
 		<![CDATA[
+			import gevu.popup;
+			import mx.managers.PopUpManager;
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
 			
 			import spark.events.GridItemEditorEvent;
+			import spark.events.TextOperationEvent;
 			private var diag_ids:Array = new Array();
 			private var dbFile:File;
 			private var sqlConn:SQLConnection;
@@ -27,6 +31,10 @@
 [Bindable]	private var id_critere:int;
 [Bindable]  public var id_instant:int;
             public var flag:int = 0;
+[Bindable]  public var ques:String;	
+[Bindable] private var reponse:String;
+[Bindable] private var commentaire:String;
+		   private var popmsg:popup= new popup();
 			
 			private function init():void{
 			var id_exi:int;
@@ -36,11 +44,13 @@
 			sqlConn.open(dbFile);
 			sqlState.sqlConnection=sqlConn;
 			var temp:Array = new Array();
+			var temp2:Array = new Array();
+			var id_crit:int;
 			
 			///Retrieve the DIAG ids
 			sqlState.text="select diag.id_instant as id_instant" +
 				          ",diag.id_lieu as id_lieu,STRFTIME('%Y-%m-%d',inst.maintenant) as maintenant,inst.commentaires as commentaires,"+
-                           "crit.id_type_controle as id_type_controle,tc.lib as lib,exi.nom as nom "+
+                           "crit.id_type_controle as id_type_controle,crit.id_critere as id_critere,tc.lib as lib,exi.nom as nom "+
 						   "From gevu_diagnostics as diag "+
 						   "inner join  gevu_criteres as crit on diag.id_critere = crit.id_critere "+
                            "inner join  gevu_instants as inst on diag.id_instant = inst.id_instant "+
@@ -49,10 +59,19 @@
                            "group by diag.id_instant"
 			sqlState.execute();
 			temp=sqlState.getResult().data;
+			id_crit=temp[0].id_critere;
+			sqlState.text="SELECT criteres FROM gevu_criteres WHERE id_critere="+id_crit;
+			sqlState.execute();
+			temp2=sqlState.getResult().data;
+			ques=temp2[0].criteres;
 			leftGrid= new ArrayCollection(temp);
 			
 		}
 			
+			public function editModif(val:String) : void {
+				this.reponse=val;
+				trace(this.reponse);
+			}
 	  
 			
 			protected function diag_creationCompleteHandler(event:FlexEvent):void
@@ -99,7 +118,7 @@
 					"From gevu_diagnostics as diag "+
 					"inner join  gevu_criteres as crit on diag.id_critere = crit.id_critere "+
 					"inner join gevu_motsclefs as mc on diag.id_reponse = mc.id_motclef " +           	
-					"where diag.id_instant="+id_instant;
+					"where diag.id_instant=300";
 				sqlState.execute();
 				temp=sqlState.getResult().data;
 				rightGrid=new ArrayCollection(temp);
@@ -125,8 +144,8 @@
 				sqlState.text="select prob.id_probleme,prob.mesure,prob.observations,prob.num_marker,"+
 					           "diag.id_lieu as id_lieu, diag.id_instant as id_instant,diag.id_critere as id_critere " +
 					           "From gevu_diagnostics as diag "+
-							   "inner join gevu_problemes as prob on diag.id_diag = prob.id_diag "+
-							   "where diag.id_diag="+18;
+							   "inner join gevu_problemes as prob on diag.id_diag = prob.id_diag ";
+							   
 							   
 				sqlState.execute();
 				temp=sqlState.getResult().data;	
@@ -143,6 +162,28 @@
 				 if(this.problems.vs != null )
 					 this.problems.vs.selectedIndex=0;
 				this.problems.visible=true;
+			}
+			
+			protected function btnSaveChoix_clickHandler(event:MouseEvent):void
+			{
+			 sqlState.text="UPDATE gevu_diagnostics SET id_reponse="+this.reponse + 
+				 " WHERE id_instant=300";
+			 sqlState.execute();
+			 sqlState.text="UPDATE gevu_instants SET commentaires='"+this.commentaire +
+				 "' WHERE id_instant=300";
+			 sqlState.execute();	
+			 
+			 PopUpManager.addPopUp(popmsg,this,true);
+			 PopUpManager.centerPopUp(popmsg);
+			 popmsg.setMsg("La modification est complète");
+			 popmsg.open(this,false);
+				
+			}
+			
+			protected function txtComment_changeHandler(event:TextOperationEvent):void
+			{
+				this.commentaire=this.txtComment.text;
+				
 			}
 			
 		]]>
@@ -187,7 +228,7 @@
 			  </s:HGroup>
 			
       <s:VGroup id="ajout" width="100%" height="100%" paddingLeft="13" paddingTop="13">
-	      <s:HGroup verticalAlign="middle">
+	    <!--   <s:HGroup verticalAlign="middle">
 		    	<s:Label text="Etapes : " />
 			    <s:Button styleName="leftArrowButton" id="btnPrevEtape" />
 			    <s:Label id="lblEtapeNum" text="0" />
@@ -195,7 +236,7 @@
 			    <s:Label id="lblEtapeTot" text="0" />
 			    <s:Button styleName="rightArrowButton" id="btnNextEtape" />
 				
-				<!-- <compo:hbControle id="hbCtl" />-->
+				<compo:hbControle id="hbCtl" />
 	    	    <s:Label text="Questions : " />
 			    <s:Button styleName="leftArrowButton" id="btnPrevQuestion"/>
 		        <s:Label id="lblQuestionNum" text="0" />
@@ -204,17 +245,20 @@
 			    <s:Label id="lblQuestionTot" text="0" />
 			    <s:Label id="lblQuestionAll" text="0" />
 				<s:Button styleName="rightArrowButton" id="btnNextQuestion" />
-		</s:HGroup>
-		    <view:repType2 id="ckReponse" />
+		</s:HGroup> -->
+		  
+			  
+		    <view:repType2 id="ckReponse" lblQ="{this.ques}" fnct="{this.editModif}"/>
 			    <s:HGroup width="100%">
-				  <s:Button id="btnSaveChoix" width="116" label="enregistrer"/>
-				  <s:Label text="Commentaires :" />
-				  <s:TextInput id="txtComment" />
+				  <s:Button id="btnSaveChoix" width="116" label="enregistrer" click="btnSaveChoix_clickHandler(event)"/>
+		    	  <s:Label text="Commentaires :" verticalAlign="middle" height="100%" /> 
+				  <s:TextInput id="txtComment" change="txtComment_changeHandler(event)"/> 
 		        </s:HGroup>
+		    
  </s:VGroup>						
   </f4cb:CustomViewStack>
 		<s:Label width="31" height="26"/>
-		<view:gevu_problemes id="problems" height="216" probGrid="{this.downtGrid}" visible="true"/>		
+		<view:gevu_problemes id="problems" height="216" probGrid="{this.downtGrid}" visible="false"/>		
  	</s:VGroup>
  </s:Panel>		
 </s:View>

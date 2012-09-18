@@ -90,14 +90,19 @@
 				this.photoPanel.type="lieu";
 				this.myGalary.type="lieu";
 				this.Preview.source="";
-				if(this.photoPanel.myVid!=null)
+				if(this.photoPanel.myVid!=null){
 					this.photoPanel.initCamera();
+				}
+					
 				this.view2.selectedIndex=1;
 				this.previewPanel.visible=true;
 				this.leftSide.visible=false;
 				if(this.myGalary!=null)
+				{	
+					this.photoPanel.init_img();
+					this.myGalary.init_list();
 					this.myGalary.initGalary();
-				
+				}
 			}
 			private function PrepareAdd():void
 				
