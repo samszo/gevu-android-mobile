@@ -7,6 +7,19 @@
 		xmlns:gallery="gallery.*"
 		xmlns:gevu="gevu.*">
 	
+	<fx:Script>
+		<![CDATA[
+			protected function del_prob_resultHandler(event:SQLEvent):void
+			{
+			 PopUpManager.addPopUp(popmsg,this,true);
+			 PopUpManager.centerPopUp(popmsg);
+			 popmsg.setMsg("La modification est complète");
+			 popmsg.open(this,false);
+			}
+		]]>
+	</fx:Script>
+	
+	
 	<fx:Declarations>
 		<sqlite:SQLite id="db" file="gevu_mobile.db"/>
 		<sqlite:Query id="add_prob" connection="{db.connection}"
@@ -15,12 +28,17 @@
 					  {this.id_instant},0,strftime('%J','{this.toSqlDate(myDate)}'),{this.id_diag})"
 					  result="add_prob_resultHandler(event)"
 					  error="add_prob_errorHandler(event)" />
+		<sqlite:Query id="del_prob" connection="{db.connection}"
+					  sql="delete from gevu_problemes where id_probleme={id_problem}"
+					  result="del_prob_resultHandler(event)"
+					  error="add_prob_errorHandler(event)"/>
 																																					  
 	</fx:Declarations>
 	
 	<fx:Script>
 		<![CDATA[
 			import gevu.delPopup;
+			import gevu.popup;
 			
 			import mx.core.FlexGlobals;
 			import mx.managers.PopUpManager;
@@ -39,10 +57,17 @@
 		[Bindable]  public	var critere:String;
 		[Bindable]  private var myDate:Date=new Date();
 			        private var	delpopup:delPopup = new delPopup();
+			        private var popmsg:popup = new popup();
+				
 			
 			protected function add_prob_resultHandler(event:SQLEvent):void
 			{
-			   var o:Object=event;	
+				
+				PopUpManager.addPopUp(popmsg,this,true);
+				PopUpManager.centerPopUp(popmsg);
+				popmsg.setMsg("La modification est complète");
+				popmsg.open(this,false);
+			  	
 			}
 			
 			protected function add_prob_errorHandler(event:SQLErrorEvent):void
@@ -55,10 +80,17 @@
 			  	this.vs.selectedIndex=1;
 			}
 			
+			private function delprob():void {
+				this.del_prob.execute();
+			}
 			
 			protected function btnDelete_clickHandler(event:MouseEvent):void
 			{
-				
+				PopUpManager.addPopUp(delpopup,this,true);
+				PopUpManager.centerPopUp(delpopup);
+				delpopup.fnct=delprob;
+				delpopup.open(this,false);
+			 	
 			}
 			
 			public function lpad(original:Object, length:int, pad:String):String
@@ -114,8 +146,18 @@
 			
 			protected function galary_clickHandler(event:MouseEvent):void
 			{
-			 FlexGlobals.topLevelApplication.galary.dispatchEvent(MouseEvent);		
+			 //FlexGlobals.topLevelApplication.galary.dispatchEvent(MouseEvent);		
 			}
+			
+			protected function dataGrid_clickHandler(event:MouseEvent):void
+			{
+				var item:Object;
+				var id_prob:int;
+				item=this.dataGrid.selectedItem;
+				id_problem=item['id_probleme'];
+				
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -127,19 +169,20 @@
    <s:HGroup paddingBottom="13" paddingLeft="13" paddingTop="13">
 		<s:Image  id="btnAjout"  source="@Embed('assets/AddRecord.png')" click="btnAjout_clickHandler(event)"/>			
 		<s:Image  id="btnDelete" source="@Embed('assets/delete.png')" click="btnDelete_clickHandler(event)"/>
-	   <s:Image id="galary" source="@Embed('assets/galary.gif')" click="galary_clickHandler(event)"
-				width="25" height="25" />
+	   <!--<s:Image id="galary" source="@Embed('assets/galary.gif')" click="galary_clickHandler(event)"
+				width="25" height="25" /> -->
 	</s:HGroup>
 	
-	<s:HGroup width="879" height="183" paddingLeft="13" paddingTop="13">
+	
 		
-	<f4cb:CustomViewStack id="vs" width="851" height="154">
+	<f4cb:CustomViewStack id="vs" width="100%" height="100%">
 		<s:VGroup id="lecture" width="100%" height="100%" paddingTop="10" paddingBottom="13" paddingLeft="13" paddingRight="13"  >
 			<s:Label text="{this.critere}" />
 			<s:HGroup width="100%" height="100%">
-				<s:DataGrid  id="dataGrid" width="100%" height="100%" dataProvider="{this.probGrid}">
+				<s:DataGrid  id="dataGrid" width="100%" height="140" dataProvider="{this.probGrid}" click="dataGrid_clickHandler(event)">
 					<s:columns>
 						<s:ArrayCollection>
+						<s:GridColumn visible="false" dataField="id_probleme"/>	
 						<s:GridColumn headerText="n° marker" dataField="num_marker" width="100" />
 						<s:GridColumn dataField="mesure" width="100" />
 						<s:GridColumn dataField="observations" />
@@ -177,6 +220,6 @@
 		</s:VGroup>
 		
 	</f4cb:CustomViewStack>
-	</s:HGroup>	
+	<!--</s:HGroup>-->	
 </s:VGroup>
 </s:View>

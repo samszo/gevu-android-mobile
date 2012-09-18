@@ -3,7 +3,7 @@
 		xmlns:s="library://ns.adobe.com/flex/spark" title="galary"
 		xmlns:sqlite="com.peterelst.air.sqlite.*"
 		minWidth="600" minHeight="600"
-		creationComplete="init_list()" >
+		>
 	
 	<fx:Declarations>
 		<sqlite:SQLite id="db" file="gevu_mobile.db"/>
@@ -48,7 +48,7 @@
 			  
 		  }
 			
-			this.lst3.scroller.setStyle("verticalscrollpolicy",ScrollPolicy.OFF);
+			//this.lst3.scroller.setStyle("verticalscrollpolicy",ScrollPolicy.OFF);
 		}
 			
 		protected function addImage_resultHandler(event:SQLEvent):void
@@ -106,7 +106,9 @@
 			sampleData.addItem({imageURL:path});
 		  }
 		}
-		
+		else {
+			sampleData.removeAll();
+		}
 		 }	
 			
 			protected function lst3_clickHandler(event:MouseEvent):void

@@ -24,6 +24,7 @@
 					  from gevu_batiments where id_lieu={this.selected_id}"
 					  result="get_data_resultHandler(event)"
 					  error="get_data_errorHandler(event)"/>
+		
 		<sqlite:Query id="update_batiment" connection="{db.connection}"
 					  sql="update gevu_batiments set
 					  ref='{this.ref}',

@@ -326,12 +326,20 @@
 			{
 			 this.add_seleced_contact.execute();	
 			}
+			
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				this.Conviewstack.selectedIndex=2;
+				
+			}
+			
 		]]>
 	</fx:Script>
 	<s:Panel x="-4" y="-2" width="903" height="310" title="Contacts" backgroundColor="black">
 		<s:VGroup id="viewContact">
 			<s:HGroup paddingTop="13" paddingBottom="13" gap="5" paddingLeft="13">
-				<s:Button   label="Ajouter un contact" click="add_form_clickHandler(event)"/>
+				<s:Button   label="Ajouter un contact qui exist" click="add_form_clickHandler(event)"/>
+				<s:Button   label="Ajouter un nouveau contact" click="button1_clickHandler(event)"/>
 				<s:Button   label="Supprimer un contact" click="delete_clickHandler(event)"/>
 			</s:HGroup>	
 		</s:VGroup>

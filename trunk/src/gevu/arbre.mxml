@@ -629,6 +629,7 @@ public function getLieuCtl(idLieu:int,idScenar:int=10,forTypeControle:String=nul
 						  
 						  //si le lieu à déjà le contrôle on ne peut pas en ajouter
 						  if (id==null) id="id_geo";
+						  if(items1!=null)
 						  if(items1[0][id]!=null) 
 						    
 						  {
@@ -886,6 +887,7 @@ public function getLieuCtl(idLieu:int,idScenar:int=10,forTypeControle:String=nul
 				 FlexGlobals.topLevelApplication.main_interface.removeAllElements();
 			 }
 			 FlexGlobals.topLevelApplication.nom_lieu.text=this.nom_lieu;
+			 //FlexGlobals.topLevelApplication.myGalary.init_list();
 			 FlexGlobals.topLevelApplication.view2.selectedIndex=0;
 			 FlexGlobals.topLevelApplication.previewPanel.visible=false;
 			 
@@ -941,7 +943,7 @@ public function getLieuCtl(idLieu:int,idScenar:int=10,forTypeControle:String=nul
 				if(ids.length==0) 
 				 {
                   var diag:gevu_diagnostics = new gevu_diagnostics();
-				  diag.flag=1;
+				  diag.flag=0;
 				  FlexGlobals.topLevelApplication.main_interface.addElement(diag);
 				 }
 				else if (ids[0]=='gevu_diagnostics')
